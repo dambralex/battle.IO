@@ -17,9 +17,9 @@ var server = http.createServer(function(req, res)
 
     var filename = path.join("/client",uri);
     if(str === "/tartiflette.js")
-      filename = path.join("", uri);
+      filename = path.join("/server", uri);
 
-    //console.log(filename);
+    console.log(filename);
     //console.log(mime.lookup(filename));
 
     if(mime.lookup(filename) === "image/png")
