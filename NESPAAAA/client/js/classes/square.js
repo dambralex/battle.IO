@@ -11,10 +11,38 @@ function Square(game, squad, type, posX, posY){
 	this.height = 50;
 
 	//orientation (by alex)
+
+	/*pour la lecture des images : 
+      U   = 0
+      UL  = 1
+      UR  = 2
+      L   = 3
+      R   = 4
+      DL  = 5
+      DR  = 6
+      D   = 7
+    */
+
 	this.orientation;
 
+	//animation
+
+		this.step = 1;
+		this.anim = 0;
+		this.repeat = 1;
+
+	// sprites loading (temporaire)
+	this.sprite = new Image();
+
+	this.chemin = "./sprites/jeu/unites/human/archer/";
+	this.overlay = "_";
+
+	
+
+	//done
+
 	// Speed
-	this.speed = 200;
+	this.speed = 50;
 
 	// Pathing
 	this.nextDestination = null;
@@ -64,6 +92,17 @@ function Square(game, squad, type, posX, posY){
 
 Square.prototype.draw = function(context, xView, yView){
 	context.save();	
+	
+	//modif by alex
+
+	
+
+	var wdth = 58;
+	var hght = 73;
+
+	
+	var screenPosition = this.getScreenPosition(xView, yView);
+
 
 	if(this.showCombatZone)
 		this.drawCombatZone(context);
@@ -72,20 +111,50 @@ Square.prototype.draw = function(context, xView, yView){
 	if(this.showPath)
 		this.drawPath(context);
 
-	if(this.selected && !this.allied)
+	if(this.selected && !this.allied){
 		context.fillStyle = 'pink';
-	else if(this.dead)
+		this.overlay = '_pink';
+		context.strokeRect(screenPosition.x,screenPosition.y,wdth,hght);
+	}
+	else if(this.dead){
 		context.fillStyle = 'black';
-	else if(this.selected)
+		this.overlay = '_black';
+		context.strokeRect(screenPosition.x,screenPosition.y,wdth,hght);
+	}
+	else if(this.selected){
 		context.fillStyle = 'green';
-	else if(!this.allied)
+		this.overlay = '_green';
+		context.strokeRect(screenPosition.x,screenPosition.y,wdth,hght);
+	}
+	else if(!this.allied){
 		context.fillStyle = 'red';
+		this.overlay = '_red';
+		context.strokeRect(screenPosition.x,screenPosition.y,wdth,hght);
+	}
 	else
 		context.fillStyle = 'blue';
+		this.overlay = '_';
 
+	this.sprite.src = this.chemin + "walk" + this.overlay + ".png";
 	var screenPosition = this.getScreenPosition(xView, yView);
+	context.drawImage(this.sprite,wdth* this.step, hght* this.orientation,wdth,hght,screenPosition.x, screenPosition.y,wdth,hght);
+	if (this.anim%10 == 0){
+		//context.drawImage(this.sprite,wdth* this.step, hght* this.orientation,wdth,hght,screenPosition.x, screenPosition.y,wdth,hght);
+		if (this.repeat == 1){
+			this.step ++;
+			if (this.step > 7){
+				this.step = 0;
+			}
+		}
+		else{
+			this.step = 0;
+		}
+	}
 	
-	context.fillRect(screenPosition.x, screenPosition.y, this.width, this.height);
+
+	//done
+	
+	//context.fillRect(screenPosition.x, screenPosition.y, this.width, this.height);
 	context.restore();
 } 
 
@@ -141,6 +210,8 @@ Square.prototype.drawPath = function(context){
 }
 
 Square.prototype.update = function(delta){
+
+	//modif by Alex
 	// console.log(this.attacking);
     // console.log(this.target);
 	var oldposX =  this.posX;
@@ -149,10 +220,14 @@ Square.prototype.update = function(delta){
 	var angle;
 	var angle_conv;
 
+	this.repeat = 1;
+
 	if(!this.dead){
 		this.move(delta);
 		this.checkCombat();
 	}
+
+	this.anim ++;
 	//on considere A0B
 	//O : old posX, old posY
 	//A : pos X, old posY
@@ -167,36 +242,94 @@ Square.prototype.update = function(delta){
 
 	angle = Math.atan2(this.posX - oldposX, this.posY - oldposY);
 
+	if (oldposX == this.posX && oldposY == this.posY){
+		this.repeat = 0;
+	}
+
 	// Converts from radians to degrees.
-	angle_conv = angle * 180 / Math.PI;
+	angle_conv = (angle * 180 / Math.PI)+45;
 
-	console.log(angle_conv);
-
-	if (angle_conv > 0){
-		//console.log ("DOWN");
-		if (angle_conv < 22,5){
-			console.log ("R");
-		}
-		else if (angle_conv < 67,5){
-			console.log ("DR");
-		}
-		else if (angle_conv < 112,5){
-			console.log ("D");
-		}
-		else if (angle_conv < 156){
-			console.log ("DL");
-		}
-		else if (angle_conv <= 180){
-			console.log ("L");
-		}
-	}
-	else if (angle_conv < 0){
-		console.log ("UP");
-	}
-	else {
-		console.log("none");
+	if (angle_conv>180){
+		angle_conv = angle_conv -360;
 	}
 
+	if (this.repeat ==1){
+			/*pour la lecture des images : 
+      U   = 0
+      UL  = 1
+      UR  = 2
+      L   = 3
+      R   = 4
+      DL  = 5
+      DR  = 6
+      D   = 7
+    */
+		/*console.log("X : " + this.posX + "Y : " + this.posY);
+		console.log("oX: " + oldposX + "oY: " +oldposY);
+		console.log("angle : "+ angle +"angle_conv : "+angle_conv);*/
+		if (angle_conv > 0){
+			if (angle_conv < 90){
+				if (angle_conv < 23){
+					//console.log("L");
+					this.orientation = 3;
+				}
+				else if (angle_conv < 68){
+					//console.log("DL");
+					this.orientation = 5;
+				}
+				else{
+					//console.log("D");
+					this.orientation = 7;
+				}
+			}
+			else{
+				if (angle_conv < 113){
+					//console.log("D");
+					this.orientation = 7;
+				}
+				else if (angle_conv < 156){
+					//console.log("DR");
+					this.orientation = 6;
+				}
+				else {
+					//console.log("right");
+					this.orientation = 4;
+				}
+			}
+		}
+		else{
+			if (angle_conv > -90){
+				if (angle_conv > -23){
+					//console.log("left");
+					this.orientation = 3;
+				}
+				else if (angle_conv > -68){
+					//console.log("UL");
+					this.orientation = 1;
+				}
+				else{
+					//console.log("U");
+					this.orientation = 0;
+				}
+			}
+			else{
+				if (angle_conv > -113){
+					//console.log("U");
+					this.orientation = 0;
+				}
+				else if (angle_conv > -156){
+					//console.log("UR");
+					this.orientation = 2;
+				}
+				else {
+					//console.log("right");
+					this.orientation = 4;
+				}
+			}
+		}
+	}
+	//done
+	
 }	
 
 Square.prototype.move = function(delta){
