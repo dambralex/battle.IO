@@ -38,6 +38,10 @@ class Game{
 
 	// Setting up the client communication
 	this.client = new Client(this);
+
+	// Pausing 
+	this.paused = true;
+	this.hasStarted = false;
 	}
 
 	init(){
@@ -85,11 +89,13 @@ class Game{
 								  this.mouseObj.outTop, 
 								  this.mouseObj.outRight,
 								  this.mouseObj.outBottom);
-	
-		this.forEachEntity(function(entity){
-			entity.update(delta);
-		})
-
+		
+		if(!this.paused){
+			this.forEachEntity(function(entity){
+				entity.update(delta);
+			});
+		}
+		
 		this.client.update();
 	}
 	
@@ -115,7 +121,7 @@ class Game{
 	
 		this.mouseObj.draw(mapContext, this.camera.posX, this.camera.posY);
 	
-		this.hud.draw(mapContext);
+		// this.hud.draw(mapContext);
 	}
 	
 	drawOnSpriteContext(spriteContext){
@@ -135,7 +141,7 @@ class Game{
 	    if(this.selectedEntities.unit[0]){
 	    	hudContext.fillText("Squad : " + this.selectedEntities.unit[0].posX + ", " +this.selectedEntities.unit[0].posY, 30, 110);
 	    }
-	    hudContext.restore();	
+	   	hudContext.restore();
 	}
 	
 	processInput(event){
@@ -146,7 +152,9 @@ class Game{
 		switch(event.type){
 			case "mousedown" : 
 				if(event.which == 1){
-					that.hud.handleLeftClick(event.offsetX, event.offsetY);
+					if(!that.paused){
+						that.hud.handleLeftClick(event.offsetX, event.offsetY);
+					}
 				}
 				break;	
 		}
@@ -303,7 +311,9 @@ class Game{
 	}
 
 	tick(){
-		that.player.tick();
+		if(!this.paused){
+			that.player.tick();
+		}
 		that.client.tick();
 	}
 
