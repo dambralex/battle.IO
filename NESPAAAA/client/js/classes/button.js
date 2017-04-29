@@ -77,6 +77,8 @@ class Button{
 		this.showButton = true;
 
 		this.text = text || "";
+
+		this.icone = new image();
 	}
 
 	press(){
