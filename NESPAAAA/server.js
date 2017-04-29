@@ -50,7 +50,7 @@ var server = http.createServer(function(req, res)
 
 var io = require('socket.io').listen(server);
 
-var maps =
+var maps = 
     [{
         playerPosition : [100, 200],
         opponentPosition : [100, 1000],
@@ -62,30 +62,29 @@ var units = [];
 var players = [];
 var connected = 0;
 
+var callback;
+
 io.sockets.on('connection', function (socket,pseudo) {
 
     // Gere les connexions des joueurs, et enregistre le pseudo dans la socket associée
     socket.on('pseudo', function(pseudo)
     {
         connected++;
-        if(connected < 3){
-            var player = { nickname : pseudo};
-            players.push(player);
-            socket.pseudo = pseudo;
+        var player = { nickname : pseudo};
+        players.push(player);
+        socket.pseudo = pseudo;
 
-            socket.emit('bonjour', "bonjour " + pseudo );
-            console.log("connexion de : " + pseudo);
-        }
-        else{
-            socket.emit('bonjour', "bonjour, trop de connexion. Aurevoir" );
-            socket.disconnect();
-            console.log("trop de connexion"+ connected);
+        socket.emit('bonjour', "bonjour " + pseudo );
+        console.log("connexion de : " + pseudo);
+
+        if(connected > 2){
+            initGame();
+            startGame();
         }
     });
 
-    socket.on('gameInformation', function(entities){
-        socket.entities = entities;
-        socket.broadcast.emit("gameInformation",entities);
+    socket.on('gameInformation', function(callback){
+        socket.callback = callback;
         console.log("got this");
         console.log(maps[0].mapID);
         // upload += sizeof(hihi);
@@ -114,9 +113,16 @@ io.sockets.on('connection', function (socket,pseudo) {
         connected--;
     });
 
-
-
 });
+
+function initGame(){
+    map = chooseMap();
+
+}
+
+function chooseMap(){
+    return maps[0];
+}
 
 
 server.listen(8080);
