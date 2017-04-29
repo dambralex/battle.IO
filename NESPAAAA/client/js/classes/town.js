@@ -1,5 +1,7 @@
 function Town(game, player, posX, posY){
 	this.game = game;
+	this.id = this.game.getNewId();
+	this.kind = kinds.town;
 
 	// Position
 	this.posX = posX;

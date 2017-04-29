@@ -1,6 +1,8 @@
-function Square(game, squad, posX, posY){
+function Square(game, squad, type, posX, posY){
 	this.game = game;
 	this.squad = squad;
+	this.type = type;
+	this.id = this.game.getNewId();
 
 	// Position
 	this.posX = posX;
