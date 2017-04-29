@@ -1,7 +1,8 @@
 class Client{
 
-	constructeur(game){
-		this.game = game;
+	constructor(data){
+		// this.game = game;
+		// this.data = data
 		this.socket = null;
 
 		this.ping = 0;
@@ -14,15 +15,21 @@ class Client{
 	}
 
 	setOnSockets(){
+		var self = this;
+		console.log(self);
+
 		this.socket.on('pong', function(data){
 			console.log(data+" ms");
-			that.client.ping = data.ping;
-			that.client.upload = data.upload;
+			self.ping = data.ping;
+			self.upload = data.upload;
 		});
 	}
 
 	update(){
-		// this.socket.emit('test',this.game);
+		if(this.socket){
+			console.log("niquez vos mère");
+			this.socket.emit('test',that.entities);
+		}
 	}
 
 	tick(){

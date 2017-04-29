@@ -1,8 +1,8 @@
 function Player(game, name, allied, startingX, startingY){
-    this.game = game;
+    // that = game;
     this.name = name;
 
-    this.mainTown = new Town(this.game, this, startingX, startingY);
+    new Town(that, this, startingX, startingY);
 
     this.stone = 0;
     this.wood = 0;
@@ -38,9 +38,9 @@ Player.prototype.calculIncome = function(){
     this.income = 0;
 
 	var resources;
-	for(var t in this.game.entities.town){
-		if(this.game.entities.town[t].player == this){
-			resources = this.game.entities.town[t].getResources();
+	for(var t in that.entities.town){
+		if(that.entities.town[t].player == this){
+			resources = that.entities.town[t].getResources();
 			this.wood += resources.wood;
 			this.iron += resources.iron;
 			this.stone += resources.stone;

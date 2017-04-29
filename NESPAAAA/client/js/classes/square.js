@@ -1,8 +1,8 @@
 function Square(game, squad, type, posX, posY){
-	this.game = game;
+	// that = game;
 	this.squad = squad;
 	this.type = type;
-	this.id = this.game.getNewId();
+	this.id = that.getNewId();
 
 	// Position
 	this.posX = posX;
@@ -59,7 +59,7 @@ function Square(game, squad, type, posX, posY){
 	this.showRangeZone = false;
 	this.showPath = false;
 
-	this.game.entities.unit.push(this);
+	that.entities.unit.push(this);
 }
 
 Square.prototype.draw = function(context, xView, yView){
@@ -234,24 +234,24 @@ Square.prototype.moveTo = function(x, y, delta){
 }
 
 Square.prototype.setDestination = function(x, y){
-	var that = this;
+	var thus = this;
 	if(window.Worker) {
 		var worker = new Worker("http://localhost:8080/js/worker.js");
 		//console.log("Envoi message au worker");
-		worker.postMessage([this.posX, this.posY, x, y, this.game.map.walls, this.game.map.getWidth(), this.game.map.getHeight(), 32]);
+		worker.postMessage([this.posX, this.posY, x, y, that.map.walls, that.map.getWidth(), that.map.getHeight(), 32]);
 		
 		worker.onmessage = function(path) {
 			//console.log("Message reçu de la part du worker");
-			that.path = path.data.slice(0);
+			thus.path = path.data.slice(0);
 			
-			var nextInPath = that.path.shift();
-			that.nextDestination = {x : nextInPath.x, y : nextInPath.y};
+			var nextInPath = thus.path.shift();
+			thus.nextDestination = {x : nextInPath.x, y : nextInPath.y};
 		}
 		
 		
 	
 	}
-	//this.path = getPath(this.posX, this.posY, x, y, this.game.map.walls, this.game.map.getWidth()*32, this.game.map.getHeight()*32, 32);
+	//this.path = getPath(this.posX, this.posY, x, y, that.map.walls, that.map.getWidth()*32, that.map.getHeight()*32, 32);
 	//var nextInPath = this.path.shift();
 		//		this.nextDestination = {x : nextInPath.x, y : nextInPath.y};
 	// Pathfind
@@ -325,8 +325,8 @@ Square.prototype.hurt = function(dmg){
 }
 
 Square.prototype.getCenter = function(){
-	var xView = this.game.camera.posX;
-	var yView = this.game.camera.posY;
+	var xView = that.camera.posX;
+	var yView = that.camera.posY;
 
 	var center = {x : this.posX, y : this.posY};
 	// var center = {x : this.posX + this.posY * -1 +this.width/2, y :  this.posX * 0.5 + this.posY*0.5 +this.height/2};
