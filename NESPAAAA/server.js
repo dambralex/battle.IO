@@ -4,14 +4,21 @@ var fs = require('fs');
 var path = require('path');
 var mime = require('mime');
 
+//server/js/maps/premiere.js
 
 var server = http.createServer(function(req, res)
 {
     var uri = url.parse(req.url).pathname;
+    var index = uri.lastIndexOf('/');
+    var str = uri.substr(index);
+
     if(uri === "/")
-        uri = "index.html";
+      uri = "index.html";
 
     var filename = path.join("/client",uri);
+    if(str === "/tartiflette.js")
+      filename = path.join("", uri);
+
     //console.log(filename);
     //console.log(mime.lookup(filename));
 
@@ -58,15 +65,15 @@ io.sockets.on('connection', function (socket,pseudo) {
             var player = { nickname : pseudo};
             players.push(player);
             socket.pseudo = pseudo;
-    
+
             socket.emit('bonjour', "bonjour " + pseudo );
-            console.log("connexion de : " + pseudo); 
+            console.log("connexion de : " + pseudo);
         }
         else{
             socket.emit('bonjour', "bonjour, trop de connexion. Aurevoir" );
             socket.disconnect();
             console.log("trop de connexion"+ connected);
-        }        
+        }
     });
 
     socket.on('test', function(hihi){
