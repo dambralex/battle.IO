@@ -41,7 +41,7 @@ class Game{
 	// this.client.setGame(this);
 
 	// Pausing 
-	this.paused = false;
+	this.paused = true;
 	this.hasStarted = false;
 	}
 
