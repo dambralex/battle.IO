@@ -326,6 +326,10 @@ class Game{
 		return this.idCount++;
 	}
 
+	startGame(){
+		paused = false;
+	}
+
 }
 
 // function Game(){

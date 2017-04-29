@@ -10,7 +10,7 @@ class Client{
 
 	setSocket(socket){
 		this.socket = socket;
-		this.socket.emit('gameInformation',this.game);
+		this.socket.emit('gameInformation',that.startGame);
 		this.setOnSockets();
 	}
 
