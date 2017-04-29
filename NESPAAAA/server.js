@@ -50,7 +50,7 @@ var server = http.createServer(function(req, res)
 
 var io = require('socket.io').listen(server);
 
-var maps = 
+var maps =
     [{
         playerPosition : [100, 200],
         opponentPosition : [100, 1000],
@@ -83,8 +83,9 @@ io.sockets.on('connection', function (socket,pseudo) {
         }
     });
 
-    socket.on('gameInformation', function(game){
-        socket.game = game;
+    socket.on('gameInformation', function(entities){
+        socket.entities = entities;
+        socket.broadcast.emit("gameInformation",entities);
         console.log("got this");
         console.log(maps[0].mapID);
         // upload += sizeof(hihi);
