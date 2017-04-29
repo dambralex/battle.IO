@@ -16,7 +16,8 @@ var Unites = {
 
         "cout_recrutement" : 20,
 
-        "anim_path" : "sprites/archer/anim"
+        //modif by Alex
+        "anim_path" : "unites/human/archer"
       },
       "lanciers" : {
         "nombre" : 6,
@@ -51,7 +52,9 @@ var Unites = {
         "est_unite_magique" : false,
 
         "cout_recrutement" : 70,
-        "anim_path" : "sprites/epeiste/anim"
+
+        //modif by Alex
+        "anim_path" : "unites/human/swordman"
       },
       "cavaliers" : {
         "nombre" : 3,
@@ -69,7 +72,9 @@ var Unites = {
         "est_unite_magique" : false,
 
         "cout_recrutement" : 100,
-        "anim_path" : "sprites/knight/anim"
+
+        //modif by Alex
+        "anim_path" : "unites/human/knight"
       }
 }
 var Towns = {
@@ -86,7 +91,16 @@ var Towns = {
           },
           "points_vie" : 600,
           "emplacements_construction" : 2,
-          "temps_upgrade" : 0
+          "temps_upgrade" : 0,
+
+          //modif by Alex
+          "anim_path" : "batiments/human/bat_1",
+          "img_size_x" : 142,
+          "img_size_y" : 132,
+          "sprite_size_x" : 142,
+          "sprite_size_y" : 132,
+          "nb_anim" :1,
+          //done
         },
         {
           "grade" : 2,
@@ -100,7 +114,16 @@ var Towns = {
           },
           "points_vie" : 700,
           "emplacements_construction" : 4,
-          "temps_upgrade" : 2
+          "temps_upgrade" : 2,
+
+          //modif by Alex
+          "anim_path" : "batiments/human/bat_1",
+          "img_size_x" : 142,
+          "img_size_y" : 132,
+          "sprite_size_x" : 142,
+          "sprite_size_y" : 132,
+          "nb_anim" :1,
+          //done
         },
         {
           "grade" : 3,
@@ -115,6 +138,15 @@ var Towns = {
           "points_vie" : 800,
           "emplacements_construction" : 5,
           "temps_upgrade" : 5,
+
+          //modif by Alex
+          "anim_path" : "batiments/human/bat_2",
+          "img_size_x" : 142,
+          "img_size_y" : 132,
+          "sprite_size_x" : 142,
+          "sprite_size_y" : 132,
+          "nb_anim" :1,
+          //done
         },
         {
           "grade" : 4,
@@ -129,6 +161,15 @@ var Towns = {
           "points_vie" : 900,
           "emplacements_construction" : 5,
           "temps_upgrade" : 8,
+
+          //modif by Alex
+          "anim_path" : "batiments/human/bat_2",
+          "img_size_x" : 142,
+          "img_size_y" : 132,
+          "sprite_size_x" : 142,
+          "sprite_size_y" : 132,
+          "nb_anim" :1,
+          //done
         },
         {
           "grade" : 5,
@@ -143,6 +184,15 @@ var Towns = {
           "points_vie" : 1000,
           "emplacements_construction" : 6,
           "temps_upgrade" : 10,
+
+          //modif by Alex
+          "anim_path" : "batiments/human/bat_3",
+          "img_size_x" : 142,
+          "img_size_y" : 132,
+          "sprite_size_x" : 142,
+          "sprite_size_y" : 132,
+          "nb_anim" :1,
+          //done
         }
       ],
 
@@ -156,6 +206,16 @@ var Towns = {
             fer : 0,
             or : 0 
           },
+
+          //modif by Alex
+          "anim_path" : "construction/carriere",
+          "img_size_x" : 38,
+          "img_size_y" : 38,
+          "sprite_size_x" : 38,
+          "sprite_size_y" : 38,
+          "nb_anim" :1,
+          //done
+
           "evolution" : {
             "nom": "carriere_amelioree",
             "production" : 3000,
@@ -174,9 +234,19 @@ var Towns = {
           "apports" : {
             pierre : 0,
             bois : 100,
-            fer : -100,
+            fer : -10,
             or : -10 
           },
+
+          //modif by Alex
+          "anim_path" : "construction/scierie",
+          "img_size_x" : 38,
+          "img_size_y" : 38,
+          "sprite_size_x" : 38,
+          "sprite_size_y" : 38,
+          "nb_anim" :1,
+          //done
+
           "evolution" : {
             "nom": "scierie_amelioree",
             "production" : 3000,
@@ -198,6 +268,16 @@ var Towns = {
             fer : 100,
             or : 0 
           },
+
+          //modif by Alex
+          "anim_path" : "construction/mine",
+          "img_size_x" : 38,
+          "img_size_y" : 38,
+          "sprite_size_x" : 38,
+          "sprite_size_y" : 38,
+          "nb_anim" :1,
+          //done
+          
           "evolution" : {
             "nom": "mine_amelioree",
             "production" : 3000,
@@ -219,6 +299,17 @@ var Towns = {
             fer : 0,
             or : 0 
           },
+
+
+          //modif by Alex
+          "anim_path" : "construction/caserne",
+          "img_size_x" : 38,
+          "img_size_y" : 38,
+          "sprite_size_x" : 38,
+          "sprite_size_y" : 38,
+          "nb_anim" :1,
+          //done
+          
           "unites" : [
             "archers",
             "lanciers"
@@ -248,6 +339,16 @@ var Towns = {
             fer : 0,
             or : 0 
           },
+
+          //modif by Alex
+          "anim_path" : "construction/ecurie",
+          "img_size_x" : 38,
+          "img_size_y" : 38,
+          "sprite_size_x" : 38,
+          "sprite_size_y" : 38,
+          "nb_anim" :1,
+          //done
+          
           "unites" : [
             "cavaliers"
           ]

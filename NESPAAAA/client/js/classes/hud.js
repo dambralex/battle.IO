@@ -153,10 +153,34 @@ Hud.prototype.drawPlayerResources = function(context){
     context.save();
     context.fillStyle = 'black';
     context.font = "10pt Arial";
-    context.fillText("Stone : "+this.game.player.stone, 320, 190);
+    
+
+    // ajout by alex (ne marche pas : parti sur les batiments a dessiner)
+    pic_stone = new Image();
+    pic_wood = new Image();
+    pic_iron = new Image();
+    pic_income = new Image();
+
+    pic_stone.src = './sprites/hud/ressources/stone.png';
+    pic_wood.src = './sprites/hud/ressources/wood.png';
+    pic_iron.src = './sprites/hud/ressources/iron.png';
+    pic_income.src = './sprites/hud/ressources/gold.png';
+
+    context.drawImage(pic_stone,0,0,128,128,320,170,128,128);
+    context.drawImage(pic_wood,0,0,128,128,470,170,128,128);
+    context.drawImage(pic_iron,0,0,128,128,620,170,128,128);
+    context.drawImage(pic_income,0,0,128,128,770,167,128,128);
+    context.fillText("Stone : "+this.game.player.stone, 360, 187);
+    context.fillText("Wood : "+this.game.player.wood, 510, 187);
+    context.fillText("Iron : "+this.game.player.iron, 660, 187);
+    context.fillText("Gold : "+this.game.player.gold+"("+this.game.player.income+")", 810, 187);
+    // done (explication : j'ai fait ca en dur, j'aurai pu faire autrement mais flemme ^^)
+
+    //commenté pour test, marche initialement (alex)
+    /*context.fillText("Stone : "+this.game.player.stone, 320, 190);
     context.fillText("Wood : "+this.game.player.wood, 420, 190);
     context.fillText("Iron : "+this.game.player.iron, 520, 190);
-    context.fillText("Gold : "+this.game.player.gold+"("+this.game.player.income+")", 620, 190);
+    context.fillText("Gold : "+this.game.player.gold+"("+this.game.player.income+")", 620, 190);*/
     context.restore();
 }
 

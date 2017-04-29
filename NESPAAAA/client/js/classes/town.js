@@ -43,22 +43,50 @@ function Town(game, player, posX, posY){
 }
 
 Town.prototype.draw = function(context, xView, yView) {
+//grosse modif de malade (alex)
+	// désolé par avance
+
+	chemin_init = "./sprites/jeu/";
+	//l'image utilisée en idle se trouve dans client/sprites/jeu/unites/human/archer/walk.png
+	//il s'agira de la premiere de chaque walk.png, y compris les batiments.
+	//ainsi, il sera facile lors de la création d'unité, ou de batiment d'alterner entre deux ou troi images...
+
+
 	context.save();	
 
-	if(this.selected && !this.isAlliedWith())
-		context.fillStyle = 'pink';
-	else if(this.dead)
-		context.fillStyle = 'black';
-	else if(this.selected)
-		context.fillStyle = 'green';
-	else if(!this.isAlliedWith())
-		context.fillStyle = 'red';
-	else
-		context.fillStyle = 'blue';
+	sprite = new Image();
 
+	var overlay = '_';
 	var screenPosition = this.getScreenPosition(xView, yView);
+
+	if(this.selected && !this.isAlliedWith()){
+		overlay = '_pink';
+		context.strokeRect(screenPosition.x,screenPosition.y,142,132);
+	}
+		//context.fillStyle = 'pink';
+	else if(this.dead)
+		overlay = '_black';
+		//context.fillStyle = 'black';
+	else if(this.selected){
+		overlay = '_green';
+		context.strokeRect(screenPosition.x,screenPosition.y,142,132);
+	}
+		//context.fillStyle = 'green';
+	else if(!this.isAlliedWith())
+		overlay = '_red';
+		//context.fillStyle = 'red';
+	else
+		overlay = '_';
+		//context.fillStyle = 'blue';
+
+	chemin_add = "batiments/human/bat_1";
+	/*sprite.src = chemin_init+type+"_"overlay".png";*/
+	//sprite.src = chemin_init+"batiments/human/bat_1"+overlay+".png"; //A GARDER AU CAS OU : MARCHE 
+	sprite.src = chemin_init+chemin_add+overlay+".png";
 	
-	context.fillRect(screenPosition.x, screenPosition.y, this.width, this.height);
+	context.drawImage(sprite,0,0,142,132,screenPosition.x,screenPosition.y,142,132);
+	
+	//context.fillRect(screenPosition.x, screenPosition.y, this.width, this.height);
 	context.restore();	
 
 	// context.fillRect(this.posX - xView, this.posY - yView, this.width, this.height);
