@@ -16,7 +16,7 @@ var server = http.createServer(function(req, res)
       uri = "index.html";
 
     var filename = path.join("/client",uri);
-    if(str === "/tartiflette.js")
+    if(str === "/premiere.js")
       filename = path.join("/server", uri);
 
     console.log(filename);
@@ -78,6 +78,7 @@ io.sockets.on('connection', function (socket,pseudo) {
     socket.on('gameInformation', function(game){
         socket.game = game;
         console.log("got this");
+        console.log(maps[0].playerPosition[0]);
         // upload += sizeof(hihi);
     });
 
