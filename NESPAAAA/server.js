@@ -45,7 +45,6 @@ var io = require('socket.io').listen(server);
 
 var units = [];
 var players = [];
-var upload = 0;
 var connected = 0;
 
 io.sockets.on('connection', function (socket,pseudo) {
@@ -69,8 +68,9 @@ io.sockets.on('connection', function (socket,pseudo) {
         }        
     });
 
-    socket.on('test', function(hihi){
-        // console.log("got this");
+    socket.on('gameInformation', function(game){
+        socket.game = game;
+        console.log("got this");
         // upload += sizeof(hihi);
     });
 
@@ -79,7 +79,7 @@ io.sockets.on('connection', function (socket,pseudo) {
     });
 
     socket.on('stats', function(ping){
-        socket.emit('pong',{ ping : Date.now() - ping, upload : upload} );
+        socket.emit('pong',Date.now() - ping );
         upload = 0;
     });
 

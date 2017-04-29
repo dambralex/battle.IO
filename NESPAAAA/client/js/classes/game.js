@@ -311,7 +311,7 @@ class Game{
 	}
 
 	tick(){
-		if(!this.paused){
+		if(!that.paused){
 			that.player.tick();
 		}
 		that.client.tick();
