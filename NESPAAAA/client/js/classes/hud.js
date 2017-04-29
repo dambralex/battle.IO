@@ -1,7 +1,7 @@
 function Hud (game){
     // var that = this;
 
-    this.game = game;
+    // that = game;
     this.show = false;
 
     this.constructionButtons = [];
@@ -58,7 +58,7 @@ Hud.prototype.init = function(){
     var button = new Button("amélioration", x, 130);
 
     button.setOnClick(function(){
-        console.log(Towns["niveau"][this.game.selectedEntities.town.stage]["emplacements_construction"]);
+        console.log(Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"]);
         if ( that.selectedEntities.town.construction.length ==  that.selectedEntities.town.stage.emplacement_construction){
             console.log("construction d'une base plus grande, nouveau stage : " + that.selectedEntities.town.stage +1);
             that.selectedEntities.town.upgrade();
@@ -81,8 +81,8 @@ Hud.prototype.drawMainControl = function(context){
     context.fillStyle = '#AAAAAA';
     context.fillRect(300, 0, context.canvas.width - 300, 200);
 
-    if(this.game.selectedEntities.squad.length <= 0){
-        if(this.game.selectedEntities.town != null){
+    if(that.selectedEntities.squad.length <= 0){
+        if(that.selectedEntities.town != null){
             this.drawTown(context);
         }
     }
@@ -102,19 +102,19 @@ Hud.prototype.drawMiniMap = function(context){
 }
 
 Hud.prototype.drawUnits = function(context){
-    var nb = this.game.selectedEntities.squad.length;
+    var nb = that.selectedEntities.squad.length;
     var box_width = (context.canvas.width - 300) / nb;
     context.save();
-    for( var squad in this.game.selectedEntities.squad)
+    for( var squad in that.selectedEntities.squad)
     {
-        var moral = this.game.selectedEntities.squad[squad].moral;
+        var moral = that.selectedEntities.squad[squad].moral;
         context.fillStyle = 'white';
         context.fillRect(squad * box_width + 300, 0, box_width, 150);
         context.fillStyle = 'red';
         context.fillText("Squad " + squad + " : moral = " + moral , squad * box_width + 302, 25);
-        for(var unit in this.game.selectedEntities.squad[squad].units)
+        for(var unit in that.selectedEntities.squad[squad].units)
         {
-            var hitpoints = this.game.selectedEntities.squad[squad].units[unit].hitPoints;
+            var hitpoints = that.selectedEntities.squad[squad].units[unit].hitPoints;
             context.font = "10pt Verdana";
             context.fillStyle = 'darkorange';
             context.fillText("PV : "+ hitpoints, squad * box_width + 302, (40 +(unit *15)));
@@ -127,11 +127,11 @@ Hud.prototype.drawTown = function(context){
 	context.save();
     context.fillStyle = 'black';
     context.font = "10pt Arial";
-    context.fillText(this.game.selectedEntities.town.name, 320, 20);
-    context.fillText("Stone : "+this.game.selectedEntities.town.stone+" "+
-                     "Wood : "+this.game.selectedEntities.town.wood+" "+
-                     "Iron : "+this.game.selectedEntities.town.iron+" "+
-                     "Income : "+this.game.selectedEntities.town.income, 600, 20);
+    context.fillText(that.selectedEntities.town.name, 320, 20);
+    context.fillText("Stone : "+that.selectedEntities.town.stone+" "+
+                     "Wood : "+that.selectedEntities.town.wood+" "+
+                     "Iron : "+that.selectedEntities.town.iron+" "+
+                     "Income : "+that.selectedEntities.town.income, 600, 20);
     context.restore();   
 
     this.drawTownConstruction(context);
@@ -139,11 +139,11 @@ Hud.prototype.drawTown = function(context){
 }
 
 Hud.prototype.drawTownConstruction = function(context){
-    for(var i in this.game.selectedEntities.town.construction){
-        this.constructionButtons[i].setText(this.game.selectedEntities.town.construction[i]);
+    for(var i in that.selectedEntities.town.construction){
+        this.constructionButtons[i].setText(that.selectedEntities.town.construction[i]);
     }
 
-    for(var c = 0; c < Towns["niveau"][this.game.selectedEntities.town.stage]["emplacements_construction"]; c++){
+    for(var c = 0; c < Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"]; c++){
         this.constructionButtons[c].draw(context);
     }
 }
@@ -183,17 +183,17 @@ Hud.prototype.drawPlayerResources = function(context){
     context.drawImage(pic_wood,0,0,128,128,470,170,128,128);
     context.drawImage(pic_iron,0,0,128,128,620,170,128,128);
     context.drawImage(pic_income,0,0,128,128,770,167,128,128);
-    context.fillText("Stone : "+this.game.player.stone, 360, 187);
-    context.fillText("Wood : "+this.game.player.wood, 510, 187);
-    context.fillText("Iron : "+this.game.player.iron, 660, 187);
-    context.fillText("Gold : "+this.game.player.gold+"("+this.game.player.income+")", 810, 187);
+    context.fillText("Stone : "+that.player.stone, 360, 187);
+    context.fillText("Wood : "+that.player.wood, 510, 187);
+    context.fillText("Iron : "+that.player.iron, 660, 187);
+    context.fillText("Gold : "+that.player.gold+"("+that.player.income+")", 810, 187);
     // done (explication : j'ai fait ca en dur, j'aurai pu faire autrement mais flemme ^^)
 
     //commenté pour test, marche initialement (alex)
-    /*context.fillText("Stone : "+this.game.player.stone, 320, 190);
-    context.fillText("Wood : "+this.game.player.wood, 420, 190);
-    context.fillText("Iron : "+this.game.player.iron, 520, 190);
-    context.fillText("Gold : "+this.game.player.gold+"("+this.game.player.income+")", 620, 190);*/
+    /*context.fillText("Stone : "+that.player.stone, 320, 190);
+    context.fillText("Wood : "+that.player.wood, 420, 190);
+    context.fillText("Iron : "+that.player.iron, 520, 190);
+    context.fillText("Gold : "+that.player.gold+"("+that.player.income+")", 620, 190);*/
     context.restore();
 }
 

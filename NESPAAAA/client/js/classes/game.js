@@ -38,6 +38,7 @@ class Game{
 
 	// Setting up the client communication
 	this.client = new Client(this);
+	// this.client.setGame(this);
 
 	// Pausing 
 	this.paused = false;
@@ -62,7 +63,7 @@ class Game{
     		that.camera.wView = window.innerWidth;
     		that.camera.hView = window.innerHeight;
 		};
-	
+
 		this.disableContextMenu();
 	
 		this.addEventListenerToCanvas(mapCanvas, this.processGameInput);
@@ -96,7 +97,7 @@ class Game{
 			});
 		}
 		
-		this.client.update();
+		// this.client.update();
 	}
 	
 	draw(mapContext, hudContext) {
@@ -131,11 +132,11 @@ class Game{
 	drawOnHudContext(hudContext){
 		this.hud.draw(hudContext);
 	
-		var test = this.player.mainTown.getScreenPosition(this.camera.posX, this.camera.posY);
+		// var test = this.player.mainTown.getScreenPosition(this.camera.posX, this.camera.posY);
 		hudContext.save();
 		hudContext.fillStyle = 'white';
 	    hudContext.font = "10pt Arial";
-	    hudContext.fillText("Town : " + test.x + ", " +test.y, 30, 50);
+	    // hudContext.fillText("Town : " + test.x + ", " +test.y, 30, 50);
 	    hudContext.fillText("Camera : " + this.camera.posX + ", " +this.camera.posY, 30, 70);
 	    hudContext.fillText("Ping : " + this.client.ping , 30, 90);
 	    if(this.selectedEntities.unit[0]){
@@ -319,7 +320,6 @@ class Game{
 
 	setSocket(socket){
 		this.client.setSocket(socket);
-		console.log("hehe");
 	}
 
 	getNewId(){

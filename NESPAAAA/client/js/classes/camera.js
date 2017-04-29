@@ -1,5 +1,5 @@
 function Camera(game, posX, posY, canvasWidth, canvasHeight, worldWidth, worldHeight){
-    this.game = game;
+    // this.game = game;
 
     this.posX = posX || 0;
     this.posY = posY || 0;

@@ -1,6 +1,6 @@
 function Town(game, player, posX, posY){
-	this.game = game;
-	this.id = this.game.getNewId();
+	// that = game;
+	this.id = that.getNewId();
 	this.kind = kinds.town;
 
 	// Position
@@ -39,7 +39,7 @@ function Town(game, player, posX, posY){
     this.isBuilding = false;
     this.currentBuilding = null;
 
-	this.game.entities.town.push(this);
+	that.entities.town.push(this);
 }
 
 Town.prototype.draw = function(context, xView, yView) {
