@@ -40,7 +40,7 @@ class Game{
 	this.client = new Client(this);
 
 	// Pausing 
-	this.paused = true;
+	this.paused = false;
 	this.hasStarted = false;
 	}
 

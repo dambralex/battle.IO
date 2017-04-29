@@ -85,6 +85,8 @@ Town.prototype.draw = function(context, xView, yView) {
 	sprite.src = chemin_init+chemin_add+overlay+".png";
 	
 	context.drawImage(sprite,0,0,142,132,screenPosition.x,screenPosition.y,142,132);
+	this.width = 142;
+	this.height = 132;
 	
 	//context.fillRect(screenPosition.x, screenPosition.y, this.width, this.height);
 	context.restore();	

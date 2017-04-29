@@ -10,6 +10,9 @@ function Square(game, squad, type, posX, posY){
 	this.width = 50;
 	this.height = 50;
 
+	//orientation (by alex)
+	this.orientation;
+
 	// Speed
 	this.speed = 200;
 
@@ -140,11 +143,61 @@ Square.prototype.drawPath = function(context){
 Square.prototype.update = function(delta){
 	// console.log(this.attacking);
     // console.log(this.target);
+	var oldposX =  this.posX;
+	var oldposY =  this.posY;
+
+	var angle;
+	var angle_conv;
+
 	if(!this.dead){
 		this.move(delta);
 		this.checkCombat();
 	}
-}
+	//on considere A0B
+	//O : old posX, old posY
+	//A : pos X, old posY
+	//B : pos X, pos Y
+
+	//[OA] = pos X - old pos X
+	//[AB] = pos Y - old posY
+	//tan (AOB) = [AB] / [OA]
+	//angle = arcTan((pos Y - old posY) / (pos X - old pos X));
+
+	//on utilise atan2 (plus simple)
+
+	angle = Math.atan2(this.posX - oldposX, this.posY - oldposY);
+
+	// Converts from radians to degrees.
+	angle_conv = angle * 180 / Math.PI;
+
+	console.log(angle_conv);
+
+	if (angle_conv > 0){
+		//console.log ("DOWN");
+		if (angle_conv < 22,5){
+			console.log ("R");
+		}
+		else if (angle_conv < 67,5){
+			console.log ("DR");
+		}
+		else if (angle_conv < 112,5){
+			console.log ("D");
+		}
+		else if (angle_conv < 156){
+			console.log ("DL");
+		}
+		else if (angle_conv <= 180){
+			console.log ("L");
+		}
+	}
+	else if (angle_conv < 0){
+		console.log ("UP");
+	}
+	else {
+		console.log("none");
+	}
+
+}	
 
 Square.prototype.move = function(delta){
 	var center = this.getCenter();
