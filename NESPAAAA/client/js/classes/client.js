@@ -10,7 +10,14 @@ class Client{
 
 	setSocket(socket){
 		this.socket = socket;
-		this.socket.emit('gameInformation',this.game);
+		//this.socket.emit('gameInformation',this.game);
+		this.socket.on('gameInformation', function(entities){
+			for(var i in entities.town)
+				console.log(entities.town[i]);
+			for(var i in entities.unit)
+				console.log(entities.unit[i]);
+		});
+
 		this.setOnSockets();
 	}
 
@@ -27,8 +34,7 @@ class Client{
 
 	update(){
 		if(this.socket){
-			console.log("niquez vos mère");
-			this.socket.emit('test',that.entities);
+			this.socket.emit('gameInformation',that.entities);
 		}
 	}
 

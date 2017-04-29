@@ -83,10 +83,9 @@ io.sockets.on('connection', function (socket,pseudo) {
         }
     });
 
-    socket.on('gameInformation', function(callback){
-        socket.callback = callback;
-        console.log("got this");
-        console.log(maps[0].mapID);
+    socket.on('gameInformation', function(entities){
+        socket.entities = entities;
+        socket.broadcast.emit("gameInformation",entities);
         // upload += sizeof(hihi);
     });
 
