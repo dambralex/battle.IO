@@ -4,15 +4,22 @@ var fs = require('fs');
 var path = require('path');
 var mime = require('mime');
 
+//server/js/maps/premiere.js
 
 var server = http.createServer(function(req, res)
 {
     var uri = url.parse(req.url).pathname;
+    var index = uri.lastIndexOf('/');
+    var str = uri.substr(index);
+
     if(uri === "/")
-        uri = "index.html";
+      uri = "index.html";
 
     var filename = path.join("/client",uri);
-    //console.log(filename);
+    if(str === "/premiere.js")
+      filename = path.join("/server", uri);
+
+    console.log(filename);
     //console.log(mime.lookup(filename));
 
     if(mime.lookup(filename) === "image/png")
@@ -45,7 +52,6 @@ var io = require('socket.io').listen(server);
 
 var units = [];
 var players = [];
-var upload = 0;
 var connected = 0;
 
 io.sockets.on('connection', function (socket,pseudo) {
@@ -58,19 +64,21 @@ io.sockets.on('connection', function (socket,pseudo) {
             var player = { nickname : pseudo};
             players.push(player);
             socket.pseudo = pseudo;
-    
+
             socket.emit('bonjour', "bonjour " + pseudo );
-            console.log("connexion de : " + pseudo); 
+            console.log("connexion de : " + pseudo);
         }
         else{
             socket.emit('bonjour', "bonjour, trop de connexion. Aurevoir" );
             socket.disconnect();
             console.log("trop de connexion"+ connected);
-        }        
+        }
     });
 
-    socket.on('test', function(hihi){
-        // console.log("got this");
+    socket.on('gameInformation', function(game){
+        socket.game = game;
+        console.log("got this");
+        console.log(maps[0].playerPosition[0]);
         // upload += sizeof(hihi);
     });
 
@@ -79,7 +87,7 @@ io.sockets.on('connection', function (socket,pseudo) {
     });
 
     socket.on('stats', function(ping){
-        socket.emit('pong',{ ping : Date.now() - ping, upload : upload} );
+        socket.emit('pong',Date.now() - ping );
         upload = 0;
     });
 
