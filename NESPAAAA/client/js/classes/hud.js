@@ -39,7 +39,7 @@ Hud.prototype.init = function(){
 
         path = chemin + name + "_.png"
         button = new Button(name, x, 80, path);
-        
+
         button.setOnClick(function(){
             that.selectedEntities.town.buildConstruction(this.text);
         });
@@ -60,7 +60,7 @@ Hud.prototype.init = function(){
             console.log("il faut plus de batiments");
         }
     });
-    
+
     this.controlButtons.push(button);
 }
 
@@ -95,24 +95,59 @@ Hud.prototype.drawMiniMap = function(context){
 }
 
 Hud.prototype.drawUnits = function(context){
-    // var nb = that.selectedEntities.squad.length;
-    // var box_width = (context.canvas.width - 300) / nb;
+    var nb = that.selectedEntities.squad.length;
+    var box_width = (context.canvas.width - 300) / nb;
     context.save();
-    // for( var squad in that.selectedEntities.squad)
-    // {
-    //     var moral = that.selectedEntities.squad[squad].moral;
-    //     context.fillStyle = 'white';
-    //     context.fillRect(squad * box_width + 300, 0, box_width, 150);
-    //     context.fillStyle = 'red';
-    //     context.fillText("Squad " + squad + " : moral = " + moral , squad * box_width + 302, 25);
-    //     for(var unit in that.selectedEntities.squad[squad].units)
-    //     {
-    //         var hitpoints = that.selectedEntities.squad[squad].units[unit].hitPoints;
-    //         context.font = "10pt Verdana";
-    //         context.fillStyle = 'darkorange';
-    //         context.fillText("PV : "+ hitpoints, squad * box_width + 302, (40 +(unit *15)));
-    //     }
-    // }
+    var is_friend = 0;
+    var x = 320;
+    var y = 30;
+    var z = 0;
+    context.fillStyle = 'black';
+    context.font = "10pt Arial";
+    for( var i in that.selectedEntities.unit){
+      if(that.player === that.selectedEntities.unit[i].player) is_friend = 1;
+    }
+
+    for(var i in that.selectedEntities.unit){
+      if(i == 10) { x = 500; z = 0; }
+      else if(i == 20) { x = 700; z = 0;}
+      else if(i == 30) { x = 900; z = 0;}
+      if(is_friend)
+      {
+        if(that.player === that.selectedEntities.unit[i].player){
+          console.log(i);
+          context.fillText("Unité " + i
+                          + "   PV : " + that.selectedEntities.unit[i].hitPoints
+                          + " / " + that.selectedEntities.unit[i].maxHitPoints
+                          , x, y + z * 15);
+          z++;
+        }
+      }
+      else {
+        context.fillText("Unité " + z
+                        + "    PV : " + that.selectedEntities.unit[i].hitPoints
+                        + " / " + that.selectedEntities.unit[i].maxHitPoints
+                        , x, y + z * 15);
+        z++;
+      }
+    }
+
+
+    /*for( var squad in that.selectedEntities.squad)
+    {
+        var moral = that.selectedEntities.squad[squad].moral;
+        context.fillStyle = 'white';
+        context.fillRect(squad * box_width + 300, 0, box_width, 150);
+        context.fillStyle = 'red';
+        context.fillText("Squad " + squad + " : moral = " + moral , squad * box_width + 302, 25);
+        for(var unit in that.selectedEntities.squad[squad].units)
+        {
+            var hitpoints = that.selectedEntities.squad[squad].units[unit].hitPoints;
+            context.font = "10pt Verdana";
+            context.fillStyle = 'darkorange';
+            context.fillText("PV : "+ hitpoints, squad * box_width + 302, (40 +(unit *15)));
+        }
+    }*/
     context.restore();
 }
 
@@ -127,7 +162,7 @@ Hud.prototype.drawTown = function(context){
                      "Income : "+that.selectedEntities.town.income, 600, 20);
     context.fillText(that.selectedEntities.town.hitPoints+"/"+that.selectedEntities.town.maxHitPoints, 450, 20);
 
-    context.restore();   
+    context.restore();
 
     if(that.selectedEntities.town.player == that.player){
         this.drawTownConstruction(context);
@@ -147,13 +182,13 @@ Hud.prototype.drawTownConstruction = function(context){
 
 Hud.prototype.drawTownControl = function(context){
     for(var i in this.controlButtons){
-        this.controlButtons[i].draw(context);   
+        this.controlButtons[i].draw(context);
     }
 
     for(var i in this.constructionButtons){
         if(this.constructionButtons[i].pressed){
             for(var b in this.constructionChoice){
-                this.constructionChoice[b].draw(context);   
+                this.constructionChoice[b].draw(context);
             }
         }
     }
@@ -163,7 +198,7 @@ Hud.prototype.drawPlayerResources = function(context){
     context.save();
     context.fillStyle = 'black';
     context.font = "10pt Arial";
-    
+
 
     // ajout by alex (ne marche pas : parti sur les batiments a dessiner)
     pic_stone = new Image();
@@ -220,6 +255,6 @@ Hud.prototype.handleLeftClick = function(x, y){
         }
     }
     else {
-        
+
     }
 }

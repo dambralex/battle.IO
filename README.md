@@ -17,6 +17,7 @@
 - *Socket.IO*
 
 ## Aspects techniques
+Toute la partie graphique se fait à travers des dessins dans des canvas HTML.<br>
 La grande majorité des calculs se font coté client. <br>
 Le principe est simple :
   - A la connexion chaque client récupère de la part du serveur les informations nécessaires au démarrage de la partie ( Map, coordonnées de départ sur la map, coordonnées de l'adversaire ...)
@@ -36,3 +37,7 @@ Le principe est simple :
 ##### Pierre :
   - Algorithme de pathfinding
   - NodeJS / SocketIO
+  
+## Inspiration
+Nous nous sommes inspiré du jeu **KOHAN : Battle of Ahriman**<br>
+*http://www.jeuxvideo.com/jeux/pc/00008433-kohan-battles-of-ahriman.htm*
