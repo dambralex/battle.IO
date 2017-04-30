@@ -224,7 +224,7 @@ Square.prototype.draw = function(context, xView, yView){
 	this.sprite.src = this.chemin + this.state + this.overlay + ".png";
 	var screenPosition = this.getScreenPosition(xView, yView);
 
-	console.log("draw de" + this.chemin + this.state + this.overlay + ".png";);
+	// console.log("draw de" + this.chemin + this.state + this.overlay + ".png");
 	context.drawImage(this.sprite,this.width* this.step, this.height* this.orientation,this.width,this.height,screenPosition.x, screenPosition.y,this.width,this.height);
 	if (this.anim%10 == 0){
 		//context.drawImage(this.sprite,this.width* this.step, this.height* this.orientation,this.width,this.height,screenPosition.x, screenPosition.y,this.width,this.height);
@@ -595,7 +595,7 @@ Square.prototype.checkCombat = function(){
 }
 
 Square.prototype.isAlliedWith = function(entity){
-	if(((this.player == that.player) && entity.allied) || (!(this.player == that.player) && !entity.allied)){
+	if(this.player == entity.player){
 		return true;
 	}
 
@@ -648,9 +648,11 @@ Square.prototype.setId = function(id){
 }
 
 Square.prototype.setInformation = function(entity){
-	this.setHitPoints = entity.hitPoints;
+	// console.log(entity.hitPoints+" , "+entity.id);
 
 	if(this.player != that.player){
+	this.hitPoints = entity.hitPoints;
+
 		this.posX = entity.posX;
 		this.posY = entity.posY;
 		this.dead = entity.dead;
