@@ -22,7 +22,7 @@ class Client{
 
 	setOnSockets(){
 		var self = this;
-		console.log(self);
+		//console.log(self);
 
 		this.socket.on('pong', function(data){
 			// console.log(data+" ms");
@@ -31,7 +31,7 @@ class Client{
 		});
 
 		this.socket.on('gameInformation', function(entities){
-				console.log(entities);
+				//console.log(entities);
 
 			for(var i in entities.town);
 				if(entities.town[i]){

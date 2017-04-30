@@ -667,7 +667,7 @@ Square.prototype.Fill = function(){
 		this.visualRange = Unites["warrior"]["champs_de_vision"];
 	}
 	
-	else if (type[1] == 2){//cas du archer
+	else if (type[0] == 2){//cas du archer
 		classe = "/archer"
 		this.img_height = Unites["archer"]["image_walk"].img_size_x;
 		this.img_width = Unites["archer"]["image_walk"].img_size_y;
@@ -687,7 +687,7 @@ Square.prototype.Fill = function(){
 		this.visualRange = Unites["archer"]["champs_de_vision"];
 	}
 
-	else if (type[1] == 3){//cas du knight
+	else if (type[0] == 3){//cas du knight
 		classe = "/knight"
 		this.img_height = Unites["knight"]["image_walk"].img_size_x;
 		this.img_width = Unites["knight"]["image_walk"].img_size_y;

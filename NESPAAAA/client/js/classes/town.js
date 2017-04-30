@@ -132,10 +132,10 @@ Town.prototype.draw = function(context, xView, yView) {
 		overlay = '_';
 		//context.fillStyle = 'blue';
 
-	chemin_add = "batiments/human/bat_1";
+	chemin_add = "batiments/human/bat_";
 	/*sprite.src = chemin_init+type+"_"overlay".png";*/
 	//sprite.src = chemin_init+"batiments/human/bat_1"+overlay+".png"; //A GARDER AU CAS OU : MARCHE 
-	sprite.src = chemin_init+chemin_add+overlay+".png";
+	sprite.src = chemin_init+chemin_add+Towns["niveau"][this.stage].bat_img+overlay+".png";
 	
 	context.drawImage(sprite,0,0,142,132,screenPosition.x,screenPosition.y,142,132);
 	this.width = 142;
@@ -201,10 +201,15 @@ Town.prototype.buildConstruction = function(name){
 //added by Alex (tempo voir si ca marche)
 Town.prototype.upgrade = function(){
 	console.log(Towns);
-	this.stage ++;
+	if (this.stage <= Towns["niveau"].length){
+		this.stage ++;
+	}
 	//if(this.isBuilding == false){ // ?
-	this.timerConstruction = new Timer(Towns["niveau"][stage].production, Date.now());
-	this.player.gold -= Towns["niveau"][lvl].cout
+	this.timerConstruction = new Timer(Towns["niveau"][this.stage].production, Date.now());
+	this.player.gold -= Towns["niveau"][this.stage].cout;
+
+	console.log (this.stage);
+
 
 }
 

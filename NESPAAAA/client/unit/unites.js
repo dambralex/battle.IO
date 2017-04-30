@@ -17,7 +17,31 @@ var Unites = {
         "cout_recrutement" : 20,
 
         //modif by Alex
-        "anim_path" : "unites/human/archer"
+        "image_walk" : {
+          "anim_path" : "./sprites/jeu/unites/human/archer/walk",
+          img_size_x : 464,
+          img_size_y : 584,
+          sprite_size_x : 58,
+          sprite_size_y : 73,
+          nb_anim :8,
+          },
+        "image_death" : {
+          "anim_path" : "./sprites/jeu/unites/human/archer/death",
+          img_size_x : 173,
+          img_size_y : 584,
+          sprite_size_x : 58,
+          sprite_size_y : 73,
+          nb_anim :3,
+          },
+        "image_hit" : {
+          "anim_path" : "./sprites/jeu/unites/human/archer/hit",
+          img_size_x : 116,
+          img_size_y : 584,
+          sprite_size_x : 58,
+          sprite_size_y : 73,
+          nb_anim :2,
+          },
+        //done
       },
       "lanciers" : {
         "nombre" : 6,
@@ -73,8 +97,32 @@ var Unites = {
 
         "cout_recrutement" : 100,
 
-        //modif by Alex
-        "anim_path" : "unites/human/knight"
+        //modif by Alex //C'EST A TERMINER!
+        "image_walk" : {
+          "anim_path" : "./sprites/jeu/unites/human/knight/walk",
+          img_size_x : 464,
+          img_size_y : 584,
+          sprite_size_x : 58,
+          sprite_size_y : 73,
+          nb_anim :8,
+          },
+        "image_death" : {
+          "anim_path" : "./sprites/jeu/unites/human/knight/death",
+          img_size_x : 142,
+          img_size_y : 132,
+          sprite_size_x : 142,
+          sprite_size_y : 132,
+          nb_anim :4,
+          },
+        "image_hit" : {
+          "anim_path" : "./sprites/jeu/unites/human/knight/hit",
+          img_size_x : 142,
+          img_size_y : 132,
+          sprite_size_x : 142,
+          sprite_size_y : 132,
+          nb_anim :2,
+          },
+        //done
       }
 }
 var Towns = {
@@ -94,12 +142,7 @@ var Towns = {
           "temps_upgrade" : 0,
 
           //modif by Alex
-          "anim_path" : "batiments/human/bat_1",
-          "img_size_x" : 142,
-          "img_size_y" : 132,
-          "sprite_size_x" : 142,
-          "sprite_size_y" : 132,
-          "nb_anim" :1,
+          "bat_img" : 1,
           //done
         },
         {
@@ -117,12 +160,7 @@ var Towns = {
           "temps_upgrade" : 2,
 
           //modif by Alex
-          "anim_path" : "batiments/human/bat_1",
-          "img_size_x" : 142,
-          "img_size_y" : 132,
-          "sprite_size_x" : 142,
-          "sprite_size_y" : 132,
-          "nb_anim" :1,
+          "bat_img" : 1,
           //done
         },
         {
@@ -140,12 +178,7 @@ var Towns = {
           "temps_upgrade" : 5,
 
           //modif by Alex
-          "anim_path" : "batiments/human/bat_2",
-          "img_size_x" : 142,
-          "img_size_y" : 132,
-          "sprite_size_x" : 142,
-          "sprite_size_y" : 132,
-          "nb_anim" :1,
+          "bat_img" : 2,
           //done
         },
         {
@@ -163,12 +196,7 @@ var Towns = {
           "temps_upgrade" : 8,
 
           //modif by Alex
-          "anim_path" : "batiments/human/bat_2",
-          "img_size_x" : 142,
-          "img_size_y" : 132,
-          "sprite_size_x" : 142,
-          "sprite_size_y" : 132,
-          "nb_anim" :1,
+          "bat_img" : 2,
           //done
         },
         {
@@ -186,12 +214,7 @@ var Towns = {
           "temps_upgrade" : 10,
 
           //modif by Alex
-          "anim_path" : "batiments/human/bat_3",
-          "img_size_x" : 142,
-          "img_size_y" : 132,
-          "sprite_size_x" : 142,
-          "sprite_size_y" : 132,
-          "nb_anim" :1,
+          "bat_img" : 3,
           //done
         }
       ],

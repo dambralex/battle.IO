@@ -51,13 +51,14 @@ Hud.prototype.init = function(){
     var button = new Button("amélioration", x, 130);
 
     button.setOnClick(function(){
-        console.log(Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"]);
-        if ( that.selectedEntities.town.construction.length ==  that.selectedEntities.town.stage.emplacement_construction){
-            console.log("construction d'une base plus grande, nouveau stage : " + that.selectedEntities.town.stage +1);
+        //console.log(Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"]);
+        if ( that.selectedEntities.town.construction.length ==  Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"]){
+            console.log(Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"] + "batiments sur"+that.selectedEntities.town.construction.length +", construction d'une base plus grande, nouveau stage : " + that.selectedEntities.town.stage +1);
             that.selectedEntities.town.upgrade();
         }
         else{
-            console.log("il faut plus de batiments");
+            console.log(Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"] + "batiments sur"+that.selectedEntities.town.construction.length +" : il faut plus de batiments");
+            console.log(Towns["niveau"]);
         }
     });
 
