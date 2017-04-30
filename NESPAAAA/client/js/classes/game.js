@@ -34,7 +34,7 @@ class Game{
 	}
 
 	// Setting up the player
-	this.player = new Player(this, "jev", Types.Races.HUMAN, true, 100, 200);
+	// this.player = new Player(this, "jev", Types.Races.HUMAN, true, 100, 200);
 
 	// Setting up the client communication
 	this.client = new Client(this);
@@ -103,7 +103,9 @@ class Game{
 	draw(mapContext, hudContext) {
 		this.drawOnMapContext(mapContext);
 		// this.drawOnSpriteContext(spriteContext);
-		this.drawOnHudContext(hudContext);
+		if(this.player){
+			this.drawOnHudContext(hudContext);
+		}
 	}
 	
 	drawOnMapContext(mapContext){
@@ -139,8 +141,8 @@ class Game{
 	    // hudContext.fillText("Town : " + test.x + ", " +test.y, 30, 50);
 	    hudContext.fillText("Camera : " + this.camera.posX + ", " +this.camera.posY, 30, 70);
 	    hudContext.fillText("Ping : " + this.client.ping , 30, 90);
-	    if(this.selectedEntities.unit[0]){
-	    	hudContext.fillText("Squad : " + this.selectedEntities.unit[0].posX + ", " +this.selectedEntities.unit[0].posY, 30, 110);
+	    if(this.selectedEntities.town){
+	    	hudContext.fillText("Squad : " + this.selectedEntities.town.posX + ", " +this.selectedEntities.town.posY, 30, 110);
 	    }
 	   	hudContext.restore();
 	}
@@ -327,7 +329,13 @@ class Game{
 	}
 
 	startGame(){
-		paused = false;
+		this.paused = false;
+		this.hasStarted = true;
+	}
+
+	setPlayer(name, type, allied, startingX, startingY){
+		this.player = new Player(null, name, type, allied, startingX, startingY);
+
 	}
 
 }

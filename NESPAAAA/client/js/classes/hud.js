@@ -210,7 +210,7 @@ Hud.prototype.handleLeftClick = function(x, y){
         }
     }
 
-    for(var b in this.constructionButtons){
+    for(var b = 0; b < Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"]; b++){
         this.constructionButtons[b].unpress();
         if(this.constructionButtons[b].text == "libre"){
             if(collisionBox({x : x, y : y, w : 0, h : 0}, this.constructionButtons[b].getBoundingBox())){

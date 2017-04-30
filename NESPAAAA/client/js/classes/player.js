@@ -1,6 +1,7 @@
-function Player(game, name, allied, startingX, startingY){
+function Player(game, name, type, allied, startingX, startingY){
     // that = game;
     this.name = name;
+    this.type = type;
 
     new Town(that, this, startingX, startingY);
 

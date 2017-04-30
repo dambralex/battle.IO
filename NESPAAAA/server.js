@@ -61,6 +61,7 @@ var maps =
 var units = [];
 var players = [];
 var connected = 0;
+var choosenMap;
 
 var callback;
 
@@ -71,13 +72,14 @@ io.sockets.on('connection', function (socket,pseudo) {
     {
         connected++;
         var player = { nickname : pseudo};
+        player.socket = socket;
         players.push(player);
         socket.pseudo = pseudo;
 
         socket.emit('bonjour', "bonjour " + pseudo );
         console.log("connexion de : " + pseudo);
 
-        if(connected > 2){
+        if(connected > 1){
             initGame();
             startGame();
         }
@@ -86,6 +88,8 @@ io.sockets.on('connection', function (socket,pseudo) {
     socket.on('gameInformation', function(entities){
         socket.entities = entities;
         socket.broadcast.emit("gameInformation",entities);
+
+        // console.log(maps[0].playerPosition);
         // upload += sizeof(hihi);
     });
 
@@ -111,17 +115,24 @@ io.sockets.on('connection', function (socket,pseudo) {
         console.log("deconnexion de " + socket.pseudo);
         connected--;
     });
-
 });
 
 function initGame(){
-    map = chooseMap();
-
+    choosenMap = chooseMap();
 }
 
 function chooseMap(){
-    return maps[0];
+    return 0;
 }
 
+function startGame(){
+    players[0].socket.emit('opponentStart', {name :players[1].socket.pseudo, starting : maps[choosenMap].opponentPosition});
+    players[1].socket.emit('opponentStart', {name :players[0].socket.pseudo, starting : maps[choosenMap].playerPosition});
+
+    players[0].socket.emit('start', {name :players[0].socket.pseudo, starting : maps[choosenMap].playerPosition});
+    players[1].socket.emit('start', {name :players[1].socket.pseudo, starting : maps[choosenMap].opponentPosition});
+
+    console.log("Le jeu commence");
+}
 
 server.listen(8080);

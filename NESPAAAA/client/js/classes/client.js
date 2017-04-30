@@ -11,13 +11,6 @@ class Client{
 	setSocket(socket){
 		this.socket = socket;
 		//this.socket.emit('gameInformation',this.game);
-		this.socket.on('gameInformation', function(entities){
-			for(var i in entities.town)
-				console.log(entities.town[i]);
-			for(var i in entities.unit)
-				console.log(entities.unit[i]);
-		});
-
 		this.setOnSockets();
 	}
 
@@ -29,6 +22,24 @@ class Client{
 			console.log(data+" ms");
 			self.ping = data.ping;
 			self.upload = data.upload;
+		});
+
+		this.socket.on('gameInformation', function(entities){
+			for(var i in entities.town);
+				// console.log(entities.town[i]);
+			for(var i in entities.unit);
+				// console.log(entities.unit[i]);
+		});
+
+		this.socket.on('start', function(data){
+			console.log("starting in "+ data.starting[0]+", "+data.starting[1]);
+			that.setPlayer(data.name, Types.Races.HUMAN, true, data.starting[0], data.starting[1]);
+
+			that.startGame();
+		});
+
+		this.socket.on('opponentStart', function(data){
+			that.setPlayer(data.name, Types.Races.ORC, false, data.starting[0], data.starting[1]);
 		});
 	}
 
