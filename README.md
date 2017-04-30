@@ -14,8 +14,8 @@
   Quand deux joueurs sont réunis, la partie commence.
 
 ## Dépendances
-*NodeJS*
-*Socket.IO*
+- *NodeJS*
+- *Socket.IO*
 
 ## Aspects techniques
 La grande majorité des calculs se font coté clients. 
