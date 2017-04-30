@@ -10,7 +10,7 @@
 
 ## Comment jouer ?
   Le jeu se joue exclusivement en 1 VS 1, contre un joueur humain.
-  Connecter vous au serveur **http://zerdnamac.tk/dagame**, et attendez la connexion d'un  deuxième joueur.
+  Connecter vous au serveur **http://zerdnamac.tk/dagame/client**, et attendez la connexion d'un  deuxième joueur.
   Quand deux joueurs sont réunis, la partie commence.
 
 ## Dépendances
