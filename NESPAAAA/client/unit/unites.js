@@ -43,13 +43,13 @@ var Unites = {
           },
         //done
       },
-      "lanciers" : {
+      "lancers" : {
         "nombre" : 6,
         "vitesse_deplacement" : 2,
         "vitesse_attaque" : 1,
         "points_vie" : 50,
         "est_unite_distance" : false,
-        "portée_attaque" : 5,
+        "portée_attaque" : 2,
         "champs_de_vision" : 50,
         "moral" : 70,
         "armure" : 20,
@@ -60,14 +60,14 @@ var Unites = {
 
         "cout_recrutement" : 50
       },
-      "epees" : {
+      "sword" : {
         "nombre" : 6,
         "vitesse_deplacement" : 2,
         "vitesse_attaque" : 2,
         "points_vie" : 50,
         "est_unite_distance" : false,
         "portée_attaque" : 5,
-        "champs_de_vision" : 50,
+        "champs_de_vision" : 3,
         "moral" : 70,
         "armure" : 40,
         "resistance_magie" : 30,
@@ -80,14 +80,14 @@ var Unites = {
         //modif by Alex
         "anim_path" : "unites/human/swordman"
       },
-      "cavaliers" : {
+      "knight" : {
         "nombre" : 3,
-        "vitesse_deplacement" : 10,
+        "vitesse_deplacement" : 100,
         "vitesse_attaque" : 5,
-        "points_vie" : 90,
+        "points_vie" : 450,
         "est_unite_distance" : false,
         "portée_attaque" : 5,
-        "champs_de_vision" : 50,
+        "champs_de_vision" : 5,
         "moral" : 100,
         "armure" : 50,
         "resistance_magie" : 50,

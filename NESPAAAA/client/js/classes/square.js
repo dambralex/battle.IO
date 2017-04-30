@@ -102,7 +102,7 @@ function Square(square, player, type, posX, posY){
 	else{
 		// that = game;
 	this.type = type;
-	console.log(type);
+	console.log(this.type);
 	that.getNewId(this);
 
 	// Position
@@ -204,11 +204,12 @@ Square.prototype.draw = function(context, xView, yView){
 	}
 	else if(this.dead){
 		//context.fillStyle = 'black';
-		this.overlay = '_black';
+		this.overlay = '_';
 		context.strokeRect(screenPosition.x,screenPosition.y,this.width,this.height);
 	}
 	else if(this.selected){
 		//context.fillStyle = 'green';
+		console.log("coincoin");
 		this.overlay = '_green';
 		context.strokeRect(screenPosition.x,screenPosition.y,this.width,this.height);
 	}
@@ -217,10 +218,12 @@ Square.prototype.draw = function(context, xView, yView){
 		this.overlay = '_red';
 		context.strokeRect(screenPosition.x,screenPosition.y,this.width,this.height);
 	}
-	else
-		context.fillStyle = 'blue';
-		this.overlay = '_';
+	else{
+			context.fillStyle = 'blue';
+			this.overlay = '_';
+	}
 
+	console.log(this.overlay);
 	this.sprite.src = this.chemin + this.state + this.overlay + ".png";
 	var screenPosition = this.getScreenPosition(xView, yView);
 
@@ -676,7 +679,7 @@ Square.prototype.fill = function(){
 		this.width = Unites["warrior"]["image_walk"].sprite_size_x;
 		this.height = Unites["warrior"]["image_walk"].sprite_size_y;
 		this.anim_max = Unites["warrior"]["image_walk"].nb_anim -1;
-		this.chemin = chemin_init + race + classe;
+		
 
 		this.speed = Unites["warrior"]["vitesse_deplacement"];
 		this.atk_speed = Unites["warrior"]["vitesse_attaque"];
@@ -696,7 +699,7 @@ Square.prototype.fill = function(){
 		this.width = Unites["archer"]["image_walk"].sprite_size_x;
 		this.height = Unites["archer"]["image_walk"].sprite_size_y;
 		this.anim_max = Unites["archer"]["image_walk"].nb_anim -1;
-		this.chemin = chemin_init + race + classe;
+		
 
 		this.speed = Unites["archer"]["vitesse_deplacement"];
 		this.atk_speed = Unites["archer"]["vitesse_attaque"];
@@ -716,18 +719,19 @@ Square.prototype.fill = function(){
 		this.width = Unites["knight"]["image_walk"].sprite_size_x;
 		this.height = Unites["knight"]["image_walk"].sprite_size_y;
 		this.anim_max = Unites["knight"]["image_walk"].nb_anim -1;
-		this.chemin = chemin_init + race + classe;
+		
 
 		this.speed = Unites["knight"]["vitesse_deplacement"];
 		this.atk_speed = Unites["knight"]["vitesse_attaque"];
 		
 		this.maxHitPoints = Unites["knight"]["points_vie"];
-		this.hitPoints = maxHitPoints;
+		this.hitPoints = this.maxHitPoints;
 
 		this.setAttackRate(1000);
 		this.attackRange = Unites["knight"]["portée_attaque"];
 		this.visualRange = Unites["knight"]["champs_de_vision"];
 	}
+	this.chemin = chemin_init + race + classe;
 }
 
 Square.prototype.tick = function(){

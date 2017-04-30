@@ -31,7 +31,7 @@ class Client{
 		});
 
 		this.socket.on('gameInformation', function(entities){
-			console.log(entities.unit);
+			// console.log(entities.unit);
 
 			for(var i in entities.town);
 				if(entities.town[i]){
@@ -74,7 +74,6 @@ class Client{
 		});
 
 		this.socket.on('newId', function(data){
-			console.log("newid");
 			that.waitingId[0].setId(data);
 			that.waitingId.shift();
 		});

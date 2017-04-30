@@ -8,11 +8,11 @@ Types = {
         // Units
         WARRIOR: 1,
         ARCHER: 2,
-        HORSE: 3,
+        KNIGHT: 3,
 
         ORCWARRIOR: 4,
         ORCARCHER: 5,
-        ORCHORSE: 6,
+        ORCKNIGHT: 6,
 
         // Squads
         SQUAD: 7,
@@ -39,7 +39,7 @@ Types = {
 var kinds = {
     warrior: [Types.Entities.WARRIOR, "unit"],
     archer: [Types.Entities.ARCHER, "unit"],
-    horse: [Types.Entities.HORSE, "unit"],
+    knight: [Types.Entities.KNIGHT, "unit"],
 
     squad: [Types.Entities.SQUAD, "squad"],
 
