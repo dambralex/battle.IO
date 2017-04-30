@@ -32,27 +32,20 @@ Hud.prototype.init = function(){
     this.controlButtons.push(button);
     var chemin = "./sprites/hud/construction/";
     var x = 320;
-    carriere = new Image();
-    caserne = new Image();
-    ecurie = new Image();
-    mine = new Image();
-    scierie = new Image();
 
-    carriere.src = chemin + "carriere_.png";
-    caserne.src = chemin + "caserne_.png";
-    ecurie.src = chemin + "ecurie_.png";
-    mine.src = chemin + "mine_.png";
-    scierie.src = chemin + "scierie_.png";
+    var path;
 
     for(name in Towns["batiments"]){
-        button = new Button(name, x, 80);
+
+        path = chemin + name + "_.png"
+        button = new Button(name, x, 80, path);
+        
         button.setOnClick(function(){
             that.selectedEntities.town.buildConstruction(this.text);
         });
         this.constructionChoice.push(button);
 
         x = x + 50;
-        context.drawImage(carriere,0,0,38,38,x,80,38,38);
     }
 
     var button = new Button("amélioration", x, 130);
