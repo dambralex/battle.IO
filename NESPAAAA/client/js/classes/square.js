@@ -145,7 +145,6 @@ function Square(square, player, type, posX, posY){
 
 	// Health
 	this.hitPoints = 500;
-
 	this.maxHitPoints = 500;
 
 	// Combat

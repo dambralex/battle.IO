@@ -281,7 +281,10 @@ class Game{
 					if(!this.entities.unit[u1].isAlliedWith(this.entities.unit[u2])){
 						if(collisionBox(this.entities.unit[u1].getCombatZone(), this.entities.unit[u2].getCombatZone())){
 							if(!this.entities.unit[u1].attacking && !this.entities.unit[u2].dead){
-								this.entities.unit[u1].engage(this.entities.unit[u2]);
+								if(this.entities.unit[u1].isAllied())
+									this.entities.unit[u1].engage(this.entities.unit[u2]);
+								else
+									this.entities.unit[u2].engage(this.entities.unit[u1]);
 							}
 						}
 					}

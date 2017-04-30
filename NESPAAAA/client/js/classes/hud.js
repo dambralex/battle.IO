@@ -95,7 +95,7 @@ Hud.prototype.drawMiniMap = function(context){
 }
 
 Hud.prototype.drawUnits = function(context){
-    var nb = that.selectedEntities.squad.length;
+    var nb = that.selectedEntities.unit.length;
     var box_width = (context.canvas.width - 300) / nb;
     context.save();
     var is_friend = 0;
@@ -115,7 +115,7 @@ Hud.prototype.drawUnits = function(context){
       if(is_friend)
       {
         if(that.player === that.selectedEntities.unit[i].player){
-          console.log(i);
+          // console.log(i);
           context.fillText("Unité " + i
                           + "   PV : " + that.selectedEntities.unit[i].hitPoints
                           + " / " + that.selectedEntities.unit[i].maxHitPoints

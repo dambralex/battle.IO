@@ -31,8 +31,6 @@ class Client{
 		});
 
 		this.socket.on('gameInformation', function(entities){
-				console.log(entities);
-
 			for(var i in entities.town);
 				if(entities.town[i]){
 					// console.log(entities.town[i]);
