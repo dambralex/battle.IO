@@ -514,6 +514,7 @@ Square.prototype.engage = function(entity){
 	// this.attacking = true;
 	this.following = true;
 	this.setTarget(entity);
+	console.log(entity);
 }
 
 Square.prototype.disengage = function(entity){
@@ -610,6 +611,8 @@ Square.prototype.setTarget = function(entity){
 }
 
 Square.prototype.follow = function(){
+	console.log(this.target);
+
 	if(collisionBox(this.getRangeZone(), this.target.getSize())){
 		this.attacking = true;
 		this.following = false;
@@ -635,10 +638,9 @@ Square.prototype.removeTarget = function(){
 }
 
 Square.prototype.getSize = function(){
-	var box = {x : this.posX, y : this.posY, w : this.width, h : this.height};	
+	var position = this.getScreenPosition();
 
-	console.log(box);
-
+	var box = {x : position.x, y : position.y, w : this.width, h : this.height};	
 	return box;
 }
 
