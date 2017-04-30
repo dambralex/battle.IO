@@ -36,19 +36,44 @@ function Square(square, player, type, posX, posY){
 	this.chemin = square.chemin;
 	this.overlay = square.overlay;
 
+	//true sprite loading (alex)
+
+	this.img_height = 0;
+	this.img_width = 0;
+	this.state = "walk";
+
+
+	//animation
+
+		this.step = 1;
+		this.anim = 0;
+		this.repeat = 1;
+		this.anim_max = 7;
+
+	// sprites loading (temporaire)
+	this.sprite = new Image();
+
+	this.chemin = "./sprites/jeu/unites/human/archer/";
+	this.overlay = "_";
+
+
+	this.width = 58;
+	this.height = 73;
+
 	
 
 	//done
 
 	// Speed
 	this.speed = square.speed;
+	this.atk_speed;
 
 	// Pathing
 	this.nextDestination = square.nextDestination;
 	this.path = square.path;
 
 	// Combat
-	this.selected = square.false;
+	this.selected = square.selected;
 
 	// Modes
 	this.movable = square.movable;
@@ -90,39 +115,9 @@ function Square(square, player, type, posX, posY){
 	// Position
 	this.posX = posX;
 	this.posY = posY;
-	this.width = 50;
-	this.height = 50;
 
-	//orientation (by alex)
-
-	/*pour la lecture des images : 
-      U   = 0
-      UL  = 1
-      UR  = 2
-      L   = 3
-      R   = 4
-      DL  = 5
-      DR  = 6
-      D   = 7
-    */
 
 	this.orientation = 7;
-
-	//animation
-
-		this.step = 1;
-		this.anim = 0;
-		this.repeat = 1;
-
-	// sprites loading (temporaire)
-	this.sprite = new Image();
-
-	this.chemin = "./sprites/jeu/unites/human/archer/";
-	this.overlay = "_";
-
-	
-
-	//done
 
 	// Speed
 	this.speed = 50;
@@ -156,11 +151,11 @@ function Square(square, player, type, posX, posY){
 
 	// Range
 	this.attackRange = 1;
-	this.visualRange = 5;
+	this.visualRange = 10;
 
 	// Zones drawing
-	this.showCombatZone = true;
-	this.showRangeZone = true;
+	this.showCombatZone = false;
+	this.showRangeZone = false;
 	this.showPath = false;
 
 	// that.entities.unit[this.id] = this;
@@ -174,20 +169,16 @@ Square.prototype.draw = function(context, xView, yView){
 	
 	//modif by alex
 
-	
-
-	this.width = 58;
-	this.height = 73;
-	
 	var screenPosition = this.getScreenPosition(xView, yView);
 
+	this.Fill();// tout en bas, la fonction récupere les informations de l'objet pour changer ses caractéristiques
 
 	if(this.showCombatZone)
-		this.drawCombatZone(context, xView, yView);
+		this.drawCombatZone(context);
 	if(this.showRangeZone)
-		this.drawRangeZone(context, xView, yView);
+		this.drawRangeZone(context);
 	if(this.showPath)
-		this.drawPath(context, xView, yView);
+		this.drawPath(context);
 
 	if(this.selected && !(this.player == that.player)){
 		context.fillStyle = 'pink';
@@ -213,7 +204,7 @@ Square.prototype.draw = function(context, xView, yView){
 		context.fillStyle = 'blue';
 		this.overlay = '_';
 
-	this.sprite.src = this.chemin + "walk" + this.overlay + ".png";
+	this.sprite.src = this.chemin + this.state + this.overlay + ".png";
 	var screenPosition = this.getScreenPosition(xView, yView);
 
 	context.drawImage(this.sprite,this.width* this.step, this.height* this.orientation,this.width,this.height,screenPosition.x, screenPosition.y,this.width,this.height);
@@ -221,7 +212,7 @@ Square.prototype.draw = function(context, xView, yView){
 		//context.drawImage(this.sprite,this.width* this.step, this.height* this.orientation,this.width,this.height,screenPosition.x, screenPosition.y,this.width,this.height);
 		if (this.repeat == 1){
 			this.step ++;
-			if (this.step > 7){
+			if (this.step > this.anim_max){
 				this.step = 0;
 			}
 		}
@@ -238,13 +229,13 @@ Square.prototype.draw = function(context, xView, yView){
 } 
 
 Square.prototype.getScreenPosition = function(xView, yView){
-	return {x : this.posX - this.posY - xView * 2, y : this.posX * 0.5 + this.posY*0.5 - yView};
+	return {x : this.posX + this.posY * -1 - xView * 2, y : this.posX * 0.5 + this.posY*0.5 - yView};
 }
 
-Square.prototype.drawCombatZone = function(context, xView, yView){
+Square.prototype.drawCombatZone = function(context){
 	context.save();	
 
-	var combatZone = this.getCombatZone(xView, yView);
+	var combatZone = this.getCombatZone();
 
 	context.fillStyle = 'yellow';
 	context.fillRect(combatZone.x, combatZone.y, combatZone.w, combatZone.h);
@@ -253,10 +244,10 @@ Square.prototype.drawCombatZone = function(context, xView, yView){
 
 }
 
-Square.prototype.drawRangeZone = function(context, xView, yView){
+Square.prototype.drawRangeZone = function(context){
 	context.save();	
 
-	var rangeZone = this.getRangeZone(xView, yView);
+	var rangeZone = this.getRangeZone();
 
 	context.fillStyle = 'grey';
 	context.fillRect(rangeZone.x, rangeZone.y, rangeZone.w, rangeZone.h);
@@ -265,7 +256,7 @@ Square.prototype.drawRangeZone = function(context, xView, yView){
 
 }
 
-Square.prototype.drawPath = function(context, xView, yView){
+Square.prototype.drawPath = function(context){
 
 	context.save();
 
@@ -485,6 +476,10 @@ Square.prototype.toggleSelect = function(){
 		this.selected = true;
 }
 
+Square.prototype.selectSquad = function(){
+	this.squad.select();
+}
+
 Square.prototype.isMovable = function(){
 	return this.movable;
 }
@@ -533,24 +528,17 @@ Square.prototype.hurt = function(dmg){
 }
 
 Square.prototype.getCenter = function(){
-	return {x : this.posX, y : this.posY };
-}
-
-Square.prototype.getCenterOnScreen = function(){
 	var xView = that.camera.posX;
 	var yView = that.camera.posY;
 
-	var center = this.getScreenPosition(xView, yView);
-	center.x += this.width/2;
-	center.y += this.height/2;
-
+	var center = {x : this.posX, y : this.posY};
 	// var center = {x : this.posX + this.posY * -1 +this.width/2, y :  this.posX * 0.5 + this.posY*0.5 +this.height/2};
 
 	return center;
 }
 
-Square.prototype.getCombatZone = function(xView, yView){
-	var center = this.getCenterOnScreen();
+Square.prototype.getCombatZone = function(){
+	var center = this.getCenter();
 
 	var rect = {x : center.x - this.visualRange*32/2,
 				y : center.y - this.visualRange*32/2,	
@@ -560,8 +548,8 @@ Square.prototype.getCombatZone = function(xView, yView){
 	return rect;
 }
 
-Square.prototype.getRangeZone = function(xView, yView){
-	var center = this.getCenterOnScreen();
+Square.prototype.getRangeZone = function(){
+	var center = this.getCenter();
 
 	var rect = {x : center.x - (this.attackRange+1)*32/2,
 				y : center.y - (this.attackRange+1)*32/2,	
@@ -582,7 +570,7 @@ Square.prototype.checkCombat = function(){
 }
 
 Square.prototype.isAlliedWith = function(entity){
-	if(this.player == entity.player){
+	if(((this.player == that.player) && entity.allied) || (!(this.player == that.player) && !entity.allied)){
 		return true;
 	}
 
@@ -598,6 +586,10 @@ Square.prototype.setTarget = function(entity){
 }
 
 Square.prototype.follow = function(){
+	var targetPos = this.getTargetPos();	
+
+	setDestination(targetPos.x, targetPos.y);
+
 	if(collisionBox(this.getRangeZone(), this.target.getSize())){
 		this.attacking = true;
 		this.following = false;
@@ -642,9 +634,75 @@ Square.prototype.setInformation = function(entity){
 	}
 }
 
-Square.prototype.tick = function(){
-	if(this.following){
-		var targetPos = this.getTargetPos();
-		this.setDestination(targetPos.x, targetPos.y);
+Square.prototype.Fill = function(){
+	var race;
+	var classe;
+	var chemin_init = "./sprites/jeu/unites/"
+	if (this.player.type == type.race.HUMAN){
+		race = "/human";
+	}
+	else {
+		race = "/orc";
+	}
+
+	//ex : Unites["archers"]["nombre"] donne 6
+	if (this.type[0] == 1 ){//cas du warrior
+		classe = "/warrior"
+		this.img_height = Unites["warrior"]["image_walk"].img_size_x;
+		this.img_width = Unites["warrior"]["image_walk"].img_size_y;
+		this.width = Unites["warrior"]["image_walk"].sprite_size_x;
+		this.height = Unites["warrior"]["image_walk"].sprite_size_y;
+		this.anim_max = Unites["warrior"]["image_walk"].nb_anim -1;
+		this.chemin = chemin_init + race + classe;
+
+		this.speed = Unites["warrior"]["vitesse_deplacement"];
+		this.atk_speed = Unites["warrior"]["vitesse_attaque"];
+		
+		this.maxHitPoints = Unites["warrior"]["points_vie"];
+		this.hitPoints = maxHitPoints;
+
+		this.setAttackRate(1000);
+		this.attackRange = Unites["warrior"]["portée_attaque"];
+		this.visualRange = Unites["warrior"]["champs_de_vision"];
+	}
+	
+	else if (type[1] == 2){//cas du archer
+		classe = "/archer"
+		this.img_height = Unites["archer"]["image_walk"].img_size_x;
+		this.img_width = Unites["archer"]["image_walk"].img_size_y;
+		this.width = Unites["archer"]["image_walk"].sprite_size_x;
+		this.height = Unites["archer"]["image_walk"].sprite_size_y;
+		this.anim_max = Unites["archer"]["image_walk"].nb_anim -1;
+		this.chemin = chemin_init + race + classe;
+
+		this.speed = Unites["archer"]["vitesse_deplacement"];
+		this.atk_speed = Unites["archer"]["vitesse_attaque"];
+		
+		this.maxHitPoints = Unites["archer"]["points_vie"];
+		this.hitPoints = maxHitPoints;
+
+		this.setAttackRate(1000);
+		this.attackRange = Unites["archer"]["portée_attaque"];
+		this.visualRange = Unites["archer"]["champs_de_vision"];
+	}
+
+	else if (type[1] == 3){//cas du knight
+		classe = "/knight"
+		this.img_height = Unites["knight"]["image_walk"].img_size_x;
+		this.img_width = Unites["knight"]["image_walk"].img_size_y;
+		this.width = Unites["knight"]["image_walk"].sprite_size_x;
+		this.height = Unites["knight"]["image_walk"].sprite_size_y;
+		this.anim_max = Unites["knight"]["image_walk"].nb_anim -1;
+		this.chemin = chemin_init + race + classe;
+
+		this.speed = Unites["knight"]["vitesse_deplacement"];
+		this.atk_speed = Unites["knight"]["vitesse_attaque"];
+		
+		this.maxHitPoints = Unites["knight"]["points_vie"];
+		this.hitPoints = maxHitPoints;
+
+		this.setAttackRate(1000);
+		this.attackRange = Unites["knight"]["portée_attaque"];
+		this.visualRange = Unites["knight"]["champs_de_vision"];
 	}
 }
