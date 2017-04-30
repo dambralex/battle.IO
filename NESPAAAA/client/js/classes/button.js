@@ -68,7 +68,7 @@
 // }
 
 class Button{
-	constructor(text, posX, posY){
+	constructor(text, posX, posY, source){
 		var self = this;
 
 		this.posX = posX || 0;
@@ -77,6 +77,12 @@ class Button{
 		this.showButton = true;
 
 		this.text = text || "";
+
+		this.icone = new Image();
+
+		this.source = source;
+		this.icone.src = source;
+		console.log(source);
 	}
 
 	press(){
@@ -96,8 +102,10 @@ class Button{
 	draw(context){
 		context.save()
 		if(this.showButton){
+			//context.drawImage(this.icone,0,0,38,38,this.posX,this.posY,38,38);
 			if(!this.pressed){
 				context.strokeStyle = 'purple';
+				//context.drawImage(this.icone,0,0,38,38,this.posX,this.posY,38,38);
 				context.strokeRect(this.posX, this.posY, 40, 40);
 				if(this.text){
 					context.fillStyle = 'purple';
@@ -110,8 +118,8 @@ class Button{
 				context.fillRect(this.posX, this.posY, 40, 40);
 				if(this.text){
 					context.fillStyle = 'white';
-   		 			context.font = "8pt Arial";
-    				context.fillText(this.text, this.posX+5, this.posY+20);
+					context.font = "8pt Arial";
+					context.fillText(this.text, this.posX+5, this.posY+20);
 				}
 			}
 		}
