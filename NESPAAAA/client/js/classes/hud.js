@@ -95,24 +95,24 @@ Hud.prototype.drawMiniMap = function(context){
 }
 
 Hud.prototype.drawUnits = function(context){
-    var nb = that.selectedEntities.squad.length;
-    var box_width = (context.canvas.width - 300) / nb;
+    // var nb = that.selectedEntities.squad.length;
+    // var box_width = (context.canvas.width - 300) / nb;
     context.save();
-    for( var squad in that.selectedEntities.squad)
-    {
-        var moral = that.selectedEntities.squad[squad].moral;
-        context.fillStyle = 'white';
-        context.fillRect(squad * box_width + 300, 0, box_width, 150);
-        context.fillStyle = 'red';
-        context.fillText("Squad " + squad + " : moral = " + moral , squad * box_width + 302, 25);
-        for(var unit in that.selectedEntities.squad[squad].units)
-        {
-            var hitpoints = that.selectedEntities.squad[squad].units[unit].hitPoints;
-            context.font = "10pt Verdana";
-            context.fillStyle = 'darkorange';
-            context.fillText("PV : "+ hitpoints, squad * box_width + 302, (40 +(unit *15)));
-        }
-    }
+    // for( var squad in that.selectedEntities.squad)
+    // {
+    //     var moral = that.selectedEntities.squad[squad].moral;
+    //     context.fillStyle = 'white';
+    //     context.fillRect(squad * box_width + 300, 0, box_width, 150);
+    //     context.fillStyle = 'red';
+    //     context.fillText("Squad " + squad + " : moral = " + moral , squad * box_width + 302, 25);
+    //     for(var unit in that.selectedEntities.squad[squad].units)
+    //     {
+    //         var hitpoints = that.selectedEntities.squad[squad].units[unit].hitPoints;
+    //         context.font = "10pt Verdana";
+    //         context.fillStyle = 'darkorange';
+    //         context.fillText("PV : "+ hitpoints, squad * box_width + 302, (40 +(unit *15)));
+    //     }
+    // }
     context.restore();
 }
 

@@ -24,13 +24,11 @@ class Game{
 	// Setting up our entities
 	this.entities = {
 		town : [],
-		squad : [],
 		unit : []
 	};
 	this.selectedEntities = {
 		town : null,
-		unit : [],
-		squad : []
+		unit : []
 	}
 
 	// Setting up the player
@@ -96,8 +94,7 @@ class Game{
 			this.forEachEntity(function(entity){
 				entity.update(delta);
 			});
-		}
-		
+		}		
 		// this.client.update();
 	}
 	
@@ -130,10 +127,6 @@ class Game{
 		// this.hud.draw(mapContext);
 	}
 	
-	drawOnSpriteContext(spriteContext){
-		
-	}
-	
 	drawOnHudContext(hudContext){
 		this.hud.draw(hudContext);
 	
@@ -150,10 +143,6 @@ class Game{
 	   	hudContext.restore();
 	}
 	
-	processInput(event){
-	
-	}
-	
 	processHudInput(event){
 		switch(event.type){
 			case "mousedown" : 
@@ -167,7 +156,6 @@ class Game{
 	}
 	
 	processGameInput(event){
-		console.log(event);
 		switch(event.type){
 			case "mousedown" : 
 				that.mouseObj.startX = event.pageX;
@@ -275,28 +263,33 @@ class Game{
 			this.mouseObj.setOutTop(true);
 		else
 			this.mouseObj.setOutTop(false);
-
-		console.log(y +" > "+ this.camera.hView - 100);
 	
-		if(y > this.camera.hView - 100)
+		if(y > this.camera.hView - 20)
 			this.mouseObj.setOutBottom(true);
 		else
 			this.mouseObj.setOutBottom(false);
 	}
 	
 	handleCollision(){
-	
+		this.checkCombatZone();	
 	}
 	
 	checkCombatZone(){
-	
+		for(var u1 in this.entities.unit){
+			for(var u2 in this.entities.unit){
+				if(u1 != u2 && (!this.entities.unit[u2].dead && !this.entities.unit[u1].dead)){
+					if(!this.entities.unit[u1].isAlliedWith(this.entities.unit[u2])){
+						if(collisionBox(this.entities.unit[u1].getCombatZone(), this.entities.unit[u2].getCombatZone())){
+							if(!this.entities.unit[u1].attacking && !this.entities.unit[u2].dead){
+								this.entities.unit[u1].engage(this.entities.unit[u2]);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
-	
-	// Lache un comm ;)
-	spawnMechant(x, y){
-		
-	}
-	
+
 	forEachEntity(callback){	
 		for(var t in this.entities.town)
 			callback(this.entities.town[t]);
@@ -326,6 +319,10 @@ class Game{
 			that.player.tick();
 		}
 		that.client.tick();
+		that.forEachUnit(function(unit){
+			unit.tick();
+		});
+		that.handleCollision();
 	}
 
 	setSocket(socket){

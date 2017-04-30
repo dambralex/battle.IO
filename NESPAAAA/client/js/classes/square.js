@@ -48,7 +48,7 @@ function Square(square, player, type, posX, posY){
 	this.path = square.path;
 
 	// Combat
-	this.selected = square.selected;
+	this.selected = square.false;
 
 	// Modes
 	this.movable = square.movable;
@@ -157,11 +157,11 @@ function Square(square, player, type, posX, posY){
 
 	// Range
 	this.attackRange = 1;
-	this.visualRange = 10;
+	this.visualRange = 5;
 
 	// Zones drawing
-	this.showCombatZone = false;
-	this.showRangeZone = false;
+	this.showCombatZone = true;
+	this.showRangeZone = true;
 	this.showPath = false;
 
 	// that.entities.unit[this.id] = this;
@@ -177,39 +177,38 @@ Square.prototype.draw = function(context, xView, yView){
 
 	
 
-	var wdth = 58;
-	var hght = 73;
-
+	this.width = 58;
+	this.height = 73;
 	
 	var screenPosition = this.getScreenPosition(xView, yView);
 
 
 	if(this.showCombatZone)
-		this.drawCombatZone(context);
+		this.drawCombatZone(context, xView, yView);
 	if(this.showRangeZone)
-		this.drawRangeZone(context);
+		this.drawRangeZone(context, xView, yView);
 	if(this.showPath)
-		this.drawPath(context);
+		this.drawPath(context, xView, yView);
 
 	if(this.selected && !(this.player == that.player)){
 		context.fillStyle = 'pink';
 		this.overlay = '_pink';
-		context.strokeRect(screenPosition.x,screenPosition.y,wdth,hght);
+		context.strokeRect(screenPosition.x,screenPosition.y,this.width,this.height);
 	}
 	else if(this.dead){
 		context.fillStyle = 'black';
 		this.overlay = '_black';
-		context.strokeRect(screenPosition.x,screenPosition.y,wdth,hght);
+		context.strokeRect(screenPosition.x,screenPosition.y,this.width,this.height);
 	}
 	else if(this.selected){
 		context.fillStyle = 'green';
 		this.overlay = '_green';
-		context.strokeRect(screenPosition.x,screenPosition.y,wdth,hght);
+		context.strokeRect(screenPosition.x,screenPosition.y,this.width,this.height);
 	}
 	else if(!(this.player == that.player)){
 		context.fillStyle = 'red';
 		this.overlay = '_red';
-		context.strokeRect(screenPosition.x,screenPosition.y,wdth,hght);
+		context.strokeRect(screenPosition.x,screenPosition.y,this.width,this.height);
 	}
 	else
 		context.fillStyle = 'blue';
@@ -218,9 +217,9 @@ Square.prototype.draw = function(context, xView, yView){
 	this.sprite.src = this.chemin + "walk" + this.overlay + ".png";
 	var screenPosition = this.getScreenPosition(xView, yView);
 
-	context.drawImage(this.sprite,wdth* this.step, hght* this.orientation,wdth,hght,screenPosition.x, screenPosition.y,wdth,hght);
+	context.drawImage(this.sprite,this.width* this.step, this.height* this.orientation,this.width,this.height,screenPosition.x, screenPosition.y,this.width,this.height);
 	if (this.anim%10 == 0){
-		//context.drawImage(this.sprite,wdth* this.step, hght* this.orientation,wdth,hght,screenPosition.x, screenPosition.y,wdth,hght);
+		//context.drawImage(this.sprite,this.width* this.step, this.height* this.orientation,this.width,this.height,screenPosition.x, screenPosition.y,this.width,this.height);
 		if (this.repeat == 1){
 			this.step ++;
 			if (this.step > 7){
@@ -240,13 +239,13 @@ Square.prototype.draw = function(context, xView, yView){
 } 
 
 Square.prototype.getScreenPosition = function(xView, yView){
-	return {x : this.posX + this.posY * -1 - xView * 2, y : this.posX * 0.5 + this.posY*0.5 - yView};
+	return {x : this.posX - this.posY - xView * 2, y : this.posX * 0.5 + this.posY*0.5 - yView};
 }
 
-Square.prototype.drawCombatZone = function(context){
+Square.prototype.drawCombatZone = function(context, xView, yView){
 	context.save();	
 
-	var combatZone = this.getCombatZone();
+	var combatZone = this.getCombatZone(xView, yView);
 
 	context.fillStyle = 'yellow';
 	context.fillRect(combatZone.x, combatZone.y, combatZone.w, combatZone.h);
@@ -255,10 +254,10 @@ Square.prototype.drawCombatZone = function(context){
 
 }
 
-Square.prototype.drawRangeZone = function(context){
+Square.prototype.drawRangeZone = function(context, xView, yView){
 	context.save();	
 
-	var rangeZone = this.getRangeZone();
+	var rangeZone = this.getRangeZone(xView, yView);
 
 	context.fillStyle = 'grey';
 	context.fillRect(rangeZone.x, rangeZone.y, rangeZone.w, rangeZone.h);
@@ -267,7 +266,7 @@ Square.prototype.drawRangeZone = function(context){
 
 }
 
-Square.prototype.drawPath = function(context){
+Square.prototype.drawPath = function(context, xView, yView){
 
 	context.save();
 
@@ -487,10 +486,6 @@ Square.prototype.toggleSelect = function(){
 		this.selected = true;
 }
 
-Square.prototype.selectSquad = function(){
-	this.squad.select();
-}
-
 Square.prototype.isMovable = function(){
 	return this.movable;
 }
@@ -539,17 +534,24 @@ Square.prototype.hurt = function(dmg){
 }
 
 Square.prototype.getCenter = function(){
+	return {x : this.posX, y : this.posY };
+}
+
+Square.prototype.getCenterOnScreen = function(){
 	var xView = that.camera.posX;
 	var yView = that.camera.posY;
 
-	var center = {x : this.posX, y : this.posY};
+	var center = this.getScreenPosition(xView, yView);
+	center.x += this.width/2;
+	center.y += this.height/2;
+
 	// var center = {x : this.posX + this.posY * -1 +this.width/2, y :  this.posX * 0.5 + this.posY*0.5 +this.height/2};
 
 	return center;
 }
 
-Square.prototype.getCombatZone = function(){
-	var center = this.getCenter();
+Square.prototype.getCombatZone = function(xView, yView){
+	var center = this.getCenterOnScreen();
 
 	var rect = {x : center.x - this.visualRange*32/2,
 				y : center.y - this.visualRange*32/2,	
@@ -559,8 +561,8 @@ Square.prototype.getCombatZone = function(){
 	return rect;
 }
 
-Square.prototype.getRangeZone = function(){
-	var center = this.getCenter();
+Square.prototype.getRangeZone = function(xView, yView){
+	var center = this.getCenterOnScreen();
 
 	var rect = {x : center.x - (this.attackRange+1)*32/2,
 				y : center.y - (this.attackRange+1)*32/2,	
@@ -581,7 +583,7 @@ Square.prototype.checkCombat = function(){
 }
 
 Square.prototype.isAlliedWith = function(entity){
-	if(((this.player == that.player) && entity.allied) || (!(this.player == that.player) && !entity.allied)){
+	if(this.player == entity.player){
 		return true;
 	}
 
@@ -597,10 +599,6 @@ Square.prototype.setTarget = function(entity){
 }
 
 Square.prototype.follow = function(){
-	var targetPos = this.getTargetPos();	
-
-	setDestination(targetPos.x, targetPos.y);
-
 	if(collisionBox(this.getRangeZone(), this.target.getSize())){
 		this.attacking = true;
 		this.following = false;
@@ -642,5 +640,12 @@ Square.prototype.setInformation = function(entity){
 		this.posX = entity.posX;
 		this.posY = entity.posY;
 		this.dead = entity.dead;
+	}
+}
+
+Square.prototype.tick = function(){
+	if(this.following){
+		var targetPos = this.getTargetPos();
+		this.setDestination(targetPos.x, targetPos.y);
 	}
 }

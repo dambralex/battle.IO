@@ -9,6 +9,9 @@ class Client{
 
 		this.currentId = 0;
 		this.requestIdDone = false;
+
+		this.townInformation = [];
+		this.unitInformation = [];
 	}
 
 	setSocket(socket){
@@ -28,12 +31,14 @@ class Client{
 		});
 
 		this.socket.on('gameInformation', function(entities){
-				// console.log(entities.unit);
+				console.log(entities);
 
 			for(var i in entities.town);
 				if(entities.town[i]){
 					// console.log(entities.town[i]);
 					// console.log(that.entities.town[i]);
+					// console.log(entities.town[i].id);
+
 					if(!that.entities.town[entities.town[i].id]){
 						new Town(entities.town[i]);
 					}
@@ -76,8 +81,45 @@ class Client{
 	}
 
 	update(){
-		if(this.socket){
-			this.socket.emit('gameInformation',that.entities);
+		this.townInformation = [];
+		this.unitInformation = [];
+
+		var tmp;
+
+		if(this.socket){ 
+			for(var t in that.entities.town){
+				if(that.entities.town[t].player == that.player){
+					tmp = {id : that.entities.town[t].id,
+					hitPoints : that.entities.town[t].hitPoints,
+					maxHitPoints : that.entities.town[t].maxHitPoints,
+					posX : that.entities.town[t].posX,
+					posY : that.entities.town[t].posY,
+					stage : that.entities.town[t].stage,
+					dead : that.entities.town[t].dead,
+					};
+					this.townInformation.push(tmp);
+				}
+			}
+			for(var u in that.entities.unit){
+				if(that.entities.unit[u].player == that.player){
+					tmp = {id : that.entities.unit[u].id,
+					hitPoints : that.entities.unit[u].hitPoints,
+					posX : that.entities.unit[u].posX,
+					posY : that.entities.unit[u].posY,
+					width : that.entities.unit[u].width,
+					height : that.entities.unit[u].height,
+					orientation : that.entities.unit[u].orientation,
+					chemin : that.entities.unit[u].chemin,
+					step : that.entities.unit[u].step,
+					anim : that.entities.unit[u].anim,
+					attackRange : that.entities.unit[u].attackRange,
+					visualRange : that.entities.unit[u].visualRange,
+					dead : that.entities.unit[u].dead,
+					};
+					this.unitInformation.push(tmp);
+				}
+			}
+			this.socket.emit('gameInformation', {town : this.townInformation, unit : this.unitInformation});
 		}
 	}
 
