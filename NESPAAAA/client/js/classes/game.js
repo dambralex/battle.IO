@@ -38,6 +38,7 @@ class Game{
 
 	// Setting up the client communication
 	this.client = new Client();
+	this.waitingId = [];
 	// this.client.setGame(this);
 
 	// Pausing 
@@ -112,7 +113,9 @@ class Game{
 		this.map.draw(mapContext, this.camera.posX, this.camera.posY);
 	
 		this.forEachEntity(function(entity){
-			entity.draw(mapContext, that.camera.posX, that.camera.posY);
+			if(entity){
+				entity.draw(mapContext, that.camera.posX, that.camera.posY);
+			}
 		});
 	
 		// for(var t in this.entities.town)
@@ -324,8 +327,10 @@ class Game{
 		this.client.setSocket(socket);
 	}
 
-	getNewId(){
-		return this.idCount++;
+	getNewId(entity){
+		// return this.idCount++;
+		this.client.requestNewId();
+		this.waitingId.push(entity);
 	}
 
 	startGame(){

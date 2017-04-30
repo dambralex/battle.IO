@@ -28,13 +28,33 @@ class Client{
 		});
 
 		this.socket.on('gameInformation', function(entities){
-				console.log(that.entities.town);
+				// console.log(entities.unit);
 
 			for(var i in entities.town);
-				// console.log(entities.town[i]);
-				// console.log(that.entities.town[i]);
-			for(var i in entities.unit);
+				if(entities.town[i]){
+					// console.log(entities.town[i]);
+					// console.log(that.entities.town[i]);
+					if(!that.entities.town[entities.town[i].id]){
+						new Town(entities.town[i]);
+					}
+					else{
+						that.entities.town[entities.town[i].id].setInformation(entities.town[i]);
+					}
+				}
+			for(var i in entities.unit){
 				// console.log(entities.unit[i]);
+				if(entities.unit[i]){
+					// console.log(entities.unit[i]);
+					// console.log(that.entities.unit[i]);
+					if(!that.entities.unit[entities.unit[i].id]){
+						new Square(entities.unit[i]);
+					}
+					else{
+						that.entities.unit[entities.unit[i].id].setInformation(entities.unit[i]);
+					}
+				}
+			}
+
 		});
 
 		this.socket.on('start', function(data){
@@ -50,7 +70,8 @@ class Client{
 
 		this.socket.on('newId', function(data){
 			console.log("newid");
-			this.currentId = data;
+			that.waitingId[0].setId(data);
+			that.waitingId.shift();
 		});
 	}
 
@@ -64,5 +85,9 @@ class Client{
 		if(this.socket){
 			this.socket.emit('stats', Date.now());
 		}
+	}
+
+	requestNewId(){
+		this.socket.emit('newId');
 	}
 }

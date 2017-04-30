@@ -108,9 +108,9 @@ io.sockets.on('connection', function (socket,pseudo) {
         upload = 0;
     });
 
-    socket.on('newId', function(idCount){
+    socket.on('newId', function(){
         console.log(idCount);
-        socket.broadcast.emit('newId', idCount );
+        socket.emit('newId', idCount++ );
     });
 
 
@@ -137,8 +137,8 @@ function chooseMap(){
 }
 
 function startGame(){
-    players[0].socket.emit('opponentStart', {name :players[1].socket.pseudo, starting : maps[choosenMap].opponentPosition});
-    players[1].socket.emit('opponentStart', {name :players[0].socket.pseudo, starting : maps[choosenMap].playerPosition});
+    // players[0].socket.emit('opponentStart', {name :players[1].socket.pseudo, starting : maps[choosenMap].opponentPosition});
+    // players[1].socket.emit('opponentStart', {name :players[0].socket.pseudo, starting : maps[choosenMap].playerPosition});
 
     players[0].socket.emit('start', {name :players[0].socket.pseudo, starting : maps[choosenMap].playerPosition});
     players[1].socket.emit('start', {name :players[1].socket.pseudo, starting : maps[choosenMap].opponentPosition});

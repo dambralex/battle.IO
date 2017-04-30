@@ -20,10 +20,10 @@ Hud.prototype.init = function(){
         this.constructionButtons.push(button);
     }
 
-    var button = new Button("Crée une esquade de soldats mélée", 320, 130);
+    var button = new Button("Soldats mélée", 320, 130);
 
     button.setOnClick(function(){
-        var wtf = new Square(that, null, kinds.warrior, that.selectedEntities.town.posX+that.selectedEntities.town.width/2,
+        new Square(null, that.player, kinds.warrior, that.selectedEntities.town.posX+that.selectedEntities.town.width/2,
                                    that.selectedEntities.town.posY+that.selectedEntities.town.height +20);
         // wtf.posX = that.selectedEntities.town.posX+that.selectedEntities.town.width/2;
         // wtf.posY = that.selectedEntities.town.posY+that.selectedEntities.town.height +20;

@@ -3,7 +3,7 @@ function Player(game, name, type, allied, startingX, startingY){
     this.name = name;
     this.type = type;
 
-    new Town(that, this, startingX, startingY);
+    new Town(null, this, startingX, startingY);
 
     this.stone = 0;
     this.wood = 0;

@@ -1,6 +1,53 @@
-function Town(game, player, posX, posY){
+function Town(town, player, posX, posY){
 	// that = game;
-	this.id = that.getNewId();
+	if(town){
+		this.id = town.id;
+	this.kind = town.kind;
+
+	// Position
+	this.posX = town.posX;
+	this.posY = town.posY;
+	this.width = town.width;
+	this.height = town.height;
+
+	// Range
+	this.visualRange = town.visualRange;
+	this.attackRange = town.attackRange;
+
+	// Movement
+	this.nextDestination = town.nextDestination;
+
+	// Health
+	this.hitPoints = town.hitPoints;
+	this.maxHitPoints = town.maxHitPoints;
+
+	// Modes
+	this.attacking = town.attacking;
+	this.player = town.player;
+	this.movable = town.movable;
+	this.selected = false;
+	this.dead = town.dead;
+
+	// Composition
+	this.name = town.name;
+	this.stage = town.stage; // état de la ville en cours
+
+	
+	this.construction = town.construction;
+
+	this.stone = town.stone;
+    this.wood = town.wood;
+    this.iron = town.iron;
+    this.income = town.income;
+
+    this.timerConstruction = town.timerConstruction;
+    this.isBuilding = town.isBuilding;
+    this.currentBuilding = town.currentBuilding;
+
+	that.entities.town[this.id] = this;
+	}
+	else{
+	that.getNewId(this);
 	this.kind = kinds.town;
 
 	// Position
@@ -43,7 +90,9 @@ function Town(game, player, posX, posY){
     this.isBuilding = false;
     this.currentBuilding = null;
 
-	that.entities.town.push(this);
+	// that.entities.town.push(this);
+	}
+	
 }
 
 Town.prototype.draw = function(context, xView, yView) {
@@ -157,4 +206,15 @@ Town.prototype.upgrade = function(){
 	this.timerConstruction = new Timer(Towns["niveau"][stage].production, Date.now());
 	this.player.gold -= Towns["niveau"][lvl].cout
 
+}
+
+Town.prototype.setId = function(id){
+	this.id = id;
+	that.entities.town[id] = this;
+}
+
+Town.prototype.setInformation = function(entity){
+	this.setHitPoints = entity.hitPoints;
+	this.setStage = entity.stage;
+	this.dead = entity.dead;
 }

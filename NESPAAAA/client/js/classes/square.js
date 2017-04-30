@@ -1,8 +1,91 @@
-function Square(game, squad, type, posX, posY){
-	// that = game;
-	this.squad = squad;
+function Square(square, player, type, posX, posY){
+	if(square){
+		// that = game;
+	this.type = square.type;
+	this.id = square.id;
+
+	// Position
+	this.posX = square.posX;
+	this.posY = square.posY;
+	this.width = square.width;
+	this.height = square.height;
+
+	//orientation (by alex)
+
+	/*pour la lecture des images : 
+      U   = 0
+      UL  = 1
+      UR  = 2
+      L   = 3
+      R   = 4
+      DL  = 5
+      DR  = 6
+      D   = 7
+    */
+
+	this.orientation = square.orientation;
+	//animation
+
+		this.step = square.step;
+		this.anim = square.anim;
+		this.repeat = square.repeat;
+
+	// sprites loading (temporaire)
+	this.sprite = new Image();
+
+	this.chemin = square.chemin;
+	this.overlay = square.overlay;
+
+	
+
+	//done
+
+	// Speed
+	this.speed = square.speed;
+
+	// Pathing
+	this.nextDestination = square.nextDestination;
+	this.path = square.path;
+
+	// Combat
+	this.selected = square.selected;
+
+	// Modes
+	this.movable = square.movable;
+	this.ranged = square.ranged;
+	this.attacking = square.attacking;
+	this.dead = square.dead;
+
+	this.player = square.player;
+	this.following = square.following;
+
+	// Health
+	this.hitPoints = square.hitPoints;
+	this.maxHitPoints = square.maxHitPoints;
+
+	// Combat
+	this.target = square.target;
+	this.attackers = square.attackers;
+
+	this.attackCallback = square.attackCallback;
+
+	// Range
+	this.attackRange = square.attackRange;
+	this.visualRange = square.visualRange;
+
+	// Zones drawing
+	this.showCombatZone = square.showCombatZone;
+	this.showRangeZone = square.showRangeZone;
+	this.showPath = square.showPath;
+
+	that.entities.unit[this.id] = this;
+
+	// that.entities.unit[this.id] = this;
+	}
+	else{
+		// that = game;
 	this.type = type;
-	this.id = that.getNewId();
+	that.getNewId(this);
 
 	// Position
 	this.posX = posX;
@@ -23,7 +106,7 @@ function Square(game, squad, type, posX, posY){
       D   = 7
     */
 
-	this.orientation;
+	this.orientation = 7;
 
 	//animation
 
@@ -57,19 +140,13 @@ function Square(game, squad, type, posX, posY){
 	this.attacking = false;
 	this.dead = false;
 
-	if(this.squad)
-		this.allied = this.squad.allied
-	else
-		this.allied = true;
+	this.player = player;
 	this.following = false;
 
 	// Health
-	if(this.allied)
-		this.hitPoints = 5000;
-	else
-		this.hitPoints = 500;
+	this.hitPoints = 500;
 
-	this.maxHitPoints = 0;
+	this.maxHitPoints = 500;
 
 	// Combat
 	this.target = null;
@@ -87,7 +164,10 @@ function Square(game, squad, type, posX, posY){
 	this.showRangeZone = false;
 	this.showPath = false;
 
-	that.entities.unit[this.id] = this;
+	// that.entities.unit[this.id] = this;
+	}
+
+	
 }
 
 Square.prototype.draw = function(context, xView, yView){
@@ -111,7 +191,7 @@ Square.prototype.draw = function(context, xView, yView){
 	if(this.showPath)
 		this.drawPath(context);
 
-	if(this.selected && !this.allied){
+	if(this.selected && !(this.player == that.player)){
 		context.fillStyle = 'pink';
 		this.overlay = '_pink';
 		context.strokeRect(screenPosition.x,screenPosition.y,wdth,hght);
@@ -126,7 +206,7 @@ Square.prototype.draw = function(context, xView, yView){
 		this.overlay = '_green';
 		context.strokeRect(screenPosition.x,screenPosition.y,wdth,hght);
 	}
-	else if(!this.allied){
+	else if(!(this.player == that.player)){
 		context.fillStyle = 'red';
 		this.overlay = '_red';
 		context.strokeRect(screenPosition.x,screenPosition.y,wdth,hght);
@@ -137,6 +217,7 @@ Square.prototype.draw = function(context, xView, yView){
 
 	this.sprite.src = this.chemin + "walk" + this.overlay + ".png";
 	var screenPosition = this.getScreenPosition(xView, yView);
+
 	context.drawImage(this.sprite,wdth* this.step, hght* this.orientation,wdth,hght,screenPosition.x, screenPosition.y,wdth,hght);
 	if (this.anim%10 == 0){
 		//context.drawImage(this.sprite,wdth* this.step, hght* this.orientation,wdth,hght,screenPosition.x, screenPosition.y,wdth,hght);
@@ -191,7 +272,7 @@ Square.prototype.drawPath = function(context){
 	context.save();
 
 	if(this.nextDestination != null){
-		if(this.allied){
+		if((this.player == that.player)){
 			context.strokeStyle = 'green';
 		}
 		else{
@@ -500,7 +581,7 @@ Square.prototype.checkCombat = function(){
 }
 
 Square.prototype.isAlliedWith = function(entity){
-	if((this.allied && entity.allied) || (!this.allied && !entity.allied)){
+	if(((this.player == that.player) && entity.allied) || (!(this.player == that.player) && !entity.allied)){
 		return true;
 	}
 
@@ -508,7 +589,7 @@ Square.prototype.isAlliedWith = function(entity){
 }
 
 Square.prototype.isAllied = function(){
-	return this.allied;
+	return (this.player == that.player);
 }
 
 Square.prototype.setTarget = function(entity){
@@ -548,4 +629,16 @@ Square.prototype.getSize = function(){
 	var box = {x : this.posX, y : this.posY, w : this.width, h : this.height};	
 
 	return box;
+}
+
+Square.prototype.setId = function(id){
+	this.id = id;
+	that.entities.unit[id] = this;
+}
+
+Square.prototype.setInformation = function(entity){
+	this.setHitPoints = entity.hitPoints;
+	this.posX = entity.posX;
+	this.posY = entity.posY;
+	this.dead = entity.dead;
 }
