@@ -25,4 +25,15 @@ Le principe est simple :
 
 
 ## Répartition des tâches
+##### Walid :
+  - Gestion de projet
+  - 
+  
+##### Alexandre :
+  - Gestion des graphismes
+  - Création des sprites
+
+##### Pierre :
+  - 
+  
 
