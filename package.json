@@ -1,0 +1,31 @@
+{
+  "name" : "battle.IO",
+  "description" : "multiplayer video game made in Javascript",
+  "keywords" : [
+    "game",
+    "nodejs",
+    "socket",
+    "io"
+  ],
+  "dependencies" : {
+    "socket-io" : "1.7.3",
+    "nodejs" : "4.2.6"
+  },
+  
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dambralex/battle.IO"
+  },
+  
+  "contributors" : [
+    {
+      "name" : "Walid Birjam"
+    },
+    {
+      "name" : "Alexandre D'Ambra"
+    },
+    {
+      "name" : "Pierre Tinland"
+    }    
+  ]
+}
