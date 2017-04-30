@@ -49,6 +49,7 @@ class Client{
 				if(entities.unit[i]){
 					// console.log(entities.unit[i]);
 					// console.log(that.entities.unit[i]);
+
 					if(!that.entities.unit[entities.unit[i].id]){
 						new Square(entities.unit[i]);
 					}
@@ -102,12 +103,14 @@ class Client{
 				if(that.entities.unit[u].player == that.player){
 					tmp = {id : that.entities.unit[u].id,
 					hitPoints : that.entities.unit[u].hitPoints,
+					player : that.entities.unit[u].player,
+					state : that.entities.unit[u].state,
 					posX : that.entities.unit[u].posX,
 					posY : that.entities.unit[u].posY,
 					width : that.entities.unit[u].width,
 					height : that.entities.unit[u].height,
+					type : that.entities.unit[u].type,
 					orientation : that.entities.unit[u].orientation,
-					chemin : that.entities.unit[u].chemin,
 					step : that.entities.unit[u].step,
 					anim : that.entities.unit[u].anim,
 					attackRange : that.entities.unit[u].attackRange,
@@ -117,6 +120,7 @@ class Client{
 					this.unitInformation.push(tmp);
 				}
 			}
+
 			this.socket.emit('gameInformation', {town : this.townInformation, unit : this.unitInformation});
 		}
 	}

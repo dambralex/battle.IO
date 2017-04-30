@@ -2,6 +2,7 @@ function Square(square, player, type, posX, posY){
 	if(square){
 		// that = game;
 	this.type = square.type;
+	console.log(this.type);
 	this.id = square.id;
 
 	// Position
@@ -36,11 +37,11 @@ function Square(square, player, type, posX, posY){
 	this.chemin = square.chemin;
 	this.overlay = square.overlay;
 
-	//true sprite loading (alex)
+		//true sprite loading (alex)
 
-	this.img_height = 0;
-	this.img_width = 0;
-	this.state = "walk";
+	this.img_height = square.img_height;
+	this.img_width = square.img_width;
+	this.state = square.state;
 
 
 	//animation
@@ -49,17 +50,6 @@ function Square(square, player, type, posX, posY){
 		this.anim = 0;
 		this.repeat = 1;
 		this.anim_max = 7;
-
-	// sprites loading (temporaire)
-	this.sprite = new Image();
-
-	this.chemin = "./sprites/jeu/unites/human/archer/";
-	this.overlay = "_";
-
-
-	this.width = 58;
-	this.height = 73;
-
 	
 
 	//done
@@ -103,13 +93,17 @@ function Square(square, player, type, posX, posY){
 	this.showRangeZone = square.showRangeZone;
 	this.showPath = square.showPath;
 
+	this.fill();// tout en bas, la fonction récupere les informations de l'objet pour changer ses caractéristiques
+
 	that.entities.unit[this.id] = this;
+
 
 	// that.entities.unit[this.id] = this;
 	}
 	else{
 		// that = game;
 	this.type = type;
+	console.log(type);
 	that.getNewId(this);
 
 	// Position
@@ -128,6 +122,22 @@ function Square(square, player, type, posX, posY){
 
 	// Combat
 	this.selected = false;
+
+	// sprites loading (temporaire)
+	this.sprite = new Image();
+
+	this.chemin = "./sprites/jeu/unites/human/archer/";
+	this.overlay = "_";
+
+	//true sprite loading (alex)
+
+	this.img_height = 0;
+	this.img_width = 0;
+	this.state = "walk";
+
+
+	this.width = 58;
+	this.height = 73;
 
 	// Modes
 	this.movable = true;
@@ -158,6 +168,8 @@ function Square(square, player, type, posX, posY){
 	this.showRangeZone = false;
 	this.showPath = false;
 
+	this.fill();// tout en bas, la fonction récupere les informations de l'objet pour changer ses caractéristiques
+
 	// that.entities.unit[this.id] = this;
 	}
 
@@ -166,12 +178,10 @@ function Square(square, player, type, posX, posY){
 
 Square.prototype.draw = function(context, xView, yView){
 	context.save();	
-	
+
 	//modif by alex
 
 	var screenPosition = this.getScreenPosition(xView, yView);
-
-	this.Fill();// tout en bas, la fonction récupere les informations de l'objet pour changer ses caractéristiques
 
 	if(this.showCombatZone)
 		this.drawCombatZone(context);
@@ -528,17 +538,24 @@ Square.prototype.hurt = function(dmg){
 }
 
 Square.prototype.getCenter = function(){
+	return {x : this.posX, y : this.posY };
+}
+
+Square.prototype.getCenterOnScreen = function(){
 	var xView = that.camera.posX;
 	var yView = that.camera.posY;
 
-	var center = {x : this.posX, y : this.posY};
+	var center = this.getScreenPosition(xView, yView);
+	center.x += this.width/2;
+	center.y += this.height/2;
+
 	// var center = {x : this.posX + this.posY * -1 +this.width/2, y :  this.posX * 0.5 + this.posY*0.5 +this.height/2};
 
 	return center;
 }
 
-Square.prototype.getCombatZone = function(){
-	var center = this.getCenter();
+Square.prototype.getCombatZone = function(xView, yView){
+	var center = this.getCenterOnScreen();
 
 	var rect = {x : center.x - this.visualRange*32/2,
 				y : center.y - this.visualRange*32/2,	
@@ -548,8 +565,8 @@ Square.prototype.getCombatZone = function(){
 	return rect;
 }
 
-Square.prototype.getRangeZone = function(){
-	var center = this.getCenter();
+Square.prototype.getRangeZone = function(xView, yView){
+	var center = this.getCenterOnScreen();
 
 	var rect = {x : center.x - (this.attackRange+1)*32/2,
 				y : center.y - (this.attackRange+1)*32/2,	
@@ -586,10 +603,6 @@ Square.prototype.setTarget = function(entity){
 }
 
 Square.prototype.follow = function(){
-	var targetPos = this.getTargetPos();	
-
-	setDestination(targetPos.x, targetPos.y);
-
 	if(collisionBox(this.getRangeZone(), this.target.getSize())){
 		this.attacking = true;
 		this.following = false;
@@ -634,11 +647,11 @@ Square.prototype.setInformation = function(entity){
 	}
 }
 
-Square.prototype.Fill = function(){
+Square.prototype.fill = function(){
 	var race;
 	var classe;
-	var chemin_init = "./sprites/jeu/unites/"
-	if (this.player.type == type.race.HUMAN){
+	var chemin_init = "./sprites/jeu/unites"
+	if (this.player.type == Types.Races.HUMAN){
 		race = "/human";
 	}
 	else {
@@ -647,7 +660,7 @@ Square.prototype.Fill = function(){
 
 	//ex : Unites["archers"]["nombre"] donne 6
 	if (this.type[0] == 1 ){//cas du warrior
-		classe = "/warrior"
+		classe = "/warrior/";
 		this.img_height = Unites["warrior"]["image_walk"].img_size_x;
 		this.img_width = Unites["warrior"]["image_walk"].img_size_y;
 		this.width = Unites["warrior"]["image_walk"].sprite_size_x;
@@ -666,8 +679,8 @@ Square.prototype.Fill = function(){
 		this.visualRange = Unites["warrior"]["champs_de_vision"];
 	}
 	
-	else if (type[1] == 2){//cas du archer
-		classe = "/archer"
+	else if (this.type[0] == 2){//cas du archer
+		classe = "/archer/";
 		this.img_height = Unites["archer"]["image_walk"].img_size_x;
 		this.img_width = Unites["archer"]["image_walk"].img_size_y;
 		this.width = Unites["archer"]["image_walk"].sprite_size_x;
@@ -679,15 +692,15 @@ Square.prototype.Fill = function(){
 		this.atk_speed = Unites["archer"]["vitesse_attaque"];
 		
 		this.maxHitPoints = Unites["archer"]["points_vie"];
-		this.hitPoints = maxHitPoints;
+		this.hitPoints = this.maxHitPoints;
 
 		this.setAttackRate(1000);
 		this.attackRange = Unites["archer"]["portée_attaque"];
 		this.visualRange = Unites["archer"]["champs_de_vision"];
 	}
 
-	else if (type[1] == 3){//cas du knight
-		classe = "/knight"
+	else if (this.type[0] == 3){//cas du knight
+		classe = "/knight/";
 		this.img_height = Unites["knight"]["image_walk"].img_size_x;
 		this.img_width = Unites["knight"]["image_walk"].img_size_y;
 		this.width = Unites["knight"]["image_walk"].sprite_size_x;
@@ -704,5 +717,12 @@ Square.prototype.Fill = function(){
 		this.setAttackRate(1000);
 		this.attackRange = Unites["knight"]["portée_attaque"];
 		this.visualRange = Unites["knight"]["champs_de_vision"];
+	}
+}
+
+Square.prototype.tick = function(){
+	if(this.following){
+		var targetPos = this.getTargetPos();
+		this.setDestination(targetPos.x, targetPos.y);
 	}
 }

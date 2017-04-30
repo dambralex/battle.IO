@@ -23,7 +23,7 @@ Hud.prototype.init = function(){
     var button = new Button("Soldats mélée", 320, 130);
 
     button.setOnClick(function(){
-        new Square(null, that.player, kinds.warrior, that.selectedEntities.town.posX+that.selectedEntities.town.width/2,
+        new Square(null, that.player, kinds.archer, that.selectedEntities.town.posX+that.selectedEntities.town.width/2,
                                    that.selectedEntities.town.posY+that.selectedEntities.town.height +20);
         // wtf.posX = that.selectedEntities.town.posX+that.selectedEntities.town.width/2;
         // wtf.posY = that.selectedEntities.town.posY+that.selectedEntities.town.height +20;
