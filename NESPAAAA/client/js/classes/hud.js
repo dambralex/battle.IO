@@ -23,7 +23,7 @@ Hud.prototype.init = function(){
     var button = new Button("Soldats mélée", 320, 130);
 
     button.setOnClick(function(){
-        new Square(null, that.player, kinds.warrior, that.selectedEntities.town.posX+that.selectedEntities.town.width/2,
+        new Square(null, that.player, kinds.archer, that.selectedEntities.town.posX+that.selectedEntities.town.width/2,
                                    that.selectedEntities.town.posY+that.selectedEntities.town.height +20);
         // wtf.posX = that.selectedEntities.town.posX+that.selectedEntities.town.width/2;
         // wtf.posY = that.selectedEntities.town.posY+that.selectedEntities.town.height +20;
@@ -96,7 +96,7 @@ Hud.prototype.drawMiniMap = function(context){
 }
 
 Hud.prototype.drawUnits = function(context){
-    var nb = that.selectedEntities.squad.length;
+    var nb = that.selectedEntities.unit.length;
     var box_width = (context.canvas.width - 300) / nb;
     context.save();
     var is_friend = 0;
@@ -116,7 +116,7 @@ Hud.prototype.drawUnits = function(context){
       if(is_friend)
       {
         if(that.player === that.selectedEntities.unit[i].player){
-          console.log(i);
+          // console.log(i);
           context.fillText("Unité " + i
                           + "   PV : " + that.selectedEntities.unit[i].hitPoints
                           + " / " + that.selectedEntities.unit[i].maxHitPoints

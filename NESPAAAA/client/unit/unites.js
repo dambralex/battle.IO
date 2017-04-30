@@ -1,5 +1,5 @@
 var Unites = {
-      "archers" : {
+      "archer" : {
         "nombre" : 6,
         "vitesse_deplacement" : 5,
         "vitesse_attaque" : 1,
