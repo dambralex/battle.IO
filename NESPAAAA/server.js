@@ -57,7 +57,7 @@ var server = http.createServer(function(req, res)
 
 var io = require('socket.io').listen(server);
 
-var maps = 
+var maps =
     [{
         playerPosition : [100, 200],
         opponentPosition : [100, 1000],
@@ -76,18 +76,28 @@ io.sockets.on('connection', function (socket,pseudo) {
     // Gere les connexions des joueurs, et enregistre le pseudo dans la socket associée
     socket.on('pseudo', function(pseudo)
     {
-        connected++;
+        var is_player = 1;
+        if(connected < 2) connected++;
+        else{
+          socket.emit('bonjour', "nb joueurs atteint, vous etes spectateurs");
+          is_player = 0;
+        }
+
         var player = { nickname : pseudo};
         player.socket = socket;
         players.push(player);
         socket.pseudo = pseudo;
 
         socket.emit('bonjour', "bonjour " + pseudo );
-        console.log("connexion de : " + pseudo);
+        console.log("connexion de : " + pseudo + "   " + connected);
 
         if(connected > 1){
+            io.emit('bonjour',"NB joueurs OK");
             initGame();
             startGame();
+        }
+        else {
+          socket.emit('bonjour',"Attente d'un autre joueur...");
         }
     });
 
@@ -109,7 +119,7 @@ io.sockets.on('connection', function (socket,pseudo) {
     });
 
     socket.on('newId', function(){
-        console.log(idCount);
+        //console.log(idCount);
         socket.emit('newId', idCount++ );
     });
 
@@ -120,11 +130,27 @@ io.sockets.on('connection', function (socket,pseudo) {
        console.log(socket.pseudo + " cree nouvelle unité " + id);
     });
 
-    // Gere la déconnexion d'un joueur. Informe les autres joueurs de son départ
+    socket.on('kick', function(pseudo){
+      socket.disconnect();
+      console.log(idCount);
+    });
+
+    // Gere la déconnexion d'un joueur. Informe et déconnecte le joueur restant
     socket.on("disconnect", function(){
-        io.emit('disconnect', socket.pseudo + " s'est déconnecté");
-        console.log("deconnexion de " + socket.pseudo);
-        connected--;
+        var is_player = 0;
+        for(var i in players)
+          if(players[i].nickname === socket.pseudo){
+            is_player = 1;
+            break;
+          }
+        if(is_player){
+          players.splice(0, players.length); // Nettoyage du tableau
+          io.emit('disconnect', socket.pseudo + " s'est déconnecté");
+          //console.log("deconnexion de " + socket.pseudo);
+          console.log("Arret du jeu");
+          connected=0;;
+        }
+        socket.disconnect(); // destruction socket
     });
 });
 

@@ -51,8 +51,8 @@
             });
 
             socket.on('disconnect', function (disconnect_mess){
-                console.log("Deconnexion d'un joueur");
-                console.log(disconnect_mess);
+                alert("Deconnexion du joueur adverse");
+                socket.emit('kick', pseudo);
             });
 
         </script>
