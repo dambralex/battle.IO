@@ -6,8 +6,15 @@ var mime = require('mime');
 
 //server/js/maps/premiere.js
 
+
+
 var server = http.createServer(function(req, res)
 {
+    // idCount = 0;
+    // units = [];
+    // players = [];
+    // connected = 0;
+
     var uri = url.parse(req.url).pathname;
     var index = uri.lastIndexOf('/');
     var str = uri.substr(index);
@@ -58,12 +65,11 @@ var maps =
     }
 ];
 
+var idCount = 0;
 var units = [];
 var players = [];
 var connected = 0;
 var choosenMap;
-
-var callback;
 
 io.sockets.on('connection', function (socket,pseudo) {
 
@@ -100,6 +106,11 @@ io.sockets.on('connection', function (socket,pseudo) {
     socket.on('stats', function(ping){
         socket.emit('pong',Date.now() - ping );
         upload = 0;
+    });
+
+    socket.on('newId', function(idCount){
+        console.log(idCount);
+        socket.broadcast.emit('newId', idCount );
     });
 
 

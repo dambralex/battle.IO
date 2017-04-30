@@ -37,7 +37,7 @@ class Game{
 	// this.player = new Player(this, "jev", Types.Races.HUMAN, true, 100, 200);
 
 	// Setting up the client communication
-	this.client = new Client(this);
+	this.client = new Client();
 	// this.client.setGame(this);
 
 	// Pausing 
@@ -314,7 +314,7 @@ class Game{
 	}
 
 	tick(){
-		if(!that.paused){
+		if(!that.paused	&& that.player){
 			that.player.tick();
 		}
 		that.client.tick();
@@ -334,10 +334,12 @@ class Game{
 	}
 
 	setPlayer(name, type, allied, startingX, startingY){
-		this.player = new Player(null, name, type, allied, startingX, startingY);
+		var player = new Player(null, name, type, allied, startingX, startingY);
 
+		if(allied){
+			this.player = player;
+		}
 	}
-
 }
 
 // function Game(){

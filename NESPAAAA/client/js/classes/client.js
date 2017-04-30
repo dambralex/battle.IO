@@ -1,11 +1,14 @@
 class Client{
 
-	constructor(data){
+	constructor(){
 		// this.game = game;
 		// this.data = data
 		this.socket = null;
 
 		this.ping = 0;
+
+		this.currentId = 0;
+		this.requestIdDone = false;
 	}
 
 	setSocket(socket){
@@ -19,14 +22,17 @@ class Client{
 		console.log(self);
 
 		this.socket.on('pong', function(data){
-			console.log(data+" ms");
-			self.ping = data.ping;
-			self.upload = data.upload;
+			// console.log(data+" ms");
+			self.ping = data;
+			// self.upload = data.upload;
 		});
 
 		this.socket.on('gameInformation', function(entities){
+				console.log(that.entities.town);
+
 			for(var i in entities.town);
 				// console.log(entities.town[i]);
+				// console.log(that.entities.town[i]);
 			for(var i in entities.unit);
 				// console.log(entities.unit[i]);
 		});
@@ -41,6 +47,11 @@ class Client{
 		this.socket.on('opponentStart', function(data){
 			that.setPlayer(data.name, Types.Races.ORC, false, data.starting[0], data.starting[1]);
 		});
+
+		this.socket.on('newId', function(data){
+			console.log("newid");
+			this.currentId = data;
+		});
 	}
 
 	update(){
@@ -50,6 +61,8 @@ class Client{
 	}
 
 	tick(){
-		this.socket.emit('stats', Date.now());
+		if(this.socket){
+			this.socket.emit('stats', Date.now());
+		}
 	}
 }

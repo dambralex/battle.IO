@@ -16,6 +16,10 @@ function Town(game, player, posX, posY){
 	// Movement
 	this.nextDestination = null;
 
+	// Health
+	this.hitPoints = 10000;
+	this.maxHitPoints = 10000;
+
 	// Modes
 	this.attacking = false;
 	this.player = player;
@@ -59,7 +63,7 @@ Town.prototype.draw = function(context, xView, yView) {
 	var overlay = '_';
 	var screenPosition = this.getScreenPosition(xView, yView);
 
-	if(this.selected && !this.isAlliedWith()){
+	if(this.selected && !(this.player == that.player)){
 		overlay = '_pink';
 		context.strokeRect(screenPosition.x,screenPosition.y,142,132);
 	}
@@ -72,7 +76,7 @@ Town.prototype.draw = function(context, xView, yView) {
 		context.strokeRect(screenPosition.x,screenPosition.y,142,132);
 	}
 		//context.fillStyle = 'green';
-	else if(!this.isAlliedWith())
+	else if(!(this.player == that.player))
 		overlay = '_red';
 		//context.fillStyle = 'red';
 	else

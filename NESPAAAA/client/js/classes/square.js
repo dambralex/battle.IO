@@ -87,7 +87,7 @@ function Square(game, squad, type, posX, posY){
 	this.showRangeZone = false;
 	this.showPath = false;
 
-	that.entities.unit.push(this);
+	that.entities.unit[this.id] = this;
 }
 
 Square.prototype.draw = function(context, xView, yView){

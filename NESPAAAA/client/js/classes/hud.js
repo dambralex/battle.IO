@@ -74,7 +74,7 @@ Hud.prototype.drawMainControl = function(context){
     context.fillStyle = '#AAAAAA';
     context.fillRect(300, 0, context.canvas.width - 300, 200);
 
-    if(that.selectedEntities.squad.length <= 0){
+    if(that.selectedEntities.unit.length <= 0){
         if(that.selectedEntities.town != null){
             this.drawTown(context);
         }
@@ -125,10 +125,14 @@ Hud.prototype.drawTown = function(context){
                      "Wood : "+that.selectedEntities.town.wood+" "+
                      "Iron : "+that.selectedEntities.town.iron+" "+
                      "Income : "+that.selectedEntities.town.income, 600, 20);
+    context.fillText(that.selectedEntities.town.hitPoints+"/"+that.selectedEntities.town.maxHitPoints, 450, 20);
+
     context.restore();   
 
-    this.drawTownConstruction(context);
-    this.drawTownControl(context);
+    if(that.selectedEntities.town.player == that.player){
+        this.drawTownConstruction(context);
+        this.drawTownControl(context);
+    }
 }
 
 Hud.prototype.drawTownConstruction = function(context){
@@ -191,24 +195,31 @@ Hud.prototype.drawPlayerResources = function(context){
 }
 
 Hud.prototype.handleLeftClick = function(x, y){
-    for(var b in this.controlButtons){
-        if(collisionBox({x : x, y : y, w : 0, h : 0}, this.controlButtons[b].getBoundingBox())){
-            this.controlButtons[b].onClick();
-        }
-    }
+    if(that.selectedEntities.unit.length <= 0){
+        if(that.selectedEntities.town != null && that.selectedEntities.town.player == that.player){
+            for(var b in this.controlButtons){
+                if(collisionBox({x : x, y : y, w : 0, h : 0}, this.controlButtons[b].getBoundingBox())){
+                    this.controlButtons[b].onClick();
+                }
+            }
 
-    for(var b in this.constructionChoice){
-        if(collisionBox({x : x, y : y, w : 0, h : 0}, this.constructionChoice[b].getBoundingBox())){
-            this.constructionChoice[b].onClick();
-        }
-    }
+            for(var b in this.constructionChoice){
+                if(collisionBox({x : x, y : y, w : 0, h : 0}, this.constructionChoice[b].getBoundingBox())){
+                    this.constructionChoice[b].onClick();
+                }
+            }
 
-    for(var b = 0; b < Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"]; b++){
-        this.constructionButtons[b].unpress();
-        if(this.constructionButtons[b].text == "libre"){
-            if(collisionBox({x : x, y : y, w : 0, h : 0}, this.constructionButtons[b].getBoundingBox())){
-                this.constructionButtons[b].togglePressed();
+            for(var b = 0; b < Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"]; b++){
+                this.constructionButtons[b].unpress();
+                if(this.constructionButtons[b].text == "libre"){
+                    if(collisionBox({x : x, y : y, w : 0, h : 0}, this.constructionButtons[b].getBoundingBox())){
+                        this.constructionButtons[b].togglePressed();
+                    }
+                }
             }
         }
+    }
+    else {
+        
     }
 }
