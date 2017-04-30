@@ -135,7 +135,10 @@ class Game{
 		hudContext.fillStyle = 'white';
 	    hudContext.font = "10pt Arial";
 	    // hudContext.fillText("Town : " + test.x + ", " +test.y, 30, 50);
-	    hudContext.fillText("Camera : " + this.camera.posX + ", " +this.camera.posY, 30, 70);
+	    // hudContext.fillText("Camera : " + this.camera.posX + ", " +this.camera.posY, 30, 70);
+	    if(this.selectedEntities.unit[0]){
+	    	hudContext.fillText("unit : " + this.selectedEntities.unit[0].id , 30, 70);
+	    }
 	    hudContext.fillText("Ping : " + this.client.ping , 30, 90);
 	    if(this.selectedEntities.town){
 	    	hudContext.fillText("Squad : " + this.selectedEntities.town.posX + ", " +this.selectedEntities.town.posY, 30, 110);
