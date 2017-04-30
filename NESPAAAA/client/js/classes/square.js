@@ -46,17 +46,16 @@ function Square(square, player, type, posX, posY){
 
 	//animation
 
-		this.step = 1;
-		this.anim = 0;
-		this.repeat = 1;
-		this.anim_max = 7;
+		this.step = square.step;
+		this.anim = square.anim;
+		this.repeat = square.repeat;
+		this.anim_max = this.anim_max;
 	
 
 	//done
 
 	// Speed
 	this.speed = square.speed;
-	this.atk_speed;
 
 	// Pathing
 	this.nextDestination = square.nextDestination;
@@ -109,7 +108,8 @@ function Square(square, player, type, posX, posY){
 	// Position
 	this.posX = posX;
 	this.posY = posY;
-
+	this.width = 50;
+	this.height = 50;
 
 	this.orientation = 7;
 
@@ -122,6 +122,13 @@ function Square(square, player, type, posX, posY){
 
 	// Combat
 	this.selected = false;
+
+	//animation
+
+	this.step = 1;
+	this.anim = 0;
+	this.repeat = 1;
+	this.anim_max = 7;
 
 	// sprites loading (temporaire)
 	this.sprite = new Image();
