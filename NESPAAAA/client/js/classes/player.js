@@ -25,6 +25,8 @@ Player.prototype.isAlliedWith = function(player){
 };
 
 Player.prototype.tick = function(){
+	this.calculIncome();
+
 	this.gold += this.income;
 
 	if(this.gold < 0)

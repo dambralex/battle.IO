@@ -637,8 +637,10 @@ Square.prototype.setId = function(id){
 }
 
 Square.prototype.setInformation = function(entity){
-	this.setHitPoints = entity.hitPoints;
-	this.posX = entity.posX;
-	this.posY = entity.posY;
-	this.dead = entity.dead;
+	if(this.player != that.player){
+		this.setHitPoints = entity.hitPoints;
+		this.posX = entity.posX;
+		this.posY = entity.posY;
+		this.dead = entity.dead;
+	}
 }
