@@ -1,12 +1,12 @@
 var Unites = {
       "archer" : {
         "nombre" : 6,
-        "vitesse_deplacement" : 5,
+        "vitesse_deplacement" : 50,
         "vitesse_attaque" : 1,
         "points_vie" : 30,
         "est_unite_distance" : true,
-        "portée_attaque" : 30,
-        "champs_de_vision" : 80,
+        "portée_attaque" : 1,
+        "champs_de_vision" : 5,
         "moral" : 50,
         "armure" : 5,
         "resistance_magie" : 5,
