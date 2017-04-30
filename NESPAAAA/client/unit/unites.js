@@ -3,7 +3,7 @@ var Unites = {
         "nombre" : 6,
         "vitesse_deplacement" : 50,
         "vitesse_attaque" : 1,
-        "points_vie" : 30,
+        "points_vie" : 300,
         "est_unite_distance" : true,
         "portée_attaque" : 1,
         "champs_de_vision" : 5,

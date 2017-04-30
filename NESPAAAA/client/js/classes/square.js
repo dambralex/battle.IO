@@ -514,7 +514,6 @@ Square.prototype.engage = function(entity){
 	// this.attacking = true;
 	this.following = true;
 	this.setTarget(entity);
-	console.log(entity);
 }
 
 Square.prototype.disengage = function(entity){
@@ -611,8 +610,6 @@ Square.prototype.setTarget = function(entity){
 }
 
 Square.prototype.follow = function(){
-	console.log(this.target);
-
 	if(collisionBox(this.getRangeZone(), this.target.getSize())){
 		this.attacking = true;
 		this.following = false;
@@ -638,7 +635,7 @@ Square.prototype.removeTarget = function(){
 }
 
 Square.prototype.getSize = function(){
-	var position = this.getScreenPosition();
+	var position = this.getCenterOnScreen();
 
 	var box = {x : position.x, y : position.y, w : this.width, h : this.height};	
 	return box;
@@ -650,8 +647,9 @@ Square.prototype.setId = function(id){
 }
 
 Square.prototype.setInformation = function(entity){
+	this.setHitPoints = entity.hitPoints;
+
 	if(this.player != that.player){
-		this.setHitPoints = entity.hitPoints;
 		this.posX = entity.posX;
 		this.posY = entity.posY;
 		this.dead = entity.dead;

@@ -31,6 +31,8 @@ class Client{
 		});
 
 		this.socket.on('gameInformation', function(entities){
+			console.log(entities.unit);
+
 			for(var i in entities.town);
 				if(entities.town[i]){
 					// console.log(entities.town[i]);
@@ -45,7 +47,6 @@ class Client{
 					}
 				}
 			for(var i in entities.unit){
-				// console.log(entities.unit[i]);
 				if(entities.unit[i]){
 					// console.log(entities.unit[i]);
 					// console.log(that.entities.unit[i]);
@@ -87,7 +88,7 @@ class Client{
 
 		if(this.socket){ 
 			for(var t in that.entities.town){
-				if(that.entities.town[t].player == that.player){
+				// if(that.entities.town[t].player == that.player){
 					tmp = {id : that.entities.town[t].id,
 					hitPoints : that.entities.town[t].hitPoints,
 					maxHitPoints : that.entities.town[t].maxHitPoints,
@@ -97,12 +98,13 @@ class Client{
 					dead : that.entities.town[t].dead,
 					};
 					this.townInformation.push(tmp);
-				}
+				// }
 			}
 			for(var u in that.entities.unit){
-				if(that.entities.unit[u].player == that.player){
+				// if(that.entities.unit[u].player == that.player){
 					tmp = {id : that.entities.unit[u].id,
 					hitPoints : that.entities.unit[u].hitPoints,
+					maxHitPoints : that.entities.unit[u].maxHitPoints,
 					player : that.entities.unit[u].player,
 					state : that.entities.unit[u].state,
 					posX : that.entities.unit[u].posX,
@@ -118,7 +120,7 @@ class Client{
 					dead : that.entities.unit[u].dead,
 					};
 					this.unitInformation.push(tmp);
-				}
+				// }
 			}
 
 			this.socket.emit('gameInformation', {town : this.townInformation, unit : this.unitInformation});
