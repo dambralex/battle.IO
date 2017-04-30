@@ -27,13 +27,13 @@ Le principe est simple :
 ## Répartition des tâches
 ##### Walid :
   - Gestion de projet
-  - 
+  - Création interface
+  - Développement moteur de jeu
   
 ##### Alexandre :
   - Gestion des graphismes
-  - Création des sprites
+  - Gestion des animations
 
 ##### Pierre :
-  - 
-  
-
+  - Algorithme de pathfinding
+  - NodeJS / SocketIO
