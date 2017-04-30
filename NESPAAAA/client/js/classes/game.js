@@ -67,7 +67,7 @@ class Game{
 
 		this.disableContextMenu();
 	
-		this.addEventListenerToCanvas(mapCanvas, this.processGameInput);
+		this.addEventListenerToCanvas(window, this.processGameInput);
 		this.addEventListenerToCanvas(hudCanvas, this.processHudInput);
 	}
 
@@ -167,6 +167,7 @@ class Game{
 	}
 	
 	processGameInput(event){
+		console.log(event);
 		switch(event.type){
 			case "mousedown" : 
 				that.mouseObj.startX = event.pageX;
@@ -179,16 +180,18 @@ class Game{
 				break;	
 			case "mouseup" : 
 				if(event.which == 1){
-					that.handleLeftClick(that.mouseObj.getSelectionBox(that.camera.posX, that.camera.posY));
+					if(that.mouseObj.mouseY < that.camera.hView - 200){
+						that.handleLeftClick(that.mouseObj.getSelectionBox(that.camera.posX, that.camera.posY));
+					}
 				}
 				else if(event.which == 3){
 					that.handleRightClick(that.mouseObj.mouseX, 
-						that.mouseObj.mouseY);
+					that.mouseObj.mouseY);
 				}
 	
 				that.mouseObj.setIsDrawing(false);
-				that.mouseObj.startX = event.offsetX;
-				that.mouseObj.startY = event.offsetY;
+				that.mouseObj.startX = event.pageX;
+				that.mouseObj.startY = event.pageY;
 				
 				break;
 			case "mousemove" :
@@ -272,8 +275,10 @@ class Game{
 			this.mouseObj.setOutTop(true);
 		else
 			this.mouseObj.setOutTop(false);
+
+		console.log(y +" > "+ this.camera.hView - 100);
 	
-		if(y > this.camera.yView - 100)
+		if(y > this.camera.hView - 100)
 			this.mouseObj.setOutBottom(true);
 		else
 			this.mouseObj.setOutBottom(false);
