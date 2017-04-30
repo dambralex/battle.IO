@@ -224,7 +224,7 @@ Square.prototype.draw = function(context, xView, yView){
 	this.sprite.src = this.chemin + this.state + this.overlay + ".png";
 	var screenPosition = this.getScreenPosition(xView, yView);
 
-	console.log("draw en cour");
+	console.log("draw de" + this.chemin + this.state + this.overlay + ".png";);
 	context.drawImage(this.sprite,this.width* this.step, this.height* this.orientation,this.width,this.height,screenPosition.x, screenPosition.y,this.width,this.height);
 	if (this.anim%10 == 0){
 		//context.drawImage(this.sprite,this.width* this.step, this.height* this.orientation,this.width,this.height,screenPosition.x, screenPosition.y,this.width,this.height);
