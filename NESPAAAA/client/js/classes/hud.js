@@ -30,6 +30,18 @@ Hud.prototype.init = function(){
     });
 
     this.controlButtons.push(button);
+
+
+    var button = new Button("chevaliers", 370, 130);
+
+    button.setOnClick(function(){
+        new Square(null, that.player, kinds.knight, that.selectedEntities.town.posX+that.selectedEntities.town.width/2,
+                                   that.selectedEntities.town.posY+that.selectedEntities.town.height +20);
+        // wtf.posX = that.selectedEntities.town.posX+that.selectedEntities.town.width/2;
+        // wtf.posY = that.selectedEntities.town.posY+that.selectedEntities.town.height +20;
+    });
+
+    this.controlButtons.push(button);
     var chemin = "./sprites/hud/construction/";
     var x = 320;
 
@@ -220,7 +232,7 @@ Hud.prototype.drawPlayerResources = function(context){
     context.fillText("Wood : "+that.player.wood, 510, 187);
     context.fillText("Iron : "+that.player.iron, 660, 187);
     context.fillText("Gold : "+that.player.gold+"("+that.player.income+")", 810, 187);
-    // done (explication : j'ai fait ca en dur, j'aurai pu faire autrement mais flemme ^^)
+    // done (explication : j'ai fait ca en dur, j'aurai pu faire autrement mais c'est pour faire rapide ^^)
 
     //commenté pour test, marche initialement (alex)
     /*context.fillText("Stone : "+that.player.stone, 320, 190);

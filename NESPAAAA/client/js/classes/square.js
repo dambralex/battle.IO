@@ -198,22 +198,22 @@ Square.prototype.draw = function(context, xView, yView){
 		this.drawPath(context);
 
 	if(this.selected && !(this.player == that.player)){
-		context.fillStyle = 'pink';
+		//context.fillStyle = 'pink';
 		this.overlay = '_pink';
 		context.strokeRect(screenPosition.x,screenPosition.y,this.width,this.height);
 	}
 	else if(this.dead){
-		context.fillStyle = 'black';
+		//context.fillStyle = 'black';
 		this.overlay = '_black';
 		context.strokeRect(screenPosition.x,screenPosition.y,this.width,this.height);
 	}
 	else if(this.selected){
-		context.fillStyle = 'green';
+		//context.fillStyle = 'green';
 		this.overlay = '_green';
 		context.strokeRect(screenPosition.x,screenPosition.y,this.width,this.height);
 	}
 	else if(!(this.player == that.player)){
-		context.fillStyle = 'red';
+		//context.fillStyle = 'red';
 		this.overlay = '_red';
 		context.strokeRect(screenPosition.x,screenPosition.y,this.width,this.height);
 	}
@@ -224,7 +224,7 @@ Square.prototype.draw = function(context, xView, yView){
 	this.sprite.src = this.chemin + this.state + this.overlay + ".png";
 	var screenPosition = this.getScreenPosition(xView, yView);
 
-	console.log("draw de" + this.chemin + this.state + this.overlay + ".png";);
+	console.log("draw de" + this.chemin + this.state + this.overlay + ".png");
 	context.drawImage(this.sprite,this.width* this.step, this.height* this.orientation,this.width,this.height,screenPosition.x, screenPosition.y,this.width,this.height);
 	if (this.anim%10 == 0){
 		//context.drawImage(this.sprite,this.width* this.step, this.height* this.orientation,this.width,this.height,screenPosition.x, screenPosition.y,this.width,this.height);
