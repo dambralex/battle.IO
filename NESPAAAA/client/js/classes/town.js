@@ -64,8 +64,8 @@ function Town(town, player, posX, posY){
 	this.nextDestination = null;
 
 	// Health
-	this.hitPoints = 10000;
-	this.maxHitPoints = 10000;
+	this.hitPoints = 400;
+	this.maxHitPoints = 400;
 
 	// Modes
 	this.attacking = false;
@@ -207,6 +207,10 @@ Town.prototype.upgrade = function(){
 	//if(this.isBuilding == false){ // ?
 	this.timerConstruction = new Timer(Towns["niveau"][this.stage].production, Date.now());
 	this.player.gold -= Towns["niveau"][this.stage].cout;
+
+	this.hitPoints = this.hitPoints + (Towns["niveau"][this.stage].points_vie - this.maxHitPoints);
+	this.maxHitPoints = Towns["niveau"][this.stage].points_vie;
+	
 
 	console.log (this.stage);
 
