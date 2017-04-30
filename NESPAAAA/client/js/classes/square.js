@@ -171,8 +171,8 @@ function Square(square, player, type, posX, posY){
 	this.visualRange = 10;
 
 	// Zones drawing
-	this.showCombatZone = false;
-	this.showRangeZone = false;
+	this.showCombatZone = true;
+	this.showRangeZone = true;
 	this.showPath = false;
 
 	this.fill();// tout en bas, la fonction récupere les informations de l'objet pour changer ses caractéristiques
@@ -636,6 +636,8 @@ Square.prototype.removeTarget = function(){
 
 Square.prototype.getSize = function(){
 	var box = {x : this.posX, y : this.posY, w : this.width, h : this.height};	
+
+	console.log(box);
 
 	return box;
 }
