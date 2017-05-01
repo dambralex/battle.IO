@@ -744,7 +744,7 @@ Square.prototype.fill = function(){
 		this.atk_speed = Unites["knight"]["vitesse_attaque"];
 		
 		this.maxHitPoints = Unites["knight"]["points_vie"];
-		this.hitPoints = maxHitPoints;
+		this.hitPoints = this.maxHitPoints;
 
 		this.setAttackRate(1000);
 		this.attackRange = Unites["knight"]["portée_attaque"];
