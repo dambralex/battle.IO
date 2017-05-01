@@ -2,7 +2,6 @@ function Square(square, player, type, posX, posY){
 	if(square){
 		// that = game;
 	this.type = square.type;
-	console.log(this.type);
 	this.id = square.id;
 
 	// Position
@@ -102,7 +101,6 @@ function Square(square, player, type, posX, posY){
 	else{
 		// that = game;
 	this.type = type;
-	console.log(this.type);
 	that.getNewId(this);
 
 	// Position
@@ -497,10 +495,6 @@ Square.prototype.toggleSelect = function(){
 		this.selected = true;
 }
 
-Square.prototype.selectSquad = function(){
-	this.squad.select();
-}
-
 Square.prototype.isMovable = function(){
 	return this.movable;
 }
@@ -516,14 +510,20 @@ Square.prototype.setMaxHitPoints = function(hp){
 
 Square.prototype.engage = function(entity){
 	// this.attacking = true;
-	this.following = true;
-	this.setTarget(entity);
+	if(!this.nextDestination){
+		this.setFollow(entity);
+	}
 }
 
 Square.prototype.disengage = function(entity){
 	this.attacking = false;
 	this.following = false;
 	this.removeTarget();
+}
+
+Square.prototype.setFollow = function(entity){
+	this.following = true;
+	this.setTarget(entity);
 }
 
 Square.prototype.isAttacking = function(){
@@ -536,6 +536,8 @@ Square.prototype.die = function(){
 	if(this.deathCallback) {
 		this.deathCallback();
     }
+
+    // delete that.entities.unit[this.id];
 }
 
 Square.prototype.hurt = function(dmg){
@@ -592,13 +594,14 @@ Square.prototype.checkCombat = function(){
 		if(this.target.dead)
 			this.disengage();
 		else{
-			if(this.attackCooldown.isOver(Date.now()) && collisionBox(this.getRangeZone(), this.target.getRangeZone()))
+			if(this.attackCooldown.isOver(Date.now()) && collisionBox(this.getRangeZone(), this.target.getSizeOnScreen()))
 				this.target.hurt(50);
 		}
 }
 
 Square.prototype.isAlliedWith = function(entity){
-	if(((this.player == that.player) && entity.allied) || (!(this.player == that.player) && !entity.allied)){
+	console.log(entity);
+	if(this.player.id == entity.player.id){
 		return true;
 	}
 
@@ -614,9 +617,9 @@ Square.prototype.setTarget = function(entity){
 }
 
 Square.prototype.follow = function(){
-	if(collisionBox(this.getRangeZone(), this.target.getSize())){
+	if(collisionBox(this.getRangeZone(), this.target.getSizeOnScreen())){
 		this.attacking = true;
-		this.following = false;
+		// this.following = false;
 		this.nextDestination = null;
 	}
 }
@@ -639,7 +642,17 @@ Square.prototype.removeTarget = function(){
 }
 
 Square.prototype.getSize = function(){
-	var position = this.getCenterOnScreen();
+	var position = this.getCenter();
+
+	var box = {x : position.x, y : position.y, w : this.width, h : this.height};	
+	return box;
+}
+
+Square.prototype.getSizeOnScreen = function(){
+	var xView = that.camera.posX;
+	var yView = that.camera.posY;
+
+	var position = this.getScreenPosition(xView, yView);
 
 	var box = {x : position.x, y : position.y, w : this.width, h : this.height};	
 	return box;
@@ -651,11 +664,13 @@ Square.prototype.setId = function(id){
 }
 
 Square.prototype.setInformation = function(entity){
-	this.setHitPoints = entity.hitPoints;
 
 	if(this.player != that.player){
 		this.posX = entity.posX;
 		this.posY = entity.posY;
+	}
+	else{
+		this.hitPoints = entity.hitPoints;
 		this.dead = entity.dead;
 	}
 }
@@ -735,6 +750,7 @@ Square.prototype.fill = function(){
 }
 
 Square.prototype.tick = function(){
+
 	if(this.following){
 		var targetPos = this.getTargetPos();
 		this.setDestination(targetPos.x, targetPos.y);

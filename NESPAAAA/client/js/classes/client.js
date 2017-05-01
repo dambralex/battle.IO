@@ -31,7 +31,7 @@ class Client{
 		});
 
 		this.socket.on('gameInformation', function(entities){
-			// console.log(entities.unit);
+			// console.log(entities.town);
 
 			for(var i in entities.town);
 				if(entities.town[i]){
@@ -73,6 +73,11 @@ class Client{
 			that.setPlayer(data.name, Types.Races.ORC, false, data.starting[0], data.starting[1]);
 		});
 
+		this.socket.on('win', function(data){
+			that.paused = true;
+			that.win = true;
+		});
+
 		this.socket.on('newId', function(data){
 			that.waitingId[0].setId(data);
 			that.waitingId.shift();
@@ -84,49 +89,39 @@ class Client{
 		this.unitInformation = [];
 
 		var tmp;
-		var actionStack;
 
 		if(this.socket){ 
 			for(var t in that.entities.town){
-				// if(that.entities.town[t].player == that.player){
-					tmp = {id : that.entities.town[t].id,
-					hitPoints : that.entities.town[t].hitPoints,
-					maxHitPoints : that.entities.town[t].maxHitPoints,
-					posX : that.entities.town[t].posX,
-					posY : that.entities.town[t].posY,
-					stage : that.entities.town[t].stage,
-					dead : that.entities.town[t].dead,
-					};
-					this.townInformation.push(tmp);
-				// }
+				tmp = {id : that.entities.town[t].id,
+				hitPoints : that.entities.town[t].hitPoints,
+				maxHitPoints : that.entities.town[t].maxHitPoints,
+				player : that.entities.town[t].player,
+				posX : that.entities.town[t].posX,
+				posY : that.entities.town[t].posY,
+				stage : that.entities.town[t].stage,
+				dead : that.entities.town[t].dead,
+				};
+				this.townInformation.push(tmp);
 			}
 			for(var u in that.entities.unit){
-					// console.log(that.entities.unit[u].actionStack);
-					actionStack = [];
-					// for(var i = 0; i < that.entities.unit[u].actionStack.length; i++){
-					// 	actionStack.push(that.entities.unit[u].actionStack[i]);
-					// }
-				// if(that.entities.unit[u].player == that.player){
-					tmp = {id : that.entities.unit[u].id,
-					hitPoints : that.entities.unit[u].hitPoints,
-					maxHitPoints : that.entities.unit[u].maxHitPoints,
-					player : that.entities.unit[u].player,
-					state : that.entities.unit[u].state,
-					posX : that.entities.unit[u].posX,
-					posY : that.entities.unit[u].posY,
-					width : that.entities.unit[u].width,
-					height : that.entities.unit[u].height,
-					type : that.entities.unit[u].type,
-					orientation : that.entities.unit[u].orientation,
-					step : that.entities.unit[u].step,
-					anim : that.entities.unit[u].anim,
-					attackRange : that.entities.unit[u].attackRange,
-					visualRange : that.entities.unit[u].visualRange,
-					dead : that.entities.unit[u].dead,
-					actionStack : actionStack,
-					};
-					this.unitInformation.push(tmp);
-				// }
+				tmp = {id : that.entities.unit[u].id,
+				hitPoints : that.entities.unit[u].hitPoints,
+				maxHitPoints : that.entities.unit[u].maxHitPoints,
+				player : that.entities.unit[u].player,
+				state : that.entities.unit[u].state,
+				posX : that.entities.unit[u].posX,
+				posY : that.entities.unit[u].posY,
+				width : that.entities.unit[u].width,
+				height : that.entities.unit[u].height,
+				type : that.entities.unit[u].type,
+				orientation : that.entities.unit[u].orientation,
+				step : that.entities.unit[u].step,
+				anim : that.entities.unit[u].anim,
+				attackRange : that.entities.unit[u].attackRange,
+				visualRange : that.entities.unit[u].visualRange,
+				dead : that.entities.unit[u].dead,
+				};
+				this.unitInformation.push(tmp);
 			}
 
 			this.socket.emit('gameInformation', {town : this.townInformation, unit : this.unitInformation});
@@ -141,5 +136,9 @@ class Client{
 
 	requestNewId(){
 		this.socket.emit('newId');
+	}
+
+	gameFinished(){
+		this.socket.emit('lost');
 	}
 }

@@ -90,6 +90,8 @@ function Town(town, player, posX, posY){
     this.isBuilding = false;
     this.currentBuilding = null;
 
+    this.player.townCount++;
+
 	// that.entities.town.push(this);
 	}
 	
@@ -184,6 +186,48 @@ Town.prototype.getResources = function(){
 	return {wood : this.wood, stone : this.stone, iron : this.iron, income : this.income}
 }
 
+Town.prototype.hurt = function(dmg){
+	this.hitPoints -= dmg;
+	if(this.hitPoints <= 0){
+		this.die();
+	}
+
+	// console.log(this.hitPoints);
+}
+
+Town.prototype.die = function(){
+	this.dead = true;
+
+	this.player.townCount--;
+
+	if(this.deathCallback) {
+		this.deathCallback();
+    }
+
+    // delete that.entities.unit[this.id];
+}
+
+Town.prototype.getCenter = function(){
+	return {x : this.posX, y : this.posY };
+}
+
+Town.prototype.getSize = function(){
+	var position = this.getCenter();
+
+	var box = {x : position.x, y : position.y, w : this.width, h : this.height};	
+	return box;
+}
+
+Town.prototype.getSizeOnScreen = function(){
+	var xView = that.camera.posX;
+	var yView = that.camera.posY;
+
+	var position = this.getScreenPosition(xView, yView);
+
+	var box = {x : position.x, y : position.y, w : this.width, h : this.height};	
+	return box;
+}
+
 Town.prototype.buildConstruction = function(name){
 	console.log(Towns);
 	if(this.isBuilding == false){
@@ -223,7 +267,13 @@ Town.prototype.setId = function(id){
 }
 
 Town.prototype.setInformation = function(entity){
-	this.setHitPoints = entity.hitPoints;
-	this.setStage = entity.stage;
-	this.dead = entity.dead;
+	this.stage = entity.stage;
+
+	if(this.player != that.player){
+	}
+	else{
+		this.hitPoints = entity.hitPoints;
+		this.maxHitPoints = entity.maxHitPoints;
+		this.dead = entity.dead;
+	}
 }
