@@ -2,6 +2,7 @@ function Square(square, player, type, posX, posY){
 	if(square){
 		// that = game;
 	this.type = square.type;
+	console.log(this.type);
 	this.id = square.id;
 
 	// Position
@@ -91,8 +92,6 @@ function Square(square, player, type, posX, posY){
 	this.showRangeZone = square.showRangeZone;
 	this.showPath = square.showPath;
 
-	this.actionStack = [];
-
 	this.fill();// tout en bas, la fonction récupere les informations de l'objet pour changer ses caractéristiques
 
 	that.entities.unit[this.id] = this;
@@ -103,6 +102,7 @@ function Square(square, player, type, posX, posY){
 	else{
 		// that = game;
 	this.type = type;
+	console.log(this.type);
 	that.getNewId(this);
 
 	// Position
@@ -175,8 +175,6 @@ function Square(square, player, type, posX, posY){
 	this.showRangeZone = false;
 	this.showPath = false;
 
-	this.actionStack = [];
-
 	this.fill();// tout en bas, la fonction récupere les informations de l'objet pour changer ses caractéristiques
 
 	// that.entities.unit[this.id] = this;
@@ -206,11 +204,12 @@ Square.prototype.draw = function(context, xView, yView){
 	}
 	else if(this.dead){
 		context.fillStyle = 'black';
-		this.overlay = '_black';
+		this.overlay = '_';
 		context.strokeRect(screenPosition.x,screenPosition.y,this.width,this.height);
 	}
 	else if(this.selected){
 		context.fillStyle = 'green';
+		//console.log("coincoin");
 		this.overlay = '_green';
 		context.strokeRect(screenPosition.x,screenPosition.y,this.width,this.height);
 	}
@@ -219,14 +218,16 @@ Square.prototype.draw = function(context, xView, yView){
 		this.overlay = '_red';
 		context.strokeRect(screenPosition.x,screenPosition.y,this.width,this.height);
 	}
-	else
-		context.fillStyle = 'blue';
-		this.overlay = '_';
+	else{
+			context.fillStyle = 'blue';
+			this.overlay = '_';
+	}
 
+	//console.log(this.overlay);
 	this.sprite.src = this.chemin + this.state + this.overlay + ".png";
 	var screenPosition = this.getScreenPosition(xView, yView);
 
-	// console.log("draw de" + this.chemin + this.state + this.overlay + ".png");
+	//console.log("draw de" + this.chemin + this.state + this.overlay + ".png");
 	context.drawImage(this.sprite,this.width* this.step, this.height* this.orientation,this.width,this.height,screenPosition.x, screenPosition.y,this.width,this.height);
 	if (this.anim%10 == 0){
 		//context.drawImage(this.sprite,this.width* this.step, this.height* this.orientation,this.width,this.height,screenPosition.x, screenPosition.y,this.width,this.height);
@@ -535,8 +536,6 @@ Square.prototype.die = function(){
 	if(this.deathCallback) {
 		this.deathCallback();
     }
-
-    delete that.entities.unit[this.id];
 }
 
 Square.prototype.hurt = function(dmg){
@@ -593,16 +592,13 @@ Square.prototype.checkCombat = function(){
 		if(this.target.dead)
 			this.disengage();
 		else{
-			if(this.attackCooldown.isOver(Date.now()) && collisionBox(this.getRangeZone(), this.target.getRangeZone())){
-				// this.target.actionStack.push(this.hurt(50));
+			if(this.attackCooldown.isOver(Date.now()) && collisionBox(this.getRangeZone(), this.target.getRangeZone()))
 				this.target.hurt(50);
-				// console.log("dnzaofdnz");
-			}
 		}
 }
 
 Square.prototype.isAlliedWith = function(entity){
-	if(this.player.id == entity.player.id){
+	if(((this.player == that.player) && entity.allied) || (!(this.player == that.player) && !entity.allied)){
 		return true;
 	}
 
@@ -655,28 +651,13 @@ Square.prototype.setId = function(id){
 }
 
 Square.prototype.setInformation = function(entity){
-	// console.log(entity.hitPoints+" , "+entity.id);
-	// console.log(this.actionStack);
-
+	this.setHitPoints = entity.hitPoints;
 
 	if(this.player != that.player){
-		// this.hitPoints = entity.hitPoints;
 		this.posX = entity.posX;
 		this.posY = entity.posY;
-		
-	}
-	else{
-		this.hitPoints = entity.hitPoints;
 		this.dead = entity.dead;
-		console.log(this.dead);
 	}
-	// this.actionStack = entity.actionStack;
-	// for(var i in this.actionStack){
-	// 	this.actionStack[i];
-	// 	console.log(this.hitPoints);
-	// }
-	// this.actionStack = [];
-
 }
 
 Square.prototype.fill = function(){
@@ -698,7 +679,7 @@ Square.prototype.fill = function(){
 		this.width = Unites["warrior"]["image_walk"].sprite_size_x;
 		this.height = Unites["warrior"]["image_walk"].sprite_size_y;
 		this.anim_max = Unites["warrior"]["image_walk"].nb_anim -1;
-		this.chemin = chemin_init + race + classe;
+		
 
 		this.speed = Unites["warrior"]["vitesse_deplacement"];
 		this.atk_speed = Unites["warrior"]["vitesse_attaque"];
@@ -718,7 +699,7 @@ Square.prototype.fill = function(){
 		this.width = Unites["archer"]["image_walk"].sprite_size_x;
 		this.height = Unites["archer"]["image_walk"].sprite_size_y;
 		this.anim_max = Unites["archer"]["image_walk"].nb_anim -1;
-		this.chemin = chemin_init + race + classe;
+		
 
 		this.speed = Unites["archer"]["vitesse_deplacement"];
 		this.atk_speed = Unites["archer"]["vitesse_attaque"];
@@ -738,7 +719,7 @@ Square.prototype.fill = function(){
 		this.width = Unites["knight"]["image_walk"].sprite_size_x;
 		this.height = Unites["knight"]["image_walk"].sprite_size_y;
 		this.anim_max = Unites["knight"]["image_walk"].nb_anim -1;
-		this.chemin = chemin_init + race + classe;
+		
 
 		this.speed = Unites["knight"]["vitesse_deplacement"];
 		this.atk_speed = Unites["knight"]["vitesse_attaque"];
@@ -750,6 +731,7 @@ Square.prototype.fill = function(){
 		this.attackRange = Unites["knight"]["portée_attaque"];
 		this.visualRange = Unites["knight"]["champs_de_vision"];
 	}
+	this.chemin = chemin_init + race + classe;
 }
 
 Square.prototype.tick = function(){
