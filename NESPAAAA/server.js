@@ -109,10 +109,6 @@ io.sockets.on('connection', function (socket,pseudo) {
         // upload += sizeof(hihi);
     });
 
-    socket.on('move', function(pos){
-        console.log(socket.pseudo + " bouge en " + pos.x + " "  + pos.y);
-    });
-
     socket.on('stats', function(ping){
         socket.emit('pong',Date.now() - ping );
         upload = 0;
@@ -123,12 +119,11 @@ io.sockets.on('connection', function (socket,pseudo) {
         socket.emit('newId', idCount++ );
     });
 
-
-    socket.on("newSquad", function(id){
-       units.push(id);
-       console.log(units);
-       console.log(socket.pseudo + " cree nouvelle unité " + id);
+    socket.on('lost', function(){
+        //console.log(idCount);
+        socket.broadcast.emit('win');
     });
+
 
     socket.on('kick', function(pseudo){
       socket.disconnect();

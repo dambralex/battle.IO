@@ -37,11 +37,14 @@ class Game{
 	// Setting up the client communication
 	this.client = new Client();
 	this.waitingId = [];
+	this.actionStack = [];
 	// this.client.setGame(this);
 
 	// Pausing 
 	this.paused = false;
 	this.hasStarted = false;
+	this.lost = false;
+	this.win = false;
 	}
 
 	init(){
@@ -123,7 +126,22 @@ class Game{
 		// 	this.entities.unit[u].draw(mapContext, that.camera.posX, that.camera.posY);
 	
 		this.mouseObj.draw(mapContext, this.camera.posX, this.camera.posY);
-	
+
+		if(this.lost){
+			mapContext.save();
+			mapContext.fillStyle = 'white';
+	    	mapContext.font = "72pt Arial";
+	    	mapContext.fillText("PERDU", 20, 100);
+	   		mapContext.restore();
+		}
+		else if(this.win){
+			mapContext.save();
+			mapContext.fillStyle = 'white';
+	    	mapContext.font = "72pt Arial";
+	    	mapContext.fillText("GAGNÉ !!", 20, 100);
+	   		mapContext.restore();
+		}
+
 		// this.hud.draw(mapContext);
 	}
 	
@@ -136,13 +154,16 @@ class Game{
 	    hudContext.font = "10pt Arial";
 	    // hudContext.fillText("Town : " + test.x + ", " +test.y, 30, 50);
 	    // hudContext.fillText("Camera : " + this.camera.posX + ", " +this.camera.posY, 30, 70);
+	    if(this.selectedEntities.town){
+	    	hudContext.fillText("unit : " + this.selectedEntities.town.id , 30, 70);
+	    }
 	    if(this.selectedEntities.unit[0]){
-	    	hudContext.fillText("unit : " + this.selectedEntities.unit[0].id , 30, 70);
+	    	hudContext.fillText("unit : " + this.selectedEntities.unit[0].id , 30, 50);
 	    }
 	    hudContext.fillText("Ping : " + this.client.ping , 30, 90);
-	    if(this.selectedEntities.town){
-	    	hudContext.fillText("Squad : " + this.selectedEntities.town.posX + ", " +this.selectedEntities.town.posY, 30, 110);
-	    }
+	    // if(this.selectedEntities.town){
+	    // 	hudContext.fillText("Squad : " + this.selectedEntities.town.posX + ", " +this.selectedEntities.town.posY, 30, 110);
+	    // }
 	   	hudContext.restore();
 	}
 	
@@ -242,6 +263,25 @@ class Game{
 		for(var s in this.selectedEntities.unit){
 			if(this.selectedEntities.unit[s].isMovable() && this.selectedEntities.unit[s].isAllied()){
 				var clickMouse = this.convertClickPosition(x, y);
+				for(var u in this.entities.unit){
+					if(this.entities.unit[u] != this.selectedEntities.unit[s]){
+						if(!this.entities.unit[u].isAlliedWith(this.selectedEntities.unit[s])){
+							if(collisionBox({x : clickMouse.x, y : clickMouse.y, w : 0, h : 0}, this.entities.unit[u].getSize())){
+								this.selectedEntities.unit[s].setFollow(this.entities.unit[u]);
+								return;
+							}
+						}
+					}
+				}
+				for(var t in this.entities.town){
+					if(!this.selectedEntities.unit[s].isAlliedWith(this.entities.town[t])){
+						if(collisionBox({x : clickMouse.x, y : clickMouse.y, w : 0, h : 0}, this.entities.town[t].getSize())){
+							this.selectedEntities.unit[s].setFollow(this.entities.town[t]);
+							return;
+						}
+					}
+				}
+				this.selectedEntities.unit[s].disengage();
 				this.selectedEntities.unit[s].setDestination(clickMouse.x, clickMouse.y);
 			}
 		}
@@ -252,17 +292,17 @@ class Game{
 	}
 	
 	handleMouseMove(x, y){
-		if(x < 100)
+		if(x < 50)
 			this.mouseObj.setOutLeft(true);
 		else
 			this.mouseObj.setOutLeft(false);
 	
-		if(x > this.camera.wView - 100)
+		if(x > this.camera.wView - 50)
 			this.mouseObj.setOutRight(true);
 		else
 			this.mouseObj.setOutRight(false);
 	
-		if(y < 100)
+		if(y < 50)
 			this.mouseObj.setOutTop(true);
 		else
 			this.mouseObj.setOutTop(false);
@@ -283,10 +323,12 @@ class Game{
 				if(u1 != u2 && (!this.entities.unit[u2].dead && !this.entities.unit[u1].dead)){
 					if(!this.entities.unit[u1].isAlliedWith(this.entities.unit[u2])){
 						if(collisionBox(this.entities.unit[u1].getCombatZone(), this.entities.unit[u2].getCombatZone())){
-							if(!this.entities.unit[u1].attacking && !this.entities.unit[u2].dead){
-								if(this.entities.unit[u1].isAllied())
+							if(this.entities.unit[u1].isAllied()){
+								if(!this.entities.unit[u1].attacking)
 									this.entities.unit[u1].engage(this.entities.unit[u2]);
-								else
+							}
+							else{
+								if(!this.entities.unit[u2].attacking)
 									this.entities.unit[u2].engage(this.entities.unit[u1]);
 							}
 						}
@@ -323,12 +365,18 @@ class Game{
 	tick(){
 		if(!that.paused	&& that.player){
 			that.player.tick();
+				if(that.player.townCount <= 0){
+					that.paused = true;
+					that.client.gameFinished();
+					that.lost = true;
+				}
+				that.forEachUnit(function(unit){
+					unit.tick();
+				});
+				that.handleCollision();
 		}
 		that.client.tick();
-		that.forEachUnit(function(unit){
-			unit.tick();
-		});
-		that.handleCollision();
+
 	}
 
 	setSocket(socket){

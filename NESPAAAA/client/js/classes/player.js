@@ -3,7 +3,7 @@ function Player(game, name, type, allied, startingX, startingY){
     this.name = name;
     this.type = type;
     that.getNewId(this);
-
+    this.townCount = 0;
 
     new Town(null, this, startingX, startingY);
 
@@ -63,4 +63,12 @@ Player.prototype.calculIncome = function(){
 
 Player.prototype.setId = function(id){
 	this.id = id;
+}
+
+PLayer.prototype.addTown = function(){
+	this.townCount++;
+}
+
+PLayer.prototype.deleteTown = function(){
+	this.townCount--;
 }

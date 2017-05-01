@@ -31,9 +31,9 @@ class Client{
 		});
 
 		this.socket.on('gameInformation', function(entities){
-			// console.log(entities.unit);
+			// console.log(entities.actionStack);
 
-			for(var i in entities.town);
+			for(var i in entities.town){
 				if(entities.town[i]){
 					// console.log(entities.town[i]);
 					// console.log(that.entities.town[i]);
@@ -46,6 +46,7 @@ class Client{
 						that.entities.town[entities.town[i].id].setInformation(entities.town[i]);
 					}
 				}
+			}
 			for(var i in entities.unit){
 				if(entities.unit[i]){
 					// console.log(entities.unit[i]);
@@ -59,7 +60,22 @@ class Client{
 					}
 				}
 			}
+			for(var i in entities.actionStack){
+				if(entities.actionStack[i]){
+					// console.log(entities.actionStack[i]);
+					var action = Function(entities.actionStack[i].argument, entities.actionStack[i].methode);
+					// console.log(action);
+					// console.log(action);
+	
+					if(that.entities.town[entities.actionStack[i].id]){
+						action(that.entities.town[entities.actionStack[i].id]);
+					}
+					if(that.entities.unit[entities.actionStack[i].id]){
+						action(that.entities.unit[entities.actionStack[i].id]);
 
+					}
+				}	
+			}
 		});
 
 		this.socket.on('start', function(data){
@@ -73,6 +89,11 @@ class Client{
 			that.setPlayer(data.name, Types.Races.ORC, false, data.starting[0], data.starting[1]);
 		});
 
+		this.socket.on('win', function(data){
+			that.paused = true;
+			that.win = true;
+		});
+
 		this.socket.on('newId', function(data){
 			that.waitingId[0].setId(data);
 			that.waitingId.shift();
@@ -83,30 +104,29 @@ class Client{
 		this.townInformation = [];
 		this.unitInformation = [];
 
+		// var actionStack = [];
 		var tmp;
-		var actionStack;
+
+		// console.log(that.actionStack);
+
 
 		if(this.socket){ 
 			for(var t in that.entities.town){
-				// if(that.entities.town[t].player == that.player){
+				if(that.entities.town[t].isAllied()){
 					tmp = {id : that.entities.town[t].id,
 					hitPoints : that.entities.town[t].hitPoints,
 					maxHitPoints : that.entities.town[t].maxHitPoints,
+					player : that.entities.town[t].player,
 					posX : that.entities.town[t].posX,
 					posY : that.entities.town[t].posY,
 					stage : that.entities.town[t].stage,
 					dead : that.entities.town[t].dead,
 					};
 					this.townInformation.push(tmp);
-				// }
+				}
 			}
 			for(var u in that.entities.unit){
-					// console.log(that.entities.unit[u].actionStack);
-					actionStack = [];
-					// for(var i = 0; i < that.entities.unit[u].actionStack.length; i++){
-					// 	actionStack.push(that.entities.unit[u].actionStack[i]);
-					// }
-				// if(that.entities.unit[u].player == that.player){
+				if(that.entities.unit[u].isAllied()){
 					tmp = {id : that.entities.unit[u].id,
 					hitPoints : that.entities.unit[u].hitPoints,
 					maxHitPoints : that.entities.unit[u].maxHitPoints,
@@ -123,14 +143,14 @@ class Client{
 					attackRange : that.entities.unit[u].attackRange,
 					visualRange : that.entities.unit[u].visualRange,
 					dead : that.entities.unit[u].dead,
-					actionStack : actionStack,
 					};
 					this.unitInformation.push(tmp);
-				// }
+				}
 			}
-
-			this.socket.emit('gameInformation', {town : this.townInformation, unit : this.unitInformation});
+			this.socket.emit('gameInformation', {town : this.townInformation, unit : this.unitInformation, actionStack : that.actionStack});
 		}
+
+		that.actionStack = [];
 	}
 
 	tick(){
@@ -141,5 +161,9 @@ class Client{
 
 	requestNewId(){
 		this.socket.emit('newId');
+	}
+
+	gameFinished(){
+		this.socket.emit('lost');
 	}
 }

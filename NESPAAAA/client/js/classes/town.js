@@ -90,6 +90,10 @@ function Town(town, player, posX, posY){
     this.isBuilding = false;
     this.currentBuilding = null;
 
+    this.player.townCount++;
+
+    this.actionStack = [];
+
 	// that.entities.town.push(this);
 	}
 	
@@ -176,12 +180,62 @@ Town.prototype.getScreenPosition = function(xView, yView){
 	return {x : this.posX + this.posY * -1 - xView * 2, y : this.posX * 0.5 + this.posY*0.5 - yView};
 }
 
-Town.prototype.isAlliedWith = function(){
-	return true;
+Town.prototype.isAlliedWith = function(entity){
+	if(this.player.id == entity.player.id){
+		return true;
+	}
+
+	return false;
+}
+
+Town.prototype.isAllied = function(){
+	return (this.player == that.player);
 }
 
 Town.prototype.getResources = function(){
 	return {wood : this.wood, stone : this.stone, iron : this.iron, income : this.income}
+}
+
+Town.prototype.hurt = function(dmg){
+	this.hitPoints -= dmg;
+	if(this.hitPoints <= 0){
+		this.die();
+	}
+
+	// console.log(this.hitPoints);
+}
+
+Town.prototype.die = function(){
+	this.dead = true;
+
+	this.player.townCount--;
+
+	if(this.deathCallback) {
+		this.deathCallback();
+    }
+
+    // delete that.entities.unit[this.id];
+}
+
+Town.prototype.getCenter = function(){
+	return {x : this.posX, y : this.posY };
+}
+
+Town.prototype.getSize = function(){
+	var position = this.getCenter();
+
+	var box = {x : position.x, y : position.y, w : this.width, h : this.height};	
+	return box;
+}
+
+Town.prototype.getSizeOnScreen = function(){
+	var xView = that.camera.posX;
+	var yView = that.camera.posY;
+
+	var position = this.getScreenPosition(xView, yView);
+
+	var box = {x : position.x, y : position.y, w : this.width, h : this.height};	
+	return box;
 }
 
 Town.prototype.buildConstruction = function(name){
@@ -223,7 +277,20 @@ Town.prototype.setId = function(id){
 }
 
 Town.prototype.setInformation = function(entity){
-	this.setHitPoints = entity.hitPoints;
-	this.setStage = entity.stage;
+
+	this.stage = entity.stage;
+	this.maxHitPoints = entity.maxHitPoints;
+	this.hitPoints = entity.hitPoints;
 	this.dead = entity.dead;
+
+	// if(this.player != that.player){
+	// 	// this.hitPoints = entity.hitPoints;
+	// 	// this.maxHitPoints = entity.maxHitPoints;
+	// 	this.stage = entity.stage;
+	// }
+	// else{
+	// 	this.hitPoints = entity.hitPoints;
+	// 	this.maxHitPoints = entity.maxHitPoints;
+	// 	this.dead = entity.dead;
+	// }
 }
