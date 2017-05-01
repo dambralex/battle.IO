@@ -444,9 +444,10 @@ class Unit{
 	
 	setDestination(x, y){
 		var thus = this;
+		var center = this.getCenter();
 		if(window.Worker) {
 			var worker = new Worker("http://localhost:8080/js/worker.js");
-			worker.postMessage([this.posX, this.posY, x, y, that.map.walls, that.map.getWidth(), that.map.getHeight(), 32]);
+			worker.postMessage([center.x, center.y, x, y, that.map.walls, that.map.getWidth(), that.map.getHeight(), 32]);
 			
 			worker.onmessage = function(path) {
 				thus.path = path.data.slice(0);
@@ -526,7 +527,10 @@ class Unit{
 	}
 	
 	getCenter(){
-		return {x : this.posX, y : this.posY };
+		var width = this.width/4 + this.height/2;
+		var height = -this.width/4 + this.height/2;
+
+		return {x : this.posX + width, y : this.posY + height};
 	}
 	
 	getCenterOnScreen(){
