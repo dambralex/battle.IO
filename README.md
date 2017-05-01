@@ -32,7 +32,7 @@ Il n'y a pas d'animation de mort, attaque implémenté encore.<br>
 Les unités mortes au combat ne disparaisse pas. (Ça laisse des odeurs ..).<br>
 Améliorer la cohérence du jeu sur son contenu.<br>
 Corriger le mode spectateur, qui ne marche pas.<br>
-Corriger les quelque bug qui reste.<br>
+Corriger les quelques bug qui reste.<br>
 
 ## Répartition des tâches
 ##### Walid :
