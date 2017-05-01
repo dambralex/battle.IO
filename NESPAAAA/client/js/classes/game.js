@@ -37,6 +37,7 @@ class Game{
 	// Setting up the client communication
 	this.client = new Client();
 	this.waitingId = [];
+	this.actionStack = [];
 	// this.client.setGame(this);
 
 	// Pausing 
@@ -153,9 +154,12 @@ class Game{
 	    hudContext.font = "10pt Arial";
 	    // hudContext.fillText("Town : " + test.x + ", " +test.y, 30, 50);
 	    // hudContext.fillText("Camera : " + this.camera.posX + ", " +this.camera.posY, 30, 70);
-	    // if(this.selectedEntities.unit[0]){
-	    	// hudContext.fillText("unit : " + this.selectedEntities.unit[0].id , 30, 70);
-	    // }
+	    if(this.selectedEntities.town){
+	    	hudContext.fillText("unit : " + this.selectedEntities.town.id , 30, 70);
+	    }
+	    if(this.selectedEntities.unit[0]){
+	    	hudContext.fillText("unit : " + this.selectedEntities.unit[0].id , 30, 50);
+	    }
 	    hudContext.fillText("Ping : " + this.client.ping , 30, 90);
 	    // if(this.selectedEntities.town){
 	    // 	hudContext.fillText("Squad : " + this.selectedEntities.town.posX + ", " +this.selectedEntities.town.posY, 30, 110);
@@ -288,17 +292,17 @@ class Game{
 	}
 	
 	handleMouseMove(x, y){
-		if(x < 100)
+		if(x < 50)
 			this.mouseObj.setOutLeft(true);
 		else
 			this.mouseObj.setOutLeft(false);
 	
-		if(x > this.camera.wView - 100)
+		if(x > this.camera.wView - 50)
 			this.mouseObj.setOutRight(true);
 		else
 			this.mouseObj.setOutRight(false);
 	
-		if(y < 100)
+		if(y < 50)
 			this.mouseObj.setOutTop(true);
 		else
 			this.mouseObj.setOutTop(false);

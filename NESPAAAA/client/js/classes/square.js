@@ -91,6 +91,8 @@ function Square(square, player, type, posX, posY){
 	this.showRangeZone = square.showRangeZone;
 	this.showPath = square.showPath;
 
+	this.actionStack = [];
+
 	this.fill();// tout en bas, la fonction récupere les informations de l'objet pour changer ses caractéristiques
 
 	that.entities.unit[this.id] = this;
@@ -172,6 +174,8 @@ function Square(square, player, type, posX, posY){
 	this.showCombatZone = false;
 	this.showRangeZone = false;
 	this.showPath = false;
+
+	this.actionStack = [];
 
 	this.fill();// tout en bas, la fonction récupere les informations de l'objet pour changer ses caractéristiques
 
@@ -594,13 +598,28 @@ Square.prototype.checkCombat = function(){
 		if(this.target.dead)
 			this.disengage();
 		else{
-			if(this.attackCooldown.isOver(Date.now()) && collisionBox(this.getRangeZone(), this.target.getSizeOnScreen()))
-				this.target.hurt(50);
+			if(collisionBox(this.getRangeZone(), this.target.getSizeOnScreen())){
+
+			}
+			if(this.attackCooldown.isOver(Date.now()) && collisionBox(this.getRangeZone(), this.target.getSizeOnScreen())){
+				// this.target.hurt(20);
+
+				var tmp = {
+					id : this.target.id,
+					argument : "entity",
+					methode : "entity.hurt(20)"
+				};
+
+				that.actionStack.push(tmp);
+
+				// [this.target.id] = function(entity){
+				// 		entity.hurt(5);
+				// 	};
+			}
 		}
 }
 
 Square.prototype.isAlliedWith = function(entity){
-	console.log(entity);
 	if(this.player.id == entity.player.id){
 		return true;
 	}
@@ -665,14 +684,43 @@ Square.prototype.setId = function(id){
 
 Square.prototype.setInformation = function(entity){
 
-	if(this.player != that.player){
-		this.posX = entity.posX;
-		this.posY = entity.posY;
-	}
-	else{
-		this.hitPoints = entity.hitPoints;
-		this.dead = entity.dead;
-	}
+	// console.log(entity.actionStack);
+
+	// if(this.player != that.player){
+	// for(var i in entity.actionStack){
+	// 	if(that.entities.unit[entity.actionStack[i].id]){
+	// 		that.entities.unit[entity.actionStack[i].id].hurt(1);
+	// 	}
+	
+	// 	console.log(entity.actionStack[i].id); // 1081 == ville
+	// 	console.log(this.id); // 1084 == cheval
+
+	// 	if(that.entities.town[entity.actionStack[i].id]){
+	// 		that.entities.town[entity.actionStack[i].id].hurt(1);
+	// 	}
+	// 	// console.log(entity.actionStack[i].action);
+	// }
+
+	this.maxHitPoints = entity.maxHitPoints;
+	this.hitPoints = entity.hitPoints;
+	this.posX = entity.posX;
+	this.posY = entity.posY;
+	this.dead = entity.dead;
+	// }
+	// else{
+		// this.hitPoints = entity.hitPoints;
+		// this.dead = entity.dead;
+	// }
+
+	// if(this.player != that.player){
+	// 	this.posX = entity.posX;
+	// 	this.posY = entity.posY;
+	// }
+	// else{
+	// 	this.hitPoints = entity.hitPoints;
+	// 	this.maxHitPoints = entity.maxHitPoints;
+	// 	this.dead = entity.dead;
+	// }
 }
 
 Square.prototype.fill = function(){
