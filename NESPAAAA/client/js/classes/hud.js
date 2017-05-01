@@ -49,7 +49,8 @@ Hud.prototype.init = function(){
 
     for(name in Towns["batiments"]){
 
-        path = chemin + name + "_.png"
+        path = chemin + name + "_.png";
+        //console.log(path);
         button = new Button(name, x, 80, path);
 
         button.setOnClick(function(){

@@ -313,6 +313,25 @@ var Towns = {
             }
           }
         },
+        "bank" : {
+          "production" : 1000,
+          "cout" : 300,
+          "apports" : {
+            pierre : -1,
+            bois : -1,
+            fer : -5,
+            or : -2 
+          },
+
+          //modif by Alex
+          "anim_path" : "construction/bank",
+          "img_size_x" : 38,
+          "img_size_y" : 38,
+          "sprite_size_x" : 38,
+          "sprite_size_y" : 38,
+          "nb_anim" :1,
+          //done
+        },
         "caserne" : {
           "production" : 1500,
           "cout" : 400,
