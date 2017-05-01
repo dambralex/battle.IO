@@ -342,6 +342,11 @@ class Game{
 	}
 
 	startGame(){
+		this.entities = {
+			town : [],
+			unit : []
+		};
+
 		this.paused = false;
 		this.hasStarted = true;
 	}

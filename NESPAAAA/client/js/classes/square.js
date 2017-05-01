@@ -2,7 +2,6 @@ function Square(square, player, type, posX, posY){
 	if(square){
 		// that = game;
 	this.type = square.type;
-	console.log(this.type);
 	this.id = square.id;
 
 	// Position
@@ -92,6 +91,8 @@ function Square(square, player, type, posX, posY){
 	this.showRangeZone = square.showRangeZone;
 	this.showPath = square.showPath;
 
+	this.actionStack = [];
+
 	this.fill();// tout en bas, la fonction récupere les informations de l'objet pour changer ses caractéristiques
 
 	that.entities.unit[this.id] = this;
@@ -102,7 +103,6 @@ function Square(square, player, type, posX, posY){
 	else{
 		// that = game;
 	this.type = type;
-	console.log(type);
 	that.getNewId(this);
 
 	// Position
@@ -174,6 +174,8 @@ function Square(square, player, type, posX, posY){
 	this.showCombatZone = true;
 	this.showRangeZone = true;
 	this.showPath = false;
+
+	this.actionStack = [];
 
 	this.fill();// tout en bas, la fonction récupere les informations de l'objet pour changer ses caractéristiques
 
@@ -533,6 +535,8 @@ Square.prototype.die = function(){
 	if(this.deathCallback) {
 		this.deathCallback();
     }
+
+    delete that.entities.unit[this.id];
 }
 
 Square.prototype.hurt = function(dmg){
@@ -589,13 +593,16 @@ Square.prototype.checkCombat = function(){
 		if(this.target.dead)
 			this.disengage();
 		else{
-			if(this.attackCooldown.isOver(Date.now()) && collisionBox(this.getRangeZone(), this.target.getRangeZone()))
+			if(this.attackCooldown.isOver(Date.now()) && collisionBox(this.getRangeZone(), this.target.getRangeZone())){
+				// this.target.actionStack.push(this.hurt(50));
 				this.target.hurt(50);
+				// console.log("dnzaofdnz");
+			}
 		}
 }
 
 Square.prototype.isAlliedWith = function(entity){
-	if(this.player == entity.player){
+	if(this.player.id == entity.player.id){
 		return true;
 	}
 
@@ -649,14 +656,27 @@ Square.prototype.setId = function(id){
 
 Square.prototype.setInformation = function(entity){
 	// console.log(entity.hitPoints+" , "+entity.id);
+	// console.log(this.actionStack);
+
 
 	if(this.player != that.player){
-	this.hitPoints = entity.hitPoints;
-
+		// this.hitPoints = entity.hitPoints;
 		this.posX = entity.posX;
 		this.posY = entity.posY;
-		this.dead = entity.dead;
+		
 	}
+	else{
+		this.hitPoints = entity.hitPoints;
+		this.dead = entity.dead;
+		console.log(this.dead);
+	}
+	// this.actionStack = entity.actionStack;
+	// for(var i in this.actionStack){
+	// 	this.actionStack[i];
+	// 	console.log(this.hitPoints);
+	// }
+	// this.actionStack = [];
+
 }
 
 Square.prototype.fill = function(){

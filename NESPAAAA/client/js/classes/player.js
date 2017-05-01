@@ -2,6 +2,8 @@ function Player(game, name, type, allied, startingX, startingY){
     // that = game;
     this.name = name;
     this.type = type;
+    that.getNewId(this);
+
 
     new Town(null, this, startingX, startingY);
 
@@ -57,4 +59,8 @@ Player.prototype.calculIncome = function(){
 		this.income += this.wood * 2;
 	if(this.iron < 0)
 		this.income += this.iron * 4;
+}
+
+Player.prototype.setId = function(id){
+	this.id = id;
 }

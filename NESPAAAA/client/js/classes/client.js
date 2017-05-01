@@ -84,6 +84,7 @@ class Client{
 		this.unitInformation = [];
 
 		var tmp;
+		var actionStack;
 
 		if(this.socket){ 
 			for(var t in that.entities.town){
@@ -100,6 +101,11 @@ class Client{
 				// }
 			}
 			for(var u in that.entities.unit){
+					// console.log(that.entities.unit[u].actionStack);
+					actionStack = [];
+					// for(var i = 0; i < that.entities.unit[u].actionStack.length; i++){
+					// 	actionStack.push(that.entities.unit[u].actionStack[i]);
+					// }
 				// if(that.entities.unit[u].player == that.player){
 					tmp = {id : that.entities.unit[u].id,
 					hitPoints : that.entities.unit[u].hitPoints,
@@ -117,6 +123,7 @@ class Client{
 					attackRange : that.entities.unit[u].attackRange,
 					visualRange : that.entities.unit[u].visualRange,
 					dead : that.entities.unit[u].dead,
+					actionStack : actionStack,
 					};
 					this.unitInformation.push(tmp);
 				// }
