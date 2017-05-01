@@ -5,12 +5,13 @@
 ## Règles
   Battle.io est un jeu de stratégie en temps réel, en 1 VS 1.<br>
   Le but du jeu est de développer votre ville de façon à avoir le maximum de ressources, et pouvoir recruter les troupes nécessaires à la défense de votre ville, et à la destruction de celle de l'adversaire.<br>
-  La destruction de la ville ennemie accorde la victoire au joueur.
+  La destruction de la ville ennemie accorde la victoire au joueur, et l'honneur.<br> Beaucoup d'honneur. 
 
 ## Comment jouer ?
   Le jeu se joue exclusivement en 1 VS 1, contre un joueur humain.<br>
   Connecter vous au serveur **http://zerdnamac.tk/dagame/client**, et attendez la connexion d'un  deuxième joueur.<br>
-  Quand deux joueurs sont réunis, la partie commence.
+  Quand deux joueurs sont réunis, la partie commence.<br>
+  Lorsque d'autre joueurs se connecte au serveur, ils entrent en mode spectateur. (Popcorn non fournis).
 
 ## Dépendances
 - *NodeJS*
@@ -22,7 +23,16 @@ La grande majorité des calculs se font coté client. <br>
 Le principe est simple :
   - A la connexion chaque client récupère de la part du serveur les informations nécessaires au démarrage de la partie ( Map, coordonnées de départ sur la map, coordonnées de l'adversaire ...)
   - Ensuite, le client communique régulièrement *l'état* courant du jeu avec le serveur (plusieurs fois par secondes), lequel met à jour ses variables personnelles, et relaie à l'autre client ces informations. Ainsi, les deux clients sont en permanence à jour l'un avec l'autre. 
+Le pathfinding est géré par des workers pour ne pas interrompre le déroulement de la boucle de jeu principale.
 
+## Points à améliorés
+Le Pathfinding bien que fonctionnel est encore assez lent pour une gestion en temps réel sur une plus grande carte.<br>
+Il n'y a pas assez de contenu.<br>
+Il n'y a pas d'animation de mort, attaque implémenté encore.<br>
+Les unités mortes au combat ne disparaisse pas. (Ça laisse des odeurs ..).<br>
+Améliorer la cohérence du jeu sur son contenu.<br>
+Corriger le mode spectateur, qui ne marche pas.<br>
+Corriger les quelque bug qui reste.<br>
 
 ## Répartition des tâches
 ##### Walid :
