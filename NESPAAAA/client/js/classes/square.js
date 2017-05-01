@@ -171,8 +171,8 @@ function Square(square, player, type, posX, posY){
 	this.visualRange = 10;
 
 	// Zones drawing
-	this.showCombatZone = true;
-	this.showRangeZone = true;
+	this.showCombatZone = false;
+	this.showRangeZone = false;
 	this.showPath = false;
 
 	this.actionStack = [];
