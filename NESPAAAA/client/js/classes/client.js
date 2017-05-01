@@ -1,8 +1,6 @@
 class Client{
 
 	constructor(){
-		// this.game = game;
-		// this.data = data
 		this.socket = null;
 
 		this.ping = 0;
@@ -16,28 +14,20 @@ class Client{
 
 	setSocket(socket){
 		this.socket = socket;
-		//this.socket.emit('gameInformation',this.game);
 		this.setOnSockets();
 	}
 
 	setOnSockets(){
 		var self = this;
-		console.log(self);
 
 		this.socket.on('pong', function(data){
-			// console.log(data+" ms");
 			self.ping = data;
-			// self.upload = data.upload;
 		});
 
 		this.socket.on('gameInformation', function(entities){
-			// console.log(entities.actionStack);
 
 			for(var i in entities.town){
 				if(entities.town[i]){
-					// console.log(entities.town[i]);
-					// console.log(that.entities.town[i]);
-					// console.log(entities.town[i].id);
 
 					if(!that.entities.town[entities.town[i].id]){
 						new Town(entities.town[i]);
@@ -49,11 +39,9 @@ class Client{
 			}
 			for(var i in entities.unit){
 				if(entities.unit[i]){
-					// console.log(entities.unit[i]);
-					// console.log(that.entities.unit[i]);
 
 					if(!that.entities.unit[entities.unit[i].id]){
-						new Square(entities.unit[i]);
+						new Unit(entities.unit[i]);
 					}
 					else{
 						that.entities.unit[entities.unit[i].id].setInformation(entities.unit[i]);
@@ -62,10 +50,7 @@ class Client{
 			}
 			for(var i in entities.actionStack){
 				if(entities.actionStack[i]){
-					// console.log(entities.actionStack[i]);
 					var action = Function(entities.actionStack[i].argument, entities.actionStack[i].methode);
-					// console.log(action);
-					// console.log(action);
 	
 					if(that.entities.town[entities.actionStack[i].id]){
 						action(that.entities.town[entities.actionStack[i].id]);
@@ -89,7 +74,7 @@ class Client{
 			that.setPlayer(data.name, Types.Races.ORC, false, data.starting[0], data.starting[1]);
 		});
 
-		this.socket.on('win', function(data){
+		this.socket.on('win', function(){
 			that.paused = true;
 			that.win = true;
 		});
@@ -104,10 +89,8 @@ class Client{
 		this.townInformation = [];
 		this.unitInformation = [];
 
-		// var actionStack = [];
 		var tmp;
 
-		// console.log(that.actionStack);
 
 
 		if(this.socket){ 
@@ -119,6 +102,7 @@ class Client{
 					player : that.entities.town[t].player,
 					posX : that.entities.town[t].posX,
 					posY : that.entities.town[t].posY,
+					name : that.entities.town[t].name,
 					stage : that.entities.town[t].stage,
 					dead : that.entities.town[t].dead,
 					};

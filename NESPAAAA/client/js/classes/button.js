@@ -1,72 +1,3 @@
-// function Button(text, posX, posY){
-// 	this.posX = posX || 0;
-// 	this.posY = posY || 0;
-// 	this.pressed = false;
-// 	this.showButton = true;
-
-// 	this.text = text || "";
-// }
-
-// Button.prototype.press = function(){
-// 	this.pressed = true;
-// 	this.onClick();
-// }
-
-// Button.prototype.unpress = function(){
-// 	this.pressed = false;
-// }
-
-// Button.prototype.setPosition = function(x, y){
-// 	this.posX = x;
-// 	this.posY = y;
-// }
-
-// Button.prototype.draw = function(context){
-// 	context.save()
-// 	if(this.showButton){
-// 		if(!this.pressed){
-// 			context.strokeStyle = 'purple';
-// 			context.strokeRect(this.posX, this.posY, 40, 40);
-// 			if(this.text){
-// 				context.fillStyle = 'purple';
-//     			context.font = "8pt Arial";
-//     			context.fillText(this.text, this.posX+5, this.posY+20);
-// 			}
-// 		}
-// 		else{
-// 			context.fillStyle = 'purple';
-// 			context.fillRect(this.posX, this.posY, 40, 40);
-// 			if(this.text){
-// 				context.fillStyle = 'white';
-//     			context.font = "8pt Arial";
-//     			context.fillText(this.text, this.posX+5, this.posY+20);
-// 			}
-// 		}
-// 	}
-// 	context.restore();
-// }
-
-// Button.prototype.onClick = function(){
-// 	if(this.clickCallback){
-// 		this.clickCallback();
-// 	}
-// }
-
-// Button.prototype.togglePressed = function(){
-// 	if(this.pressed == true)
-// 		this.pressed = false;
-// 	else
-// 		this.pressed = true;
-// }
-
-// Button.prototype.setOnClick = function(callback){
-// 	this.clickCallback = callback;
-// }
-
-// Button.prototype.setText = function(text){
-// 	this.text = text;
-// }
-
 class Button{
 	constructor(text, posX, posY, source){
 		var self = this;
@@ -85,7 +16,6 @@ class Button{
 
 		this.source = source;
 		this.icone.src = source;
-		console.log(source);
 		if (this.source != null){
 			this.switchdraw = 1;
 		}
@@ -111,18 +41,12 @@ class Button{
 
 	draw(context){
 		context.save()
-		if(this.showButton){
-			//console.log ("draw " + this.source);
-			/*if (this.source != null){
-				switchdraw = 1;
-			}*/
-			
+		if(this.showButton){		
 			if(!this.pressed){
 				if (this.switchdraw == 1){
 					context.drawImage(this.icone,0,0,38,38,this.posX,this.posY,38,38);
 				}
 				else{
-					/*context.drawImage(this.icone,0,0,38,38,this.posX,this.posY,38,38);*/
 					context.strokeStyle = 'purple';
 					
 					context.strokeRect(this.posX, this.posY, 40, 40);
@@ -138,7 +62,6 @@ class Button{
 					context.drawImage(this.icone,0,0,38,38,this.posX,this.posY,38,38);
 				}
 				else{
-					/*context.drawImage(this.icone,0,0,38,38,this.posX,this.posY,38,38);*/
 					context.fillStyle = 'purple';
 					context.fillRect(this.posX, this.posY, 40, 40);
 					if(this.text){
