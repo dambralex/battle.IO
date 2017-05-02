@@ -25,14 +25,23 @@ Le principe est simple :
   - Ensuite, le client communique régulièrement *l'état* courant du jeu avec le serveur (plusieurs fois par secondes), lequel met à jour ses variables personnelles, et relaie à l'autre client ces informations. Ainsi, les deux clients sont en permanence à jour l'un avec l'autre. 
 Le pathfinding est géré par des workers pour ne pas interrompre le déroulement de la boucle de jeu principale.
 
-## Points à améliorés
+## Points à améliorer
 Le Pathfinding bien que fonctionnel est encore assez lent pour une gestion en temps réel sur une plus grande carte.<br>
 Il n'y a pas assez de contenu.<br>
 Il n'y a pas d'animation de mort, attaque implémenté encore.<br>
 Les unités mortes au combat ne disparaisse pas. (Ça laisse des odeurs ..).<br>
 Améliorer la cohérence du jeu sur son contenu.<br>
 Corriger le mode spectateur, qui ne marche pas.<br>
-Corriger les quelque bug qui reste.<br>
+Mettre un cout de recrutement, et d'entretien aux unités.<br>
+Afficher les informations sur les batiments et unités recrutés (pour la modique somme de 0 PO), sur l'interface avant de les construires.<br>
+Intégration d'une miniMap<br>
+Ajouter des affichages pour que le jeu soit plus explicite <br>
+Intégration d'un affichage des évenements important + chat <br>
+Ajout de la construction de plusieurs villes <br>
+Intégration de plus de joueurs <br>
+Corriger les quelques bug qui reste.<br>
+
+Ajouter au moins un lama <br>
 
 ## Répartition des tâches
 ##### Walid :
@@ -51,3 +60,8 @@ Corriger les quelque bug qui reste.<br>
 ## Inspiration
 Nous nous sommes inspiré du jeu **KOHAN : Battle of Ahriman**<br>
 *http://www.jeuxvideo.com/jeux/pc/00008433-kohan-battles-of-ahriman.htm*
+
+## Aides
+*http://html5.litten.com/using-multiple-html5-canvases-as-layers/*
+*http://jsfiddle.net/gfcarv/QKgHs/*
+*https://gamedev.stackexchange.com/a/47401*

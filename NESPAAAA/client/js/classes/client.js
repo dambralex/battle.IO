@@ -102,6 +102,8 @@ class Client{
 					player : that.entities.town[t].player,
 					posX : that.entities.town[t].posX,
 					posY : that.entities.town[t].posY,
+					width : that.entities.town[t].width,
+					height : that.entities.town[t].height,
 					name : that.entities.town[t].name,
 					stage : that.entities.town[t].stage,
 					dead : that.entities.town[t].dead,

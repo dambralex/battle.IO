@@ -201,7 +201,10 @@ class Town{
 	}
 	
 	getCenter(){
-		return {x : this.posX, y : this.posY };
+		var width = this.width/4 + this.height/2;
+		var height = -this.width/4 + this.height/2;
+
+		return {x : this.posX + width, y : this.posY + height};
 	}
 	
 	getSize(){
@@ -222,7 +225,6 @@ class Town{
 	}
 	
 	buildConstruction(name){
-		console.log(Towns);
 		if(this.isBuilding == false){
 			if(this.player.gold >= Towns["batiments"][name].cout){
 				this.timerConstruction = new Timer(Towns["batiments"][name].production, Date.now());
@@ -237,20 +239,19 @@ class Town{
 	}
 	//added by Alex (tempo voir si ca marche)
 	upgrade(){
-		console.log(Towns);
-		if (this.stage <= Towns["niveau"].length){
+		if (this.stage < Towns["niveau"].length-1){
 			this.stage ++;
 		}
-		this.timerConstruction = new Timer(Towns["niveau"][this.stage].production, Date.now());
-		this.player.gold -= Towns["niveau"][this.stage].cout;
-	
-		this.hitPoints = this.hitPoints + (Towns["niveau"][this.stage].points_vie - this.maxHitPoints);
-		this.maxHitPoints = Towns["niveau"][this.stage].points_vie;
+
+		console.log(Towns["niveau"].length);
+		console.log(this.stage);
+		if(this.player.gold >= Towns["niveau"][this.stage].cout){
+			this.timerConstruction = new Timer(Towns["niveau"][this.stage].production, Date.now());
+			this.player.gold -= Towns["niveau"][this.stage].cout;
 		
-	
-		console.log (this.stage);
-	
-	
+			this.hitPoints = this.hitPoints + (Towns["niveau"][this.stage].points_vie - this.maxHitPoints);
+			this.maxHitPoints = Towns["niveau"][this.stage].points_vie;
+		}
 	}
 	
 	setId(id){
