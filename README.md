@@ -60,3 +60,8 @@ Ajouter au moins un lama <br>
 ## Inspiration
 Nous nous sommes inspiré du jeu **KOHAN : Battle of Ahriman**<br>
 *http://www.jeuxvideo.com/jeux/pc/00008433-kohan-battles-of-ahriman.htm*
+
+## Aides
+*http://html5.litten.com/using-multiple-html5-canvases-as-layers/*
+*http://jsfiddle.net/gfcarv/QKgHs/*
+*https://gamedev.stackexchange.com/a/47401*
