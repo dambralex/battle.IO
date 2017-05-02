@@ -34,6 +34,11 @@ Améliorer la cohérence du jeu sur son contenu.<br>
 Corriger le mode spectateur, qui ne marche pas.<br>
 Mettre un cout de recrutement, et d'entretien aux unités.<br>
 Afficher les informations sur les batiments et unités recrutés (pour la modique somme de 0 PO), sur l'interface avant de les construires.<br>
+Intégration d'une miniMap<br>
+Ajouter des affichages pour que le jeu soit plus explicite <br>
+Intégration d'un affichage des évenements important + chat <br>
+Ajout de la construction de plusieurs villes <br>
+Intégration de plus de joueurs <br>
 Corriger les quelques bug qui reste.<br>
 
 Ajouter au moins un lama <br>
