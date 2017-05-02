@@ -614,8 +614,7 @@ class Unit{
 		var targetPos = {};
 	
 		if(this.target){
-			targetPos.x = this.target.posX;
-			targetPos.y = this.target.posY;
+			targetPos = this.target.getCenter();
 		}
 	
 		return targetPos;

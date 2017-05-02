@@ -25,14 +25,18 @@ Le principe est simple :
   - Ensuite, le client communique régulièrement *l'état* courant du jeu avec le serveur (plusieurs fois par secondes), lequel met à jour ses variables personnelles, et relaie à l'autre client ces informations. Ainsi, les deux clients sont en permanence à jour l'un avec l'autre. 
 Le pathfinding est géré par des workers pour ne pas interrompre le déroulement de la boucle de jeu principale.
 
-## Points à améliorés
+## Points à améliorer
 Le Pathfinding bien que fonctionnel est encore assez lent pour une gestion en temps réel sur une plus grande carte.<br>
 Il n'y a pas assez de contenu.<br>
 Il n'y a pas d'animation de mort, attaque implémenté encore.<br>
 Les unités mortes au combat ne disparaisse pas. (Ça laisse des odeurs ..).<br>
 Améliorer la cohérence du jeu sur son contenu.<br>
 Corriger le mode spectateur, qui ne marche pas.<br>
+Mettre un cout de recrutement, et d'entretien aux unités.<br>
+Afficher les informations sur les batiments et unités recrutés (pour la modique somme de 0 PO), sur l'interface avant de les construires.<br>
 Corriger les quelques bug qui reste.<br>
+
+Ajouter au moins un lama <br>
 
 ## Répartition des tâches
 ##### Walid :
