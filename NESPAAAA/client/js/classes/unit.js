@@ -552,7 +552,8 @@ class Unit{
 			this.deathCallback();
 	    }
 
-	    delete that.entities.unit[this.id];
+	    // if(this.player != that.player)
+	    	// delete that.entities.unit[this.id];
 	
 	    // Faire disparaitre les cadavres *siffle en faisant l'innocent*
 	}

@@ -86,6 +86,8 @@ class Game{
 	}
 	
 	update(delta){
+		// that.removeWreck();
+		
 		this.camera.update(delta, this.mouseObj.outLeft, 
 								  this.mouseObj.outTop, 
 								  this.mouseObj.outRight,
@@ -386,5 +388,16 @@ class Game{
 	sendError(message){
 		this.hud.getError(message);
 		console.log(message);
+	}
+
+	removeWreck(){
+		this.forEachEntity(function(entity){
+			if(entity.dead){
+				if(that.entities.town[entity.id])
+					delete that.entities.town[entity.id];
+				if(that.entities.unit[entity.id])
+					delete that.entities.unit[entity.id];
+			}
+		});
 	}
 }

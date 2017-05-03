@@ -25,6 +25,7 @@ class Client{
 		});
 
 		this.socket.on('gameInformation', function(entities){
+			// console.log(entities.town);
 
 			for(var i in entities.town){
 				if(entities.town[i]){
@@ -39,8 +40,7 @@ class Client{
 			}
 			for(var i in entities.unit){
 				if(entities.unit[i]){
-
-					if(!that.entities.unit[entities.unit[i].id]){
+					if(!that.entities.unit[entities.unit[i].id] && !entities.unit[i].dead){
 						new Unit(entities.unit[i]);
 					}
 					else{
@@ -93,6 +93,7 @@ class Client{
 	update(){
 		if(that.spectate)
 			return;
+
 
 		this.townInformation = [];
 		this.unitInformation = [];

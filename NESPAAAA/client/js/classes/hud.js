@@ -16,7 +16,9 @@ class Hud{
         for(var c = 0; c < 7; c++){
             button = new Button("libre", c*50 + 320, 30);
             button.setOnClick(function(){
-                button.unpress();
+                if(this.text != "libre"){
+                    this.unpress();
+                }
             });
 
             button.setDescription(
@@ -26,7 +28,7 @@ class Hud{
             this.constructionButtons.push(button);
         }
     
-        button = new Button("Mélée", 320, 130);
+        button = new Button("Mélée", 700, 30);
     
         button.setOnClick(function(){
             new Unit(null, that.player, kinds.archer, that.selectedEntities.town.posX+that.selectedEntities.town.width/2,
@@ -37,12 +39,12 @@ class Hud{
         button.setStats("Cout : "+Unites["archer"]["cout_recrutement"]+" ");
         button.addStats("Force : "+Unites["archer"]["force"]+" ");
         button.addStats("Armure : "+Unites["archer"]["armure"]+" ");
-        button.addStats("PdV : "+Unites["archer"]["point_vie"]);
+        button.addStats("PdV : "+Unites["archer"]["points_vie"]);
 
         this.controlButtons.push(button);
 
     
-        button = new Button("chevaliers", 370, 130);
+        button = new Button("chevaliers", 750, 30);
     
         button.setOnClick(function(){
             new Unit(null, that.player, kinds.knight, that.selectedEntities.town.posX+that.selectedEntities.town.width/2,
@@ -83,7 +85,7 @@ class Hud{
             x = x + 50;
         }
     
-        button = new Button("amélioration", x, 130);
+        button = new Button("amélioration", 320, 130);
     
         button.setOnClick(function(){
             if ( that.selectedEntities.town.construction.length ==  Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"]){
@@ -216,6 +218,7 @@ class Hud{
             this.forEachButton(function(button){
                 button.draw(context);
             });
+            this.drawTownCurrentConstruction(context);
         }
     }
     
@@ -338,9 +341,9 @@ class Hud{
         context.save();
         context.fillStyle = 'black';
         context.font = "10pt Arial";
-        context.fillText(this.show.text, 700, 50);
-        context.fillText(this.show.description, 700, 70);
-        context.fillText(this.show.stats, 700, 90);
+        context.fillText(this.show.text, 900, 50);
+        context.fillText(this.show.description, 900, 70);
+        context.fillText(this.show.stats, 900, 90);
         context.restore();
     }
 
@@ -354,7 +357,23 @@ class Hud{
             context.save();
             context.fillStyle = 'red';
             context.font = "10pt Arial";
-            context.fillText(this.errorMessage, 700, 160);
+            context.fillText(this.errorMessage, 900, 160);
+            context.restore();
+        }
+    }
+
+    drawTownCurrentConstruction(context){
+        if(that.selectedEntities.town.isBuilding){
+            var pourcent = 0;
+            context.save();
+            context.fillStyle = 'purple';
+            context.font = "8pt Arial";
+            context.fillText("Construction en cours", 400, 140);
+            context.fillText(that.selectedEntities.town.currentBuilding, 400, 155);
+            context.stokeStyle = 'purple';
+            context.strokeRect(450, 150, 100, 10);
+            pourcent = that.selectedEntities.town.timerConstruction.pourcentageOver(Date.now());
+            context.fillRect(450, 150, 100*pourcent, 10);
             context.restore();
         }
     }
