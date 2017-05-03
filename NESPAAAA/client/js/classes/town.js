@@ -43,6 +43,9 @@ class Town{
 		    this.timerConstruction = town.timerConstruction;
 		    this.isBuilding = town.isBuilding;
 		    this.currentBuilding = town.currentBuilding;
+
+		    this.showHPVariation = true;
+		    this.HPVariation = [];
 		
 			that.entities.town[this.id] = this;
 		}
@@ -89,6 +92,9 @@ class Town{
 		    this.timerConstruction = new Timer();
 		    this.isBuilding = false;
 		    this.currentBuilding = null;
+
+		    this.showHPVariation = true;
+		    this.HPVariation = [];
 		
 		    this.player.addTown();	
 		}
@@ -134,9 +140,40 @@ class Town{
 		context.drawImage(sprite,0,0,142,132,screenPosition.x,screenPosition.y,142,132);
 		this.width = 142;
 		this.height = 132;
+
+		if(this.showHPVariation)
+			this.drawHPVariation(context);
 		
 		context.restore();	
-	};
+	}
+
+	drawHPVariation(context){
+		context.save();
+		for(var i in this.HPVariation){
+			var timePourcent = this.HPVariation[i].timer.pourcentageOver(Date.now());
+
+			if(timePourcent > 1){
+				delete this.HPVariation[i];
+				return;
+			}
+
+			if(this.HPVariation[i].variation > 0)
+				context.fillStyle = 'green';
+			else
+				context.fillStyle = 'red';
+
+			var xView = that.camera.posX;
+			var yView = that.camera.posY;
+
+			var position = this.getScreenPosition(xView, yView);
+
+	    	context.font = "7pt Arial";
+			context.fillText(this.HPVariation[i].variation, position.x + this.width/2, position.y-50*timePourcent);
+
+		}
+
+		context.restore();
+	}
 	
 	update(delta){
 		if(this.isBuilding && this.timerConstruction.isOver(Date.now())){
@@ -185,6 +222,7 @@ class Town{
 	
 	hurt(dmg){
 		this.hitPoints -= dmg;
+		this.HPVariation.push({timer : new Timer(1000, Date.now()), variation : -dmg});
 		if(this.hitPoints <= 0){
 			this.die();
 		}
@@ -192,8 +230,10 @@ class Town{
 	
 	die(){
 		this.dead = true;
-	
-		this.player.deleteTown();
+		
+		if(this.player == that.player){
+			this.player.deleteTown();
+		}
 	
 		if(this.deathCallback) {
 			this.deathCallback();
@@ -234,7 +274,11 @@ class Town{
 			}
 			else {
 				console.log ("pas assez de ressources");
+				that.sendError("Pas assez de ressources");
 			}
+		}
+		else{
+			that.sendError("Il y a déjà un batiment en construction");
 		}
 	}
 	//added by Alex (tempo voir si ca marche)
@@ -243,14 +287,15 @@ class Town{
 			this.stage ++;
 		}
 
-		console.log(Towns["niveau"].length);
-		console.log(this.stage);
 		if(this.player.gold >= Towns["niveau"][this.stage].cout){
 			this.timerConstruction = new Timer(Towns["niveau"][this.stage].production, Date.now());
 			this.player.gold -= Towns["niveau"][this.stage].cout;
 		
 			this.hitPoints = this.hitPoints + (Towns["niveau"][this.stage].points_vie - this.maxHitPoints);
 			this.maxHitPoints = Towns["niveau"][this.stage].points_vie;
+		}
+		else{
+			that.sendError("Pas assez de ressource");
 		}
 	}
 	

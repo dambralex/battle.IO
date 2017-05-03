@@ -9,6 +9,7 @@ var Unites = {
         "champs_de_vision" : 5,
         "moral" : 50,
         "armure" : 5,
+        "force" : 20,
         "resistance_magie" : 5,
         "points_magie" : 0,
         "degats_magie" : 0,
@@ -89,6 +90,7 @@ var Unites = {
         "portée_attaque" : 2,
         "champs_de_vision" : 7,
         "moral" : 100,
+        "force" : 20,
         "armure" : 50,
         "resistance_magie" : 50,
         "points_magie" : 0,
@@ -129,6 +131,7 @@ var Towns = {
       "niveau" : [
         {
           "grade" : 1,
+          "description" : "",
           "production" : 2000,
           "cout" : 0,
           "apports" : {
@@ -147,6 +150,7 @@ var Towns = {
         },
         {
           "grade" : 2,
+          "description" : "Améliore votre village en ville",
           "production" : 2000,
           "cout" : 200,
           "apports" : {
@@ -165,6 +169,7 @@ var Towns = {
         },
         {
           "grade" : 3,
+          "description" : "Améliore votre ville en cité",
           "production" : 3000,
           "cout" : 400,
           "apports" : {
@@ -183,6 +188,7 @@ var Towns = {
         },
         {
           "grade" : 4,
+          "description" : "Améliore votre cité en citadelle",
           "production" : 4000,
           "cout" : 600,
           "apports" : {
@@ -201,6 +207,7 @@ var Towns = {
         },
         {
           "grade" : 5,
+          "description" : "Améliore votre citadelle en forteresse",
           "production" : 5000,
           "cout" : 800,
           "apports" : {
@@ -221,6 +228,7 @@ var Towns = {
 
       "batiments" : {
         "carriere" : {
+          "description" : "Apporte des cargaison de pierre à votre royaume",
           "production" : 2000,
           "cout" : 225,
           "apports" : {
@@ -241,6 +249,7 @@ var Towns = {
 
           "evolution" : {
             "nom": "carriere_amelioree",
+            "description" : "",
             "production" : 3000,
             "cout" : 400,
             "apports" : {
@@ -252,6 +261,7 @@ var Towns = {
         }
       },
         "scierie" : {
+          "description" : "Travail le bois brut pour donner du bois de qualité utilisable",
           "production" : 2500,
           "cout" : 100,
           "apports" : {
@@ -272,6 +282,7 @@ var Towns = {
 
           "evolution" : {
             "nom": "scierie_amelioree",
+            "description" : "",
             "production" : 3000,
             "cout" : 400,
             "apports" : {
@@ -283,6 +294,7 @@ var Towns = {
           }
         },
         "mine" : {
+          "description" : "Apporte a votre royaume du fer",
           "production" : 1000,
           "cout" : 300,
           "apports" : {
@@ -303,6 +315,7 @@ var Towns = {
           
           "evolution" : {
             "nom": "mine_amelioree",
+            "description" : "",
             "production" : 3000,
             "cout" : 400,
             "apports" : {
@@ -314,13 +327,14 @@ var Towns = {
           }
         },
         "bank" : {
+          "description" : "Revend le surplus de ressource pour enrichir votre royaume",
           "production" : 1000,
           "cout" : 300,
           "apports" : {
-            pierre : -1,
-            bois : -1,
-            fer : -5,
-            or : -2 
+            pierre : -100,
+            bois : -100,
+            fer : -100,
+            or : 600 
           },
 
           //modif by Alex
@@ -333,6 +347,7 @@ var Towns = {
           //done
         },
         "caserne" : {
+          "description" : "",
           "production" : 1500,
           "cout" : 400,
           "apports" : {
@@ -373,6 +388,7 @@ var Towns = {
           }
         },
         "ecurie" : {
+          "description" : "Permet de d'établir un élevage de chevaux organisé dans votre royaume",
           "production" : 1200,
           "cout" : 600,
           "apports" : {

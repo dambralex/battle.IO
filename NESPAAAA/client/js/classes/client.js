@@ -83,15 +83,21 @@ class Client{
 			that.waitingId[0].setId(data);
 			that.waitingId.shift();
 		});
+
+		this.socket.on('spectator', function(){
+			that.spectate = true;
+			that.hasStarted = true;
+		}) 
 	}
 
 	update(){
+		if(that.spectate)
+			return;
+
 		this.townInformation = [];
 		this.unitInformation = [];
 
 		var tmp;
-
-
 
 		if(this.socket){ 
 			for(var t in that.entities.town){

@@ -13,4 +13,8 @@ class Timer{
 		}
 		return over;
 	};
+
+	pourcentageOver(time){
+		return (time - this.lastTime) / this.duration;
+	}
 }

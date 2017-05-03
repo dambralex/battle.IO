@@ -5,8 +5,9 @@ class Button{
 		this.posX = posX || 0;
 		this.posY = posY || 0;
 		this.pressed = false;
-		this.showButton = true;
-
+		this.showButton = false;
+		this.description = "";
+		this.stats = "";
 
 		this.switchdraw = 0;
 
@@ -59,11 +60,15 @@ class Button{
 			}
 			else{
 				if (this.switchdraw == 1){
+					context.strokeStyle = 'yellow';
+					context.strokeRect(this.posX, this.posY, 40, 40);
 					context.drawImage(this.icone,0,0,38,38,this.posX,this.posY,38,38);
 				}
 				else{
 					context.fillStyle = 'purple';
 					context.fillRect(this.posX, this.posY, 40, 40);
+					context.strokeStyle = 'yellow';
+					context.strokeRect(this.posX, this.posY, 40, 40);
 					if(this.text){
 						context.fillStyle = 'white';
 						context.font = "8pt Arial";
@@ -94,6 +99,22 @@ class Button{
 
 	setText(text){
 		this.text = text;
+	}
+
+	setDescription(description){
+		this.description = description;
+	}
+
+	setStats(stats){
+		this.stats = stats;
+	}
+
+	addDescription(description){
+		this.description += description;
+	}
+
+	addStats(stats){
+		this.stats += stats;
 	}
 
 	getBoundingBox(){

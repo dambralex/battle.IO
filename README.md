@@ -39,6 +39,7 @@ Ajouter des affichages pour que le jeu soit plus explicite <br>
 Intégration d'un affichage des évenements important + chat <br>
 Ajout de la construction de plusieurs villes <br>
 Intégration de plus de joueurs <br>
+Rassembler les classes Unit et Town en un classe mère Entity<br>
 Corriger les quelques bug qui reste.<br>
 
 Ajouter au moins un lama de combat <br>

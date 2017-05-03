@@ -1,6 +1,9 @@
 class Hud{
     constructor(){
-        this.show = false;
+        this.show = null;
+        this.buttonPressed = null;
+        this.errorMessage ="";
+        this.errorMessageTimer = new Timer();
     
         this.constructionButtons = [];
         this.controlButtons = [];
@@ -12,25 +15,45 @@ class Hud{
     
         for(var c = 0; c < 7; c++){
             button = new Button("libre", c*50 + 320, 30);
+            button.setOnClick(function(){
+                button.unpress();
+            });
+
+            button.setDescription(
+                "Emplacement libre pour construire un batiment dans la ville");
+            button.setStats("Cliquez pour construire");
+
             this.constructionButtons.push(button);
         }
     
-        var button = new Button("Mélée", 320, 130);
+        button = new Button("Mélée", 320, 130);
     
         button.setOnClick(function(){
             new Unit(null, that.player, kinds.archer, that.selectedEntities.town.posX+that.selectedEntities.town.width/2,
                                        that.selectedEntities.town.posY+that.selectedEntities.town.height +20);
         });
-    
+
+        button.setDescription("Créer une unité de mélée");
+        button.setStats("Cout : "+Unites["archer"]["cout_recrutement"]+" ");
+        button.addStats("Force : "+Unites["archer"]["force"]+" ");
+        button.addStats("Armure : "+Unites["archer"]["armure"]+" ");
+        button.addStats("PdV : "+Unites["archer"]["point_vie"]);
+
         this.controlButtons.push(button);
+
     
-    
-        var button = new Button("chevaliers", 370, 130);
+        button = new Button("chevaliers", 370, 130);
     
         button.setOnClick(function(){
             new Unit(null, that.player, kinds.knight, that.selectedEntities.town.posX+that.selectedEntities.town.width/2,
                                        that.selectedEntities.town.posY+that.selectedEntities.town.height +20);
         });
+        button.setDescription("Créer un cavalier de mélée. Elle est supérieur à une unité simple de mélée");
+        button.setStats("Cout : "+Unites["knight"]["cout_recrutement"]+" ");
+        button.addStats("Force : "+Unites["knight"]["force"]+" ");
+        button.addStats("Armure : "+Unites["knight"]["armure"]+" ");
+        button.addStats("PdV : "+Unites["knight"]["points_vie"]);
+
     
         this.controlButtons.push(button);
         var chemin = "./sprites/hud/construction/";
@@ -46,23 +69,54 @@ class Hud{
             button.setOnClick(function(){
                 that.selectedEntities.town.buildConstruction(this.text);
             });
+
+            button.setDescription(Towns["batiments"][name]["description"]);
+            button.setStats("Cout : "+Towns["batiments"][name]["cout"]+" ");
+            button.addStats("Pierre : "+Towns["batiments"][name]["apports"].pierre+" ");
+            button.addStats("Bois : "+Towns["batiments"][name]["apports"].bois+" ");
+            button.addStats("Fer : "+Towns["batiments"][name]["apports"].fer+" ");
+            button.addStats("Or : "+Towns["batiments"][name]["apports"].or);
+            button.addStats("\nTemps de construction : "+Towns["batiments"][name]["production"]/1000+" s");
+
             this.constructionChoice.push(button);
     
             x = x + 50;
         }
     
-        var button = new Button("amélioration", x, 130);
+        button = new Button("amélioration", x, 130);
     
         button.setOnClick(function(){
             if ( that.selectedEntities.town.construction.length ==  Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"]){
                 console.log(Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"] + "batiments sur"+that.selectedEntities.town.construction.length +", construction d'une base plus grande, nouveau stage : " + that.selectedEntities.town.stage +1);
                 that.selectedEntities.town.upgrade();
+                if(Towns["niveau"][that.selectedEntities.town.stage+1]){
+                    button.setDescription(Towns["niveau"][that.selectedEntities.town.stage+1]["description"]);
+                    button.setStats("Cout : "+Towns["niveau"][that.selectedEntities.town.stage+1]["cout"]+" ");
+                    button.addStats("Pierre : "+Towns["niveau"][that.selectedEntities.town.stage+1]["apports"].pierre+" ");
+                    button.addStats("Bois : "+Towns["niveau"][that.selectedEntities.town.stage+1]["apports"].bois+" ");
+                    button.addStats("Fer : "+Towns["niveau"][that.selectedEntities.town.stage+1]["apports"].fer+" ");
+                    button.addStats("Or : "+Towns["niveau"][that.selectedEntities.town.stage+1]["apports"].or+"\n");
+                    button.addStats("Temps de construction : "+Towns["niveau"][that.selectedEntities.town.stage+1]["production"]/1000+" seconde");
+                }
+                else{
+                    button.setDescription("Déjà au niveau maximum");
+                    button.setStats("");
+                }
             }
             else{
                 console.log(Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"] + "batiments sur"+that.selectedEntities.town.construction.length +" : il faut plus de batiments");
                 console.log(Towns["niveau"]);
+                that.sendError("Il reste un emplacement de batiments libre. Vous ne pouvez pas améliorer votre ville");
             }
         });
+
+        button.setDescription(Towns["niveau"][1]["description"]);
+        button.setStats("Cout : "+Towns["niveau"][1]["cout"]+" ");
+        button.addStats("Pierre : "+Towns["niveau"][1]["apports"].pierre+" ");
+        button.addStats("Bois : "+Towns["niveau"][1]["apports"].bois+" ");
+        button.addStats("Fer : "+Towns["niveau"][1]["apports"].fer+" ");
+        button.addStats("Or : "+Towns["niveau"][1]["apports"].or+"\n");
+        button.addStats("Temps de construction : "+Towns["niveau"][1]["production"]+"seconde");
     
         this.controlButtons.push(button);
     }
@@ -83,9 +137,16 @@ class Hud{
         }
         else {
             this.drawUnits(context);
+            this.forEachButton(function(button){
+                button.showButton = false;
+            });
         }
-    
-        this.drawPlayerResources(context);
+        
+        if(that.player){
+            this.drawPlayerResources(context);
+        }
+
+        this.drawError(context);
     
         context.restore();
     }
@@ -149,32 +210,44 @@ class Hud{
         context.restore();
     
         if(that.selectedEntities.town.player == that.player){
+            this.drawButtonInformation(context);
             this.drawTownConstruction(context);
             this.drawTownControl(context);
+            this.forEachButton(function(button){
+                button.draw(context);
+            });
         }
     }
     
     drawTownConstruction(context){
         for(var i in that.selectedEntities.town.construction){
             this.constructionButtons[i].setText(that.selectedEntities.town.construction[i]);
+            this.constructionButtons[i].setDescription(Towns["batiments"][this.constructionButtons[i].text]["description"]);
+            this.constructionButtons[i].setStats("Pierre : "+Towns["batiments"][this.constructionButtons[i].text]["apports"].pierre+" ");
+            this.constructionButtons[i].addStats("Bois : "+Towns["batiments"][this.constructionButtons[i].text]["apports"].bois+" ");
+            this.constructionButtons[i].addStats("Fer : "+Towns["batiments"][this.constructionButtons[i].text]["apports"].fer+" ");
+            this.constructionButtons[i].addStats("Or : "+Towns["batiments"][this.constructionButtons[i].text]["apports"].or+"\n");
         }
     
         for(var c = 0; c < Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"]; c++){
-            this.constructionButtons[c].draw(context);
+            this.constructionButtons[c].showButton = true;
         }
     }
     
     drawTownControl(context){
         for(var i in this.controlButtons){
-            this.controlButtons[i].draw(context);
+            this.controlButtons[i].showButton = true;
         }
+
+        var showConstructionChoice = false;
     
         for(var i in this.constructionButtons){
             if(this.constructionButtons[i].pressed){
-                for(var b in this.constructionChoice){
-                    this.constructionChoice[b].draw(context);
-                }
+                showConstructionChoice = true;
             }
+        }
+        for(var b in this.constructionChoice){
+            this.constructionChoice[b].showButton = showConstructionChoice;
         }
     }
     
@@ -209,32 +282,89 @@ class Hud{
     }
     
     handleLeftClick(x, y){
+        var buttonPressed = null;
+
         if(that.selectedEntities.unit.length <= 0){
             if(that.selectedEntities.town != null && that.selectedEntities.town.player == that.player){
-                for(var b in this.controlButtons){
-                    if(collisionBox({x : x, y : y, w : 0, h : 0}, this.controlButtons[b].getBoundingBox())){
-                        this.controlButtons[b].onClick();
-                    }
-                }
-    
-                for(var b in this.constructionChoice){
-                    if(collisionBox({x : x, y : y, w : 0, h : 0}, this.constructionChoice[b].getBoundingBox())){
-                        this.constructionChoice[b].onClick();
-                    }
-                }
-    
-                for(var b = 0; b < Towns["niveau"][that.selectedEntities.town.stage]["emplacements_construction"]; b++){
+                for(var b in this.constructionButtons)
                     this.constructionButtons[b].unpress();
-                    if(this.constructionButtons[b].text == "libre"){
-                        if(collisionBox({x : x, y : y, w : 0, h : 0}, this.constructionButtons[b].getBoundingBox())){
-                            this.constructionButtons[b].togglePressed();
-                        }
+
+                this.forEachButton(function(button){
+                    if(button.showButton && collisionBox({x : x, y : y, w : 0, h : 0}, button.getBoundingBox())){
+                        button.press();
+                        buttonPressed = button;
                     }
-                }
+                });
             }
         }
         else {
     
         }
+
+        this.buttonPressed = buttonPressed;
+    }
+
+    handleClickUp(){
+        if(this.buttonPressed){
+            for(var b in this.constructionButtons){
+                if(this.buttonPressed == this.constructionButtons[b])
+                    return;
+            }
+            this.buttonPressed.unpress();
+            this.buttonPressed = null;
+        }
+    }
+
+    handleMouseMove(x, y){
+        var show = null;
+
+        if(that.selectedEntities.town != null && that.selectedEntities.town.player == that.player){     
+            
+            this.forEachButton(function(button){
+                if(button.showButton && collisionBox({x : x, y : y, w : 0, h : 0}, button.getBoundingBox())){
+                    show = button;
+                    return;
+                }
+            });
+        }
+
+        this.show = show;
+    }
+
+    drawButtonInformation(context){
+        if(!this.show)
+            return;
+
+        context.save();
+        context.fillStyle = 'black';
+        context.font = "10pt Arial";
+        context.fillText(this.show.text, 700, 50);
+        context.fillText(this.show.description, 700, 70);
+        context.fillText(this.show.stats, 700, 90);
+        context.restore();
+    }
+
+    getError(message){
+        this.errorMessage = message;
+        this.errorMessageTimer = new Timer(2000, Date.now());
+    }
+
+    drawError(context){
+        if(this.errorMessageTimer.pourcentageOver(Date.now()) < 1){
+            context.save();
+            context.fillStyle = 'red';
+            context.font = "10pt Arial";
+            context.fillText(this.errorMessage, 700, 160);
+            context.restore();
+        }
+    }
+
+    forEachButton(callback){
+        for(var b in this.controlButtons)
+            callback(this.controlButtons[b]);
+        for(var b in this.constructionChoice)
+            callback(this.constructionChoice[b]);
+        for(var b in this.constructionButtons)
+            callback(this.constructionButtons[b]);
     }
 }

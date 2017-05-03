@@ -76,11 +76,12 @@ io.sockets.on('connection', function (socket,pseudo) {
     // Gere les connexions des joueurs, et enregistre le pseudo dans la socket associée
     socket.on('pseudo', function(pseudo)
     {
-        var is_player = 1;
-        if(connected < 2) connected++;
-        else{
+        socket.isPlayer = 1;
+        connected++;
+        if(connected > 2){
           socket.emit('bonjour', "nb joueurs atteint, vous etes spectateurs");
-          is_player = 0;
+          socket.emit('spectator');
+          socket.isPlayer = 0;
         }
 
         var player = { nickname : pseudo};
@@ -91,12 +92,12 @@ io.sockets.on('connection', function (socket,pseudo) {
         socket.emit('bonjour', "bonjour " + pseudo );
         console.log("connexion de : " + pseudo + "   " + connected);
 
-        if(connected > 1){
+        if(connected == 2){
             io.emit('bonjour',"NB joueurs OK");
             initGame();
             startGame();
         }
-        else {
+        else if(connected < 2){
           socket.emit('bonjour',"Attente d'un autre joueur...");
         }
     });
@@ -132,18 +133,12 @@ io.sockets.on('connection', function (socket,pseudo) {
 
     // Gere la déconnexion d'un joueur. Informe et déconnecte le joueur restant
     socket.on("disconnect", function(){
-        var is_player = 0;
-        for(var i in players)
-          if(players[i].nickname === socket.pseudo){
-            is_player = 1;
-            break;
-          }
-        if(is_player){
+        if(socket.isPlayer){
           players.splice(0, players.length); // Nettoyage du tableau
           io.emit('disconnect', socket.pseudo + " s'est déconnecté");
           //console.log("deconnexion de " + socket.pseudo);
           console.log("Arret du jeu");
-          connected=0;;
+          connected=0;
         }
         socket.disconnect(); // destruction socket
     });

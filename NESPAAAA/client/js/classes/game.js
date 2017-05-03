@@ -43,6 +43,7 @@ class Game{
 	this.hasStarted = false;
 	this.lost = false;
 	this.win = false;
+	this.spectate = false;
 	}
 
 	init(){
@@ -99,7 +100,7 @@ class Game{
 	
 	draw(mapContext, hudContext) {
 		this.drawOnMapContext(mapContext);
-		if(this.player){
+		if(this.player || this.spectate){
 			this.drawOnHudContext(hudContext);
 		}
 	}
@@ -159,6 +160,18 @@ class Game{
 					}
 				}
 				break;	
+			case "mouseup" : 
+				if(event.which == 1){
+					if(!that.paused){
+						that.hud.handleClickUp();
+					}
+				}
+				break;
+			case "mousemove" :
+				if(!that.paused){
+					that.hud.handleMouseMove(event.offsetX, event.offsetY);		
+				}
+				break;
 		}
 	}
 	
@@ -313,8 +326,6 @@ class Game{
 	forEachEntity(callback){	
 		for(var t in this.entities.town)
 			callback(this.entities.town[t]);
-		for(var s in this.entities.squad)
-			callback(this.entities.squad[s]);
 		for(var u in this.entities.unit)
 			callback(this.entities.unit[u]);
 	}
@@ -322,11 +333,6 @@ class Game{
 	forEachTown(callback){	
 		for(var t in this.entities.town)
 			callback(this.entities.town[t]);
-	}
-	
-	forEachSquad(callback){	
-		for(var s in this.entities.squad)
-			callback(this.entities.squad[s]);
 	}
 	
 	forEachUnit(callback){	
@@ -375,5 +381,10 @@ class Game{
 		if(allied){
 			this.player = player;
 		}
+	}
+
+	sendError(message){
+		this.hud.getError(message);
+		console.log(message);
 	}
 }

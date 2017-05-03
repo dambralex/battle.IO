@@ -91,6 +91,9 @@ class Unit{
 			this.showCombatZone = false;
 			this.showRangeZone = false;
 			this.showPath = false;
+
+			this.showHPVariation = true;
+		    this.HPVariation = [];
 		
 			this.actionStack = [];
 		
@@ -173,6 +176,9 @@ class Unit{
 			this.showCombatZone = false;
 			this.showRangeZone = false;
 			this.showPath = true;
+
+			this.showHPVariation = true;
+		    this.HPVariation = [];
 		
 			this.actionStack = [];
 		
@@ -191,6 +197,8 @@ class Unit{
 			this.drawRangeZone(context);
 		if(this.showPath)
 			this.drawPath(context);
+		if(this.showHPVariation)
+			this.drawHPVariation(context);
 	
 		context.save();	
 
@@ -236,7 +244,7 @@ class Unit{
 		
 	
 		//done
-			} 
+	} 
 	
 	getScreenPosition(xView, yView){
 		return {x : this.posX + this.posY * -1 - xView * 2, y : this.posX * 0.5 + this.posY*0.5 - yView};
@@ -302,6 +310,34 @@ class Unit{
 		}
 		context.restore();
 	
+	}
+
+	drawHPVariation(context){
+		context.save();
+		for(var i in this.HPVariation){
+			var timePourcent = this.HPVariation[i].timer.pourcentageOver(Date.now());
+
+			if(timePourcent > 1){
+				delete this.HPVariation[i];
+				return;
+			}
+
+			if(this.HPVariation[i].variation > 0)
+				context.fillStyle = 'green';
+			else
+				context.fillStyle = 'red';
+
+			var xView = that.camera.posX;
+			var yView = that.camera.posY;
+
+			var position = this.getScreenPosition(xView, yView);
+
+	    	context.font = "7pt Arial";
+			context.fillText(this.HPVariation[i].variation, position.x + this.width/2, position.y-50*timePourcent);
+
+		}
+
+		context.restore();
 	}
 	
 	update(delta){
@@ -515,12 +551,15 @@ class Unit{
 		if(this.deathCallback) {
 			this.deathCallback();
 	    }
+
+	    delete that.entities.unit[this.id];
 	
 	    // Faire disparaitre les cadavres *siffle en faisant l'innocent*
 	}
 	
 	hurt(dmg){
 		this.hitPoints -= dmg;
+		this.HPVariation.push({timer : new Timer(1000, Date.now()), variation : -dmg});
 		if(this.hitPoints <= 0){
 			this.die();
 		}	
@@ -575,6 +614,7 @@ class Unit{
 	
 				}
 				if(this.attackCooldown.isOver(Date.now()) && collisionBox(this.getRangeZone(), this.target.getSizeOnScreen())){	
+					this.target.hurt(20);
 					var tmp = {
 						id : this.target.id,
 						argument : "entity",
