@@ -8,17 +8,18 @@
         <script src="./js/pathfinding.js"></script>
         <script src="./maps/premiere.js"></script>
         <script src="./unit/unites.js"></script>
+        <script src="./unit/gametypes.js"></script>
         <script src="./js/classes/button.js"></script>
+        <script src="./js/classes/client.js"></script>
         <script src="./js/classes/camera.js"></script>
         <script src="./js/classes/player.js"></script>
         <script src="./js/classes/town.js"></script>
         <script src="./js/classes/timer.js"></script>
         <script src="./js/classes/hud.js"></script>
         <script src="./js/classes/tileset.js"></script>
-        <script src="./js/classes/squad.js"></script>
+        <script src="./js/classes/unit.js"></script>
         <script src="./js/classes/game.js"></script>
         <script src="./js/classes/mouseObj.js"></script>
-        <script src="./js/classes/square.js"></script>
         <script src="./js/classes/map.js"></script>
         <script src="./js/main.js"></script>
         <script src="./js/pathfinding.js"></script>
@@ -49,8 +50,8 @@
             });
 
             socket.on('disconnect', function (disconnect_mess){
-                console.log("Deconnexion d'un joueur");
-                console.log(disconnect_mess);
+                alert("Deconnexion du joueur adverse");
+                socket.emit('kick', pseudo);
             });
 
         </script>

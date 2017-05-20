@@ -23,8 +23,10 @@ var init = function(){
 
 	// Game Config
 	this.game.init();
+	this.game.setSocket(socket);
 
 	window.setInterval(this.game.tick, 1000);
+	window.setInterval(this.game.client.update, 20);
 }
 
 var run = function(){

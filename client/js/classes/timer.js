@@ -1,14 +1,20 @@
-function Timer(duration, startTime){
-	this.lastTime = startTime || 0;
-	this.duration = duration;
-}
-
-Timer.prototype.isOver = function(time) {
-	var over = false;
-
-	if((time - this.lastTime) > this.duration) {
-		over = true;
-		this.lastTime = time;
+class Timer{
+	constructor(duration, startTime){
+		this.lastTime = startTime || 0;
+		this.duration = duration;
 	}
-	return over;
-};
+
+	isOver(time) {
+		var over = false;
+	
+		if((time - this.lastTime) > this.duration) {
+			over = true;
+			this.lastTime = time;
+		}
+		return over;
+	};
+
+	pourcentageOver(time){
+		return (time - this.lastTime) / this.duration;
+	}
+}

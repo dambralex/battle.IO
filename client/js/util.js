@@ -61,13 +61,3 @@ function normalizeBox(box){
 
 	box = nBox;
 }
-
-var Buildings = {
-	"Scierie" : {
-		time : 5000,
-		stone : 0,
-		wood : 8,
-		iron : 0,
-		income : 0
-	}
-}

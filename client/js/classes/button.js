@@ -1,82 +1,29 @@
-// function Button(text, posX, posY){
-// 	this.posX = posX || 0;
-// 	this.posY = posY || 0;
-// 	this.pressed = false;
-// 	this.showButton = true;
-
-// 	this.text = text || "";
-// }
-
-// Button.prototype.press = function(){
-// 	this.pressed = true;
-// 	this.onClick();
-// }
-
-// Button.prototype.unpress = function(){
-// 	this.pressed = false;
-// }
-
-// Button.prototype.setPosition = function(x, y){
-// 	this.posX = x;
-// 	this.posY = y;
-// }
-
-// Button.prototype.draw = function(context){
-// 	context.save()
-// 	if(this.showButton){
-// 		if(!this.pressed){
-// 			context.strokeStyle = 'purple';
-// 			context.strokeRect(this.posX, this.posY, 40, 40);
-// 			if(this.text){
-// 				context.fillStyle = 'purple';
-//     			context.font = "8pt Arial";
-//     			context.fillText(this.text, this.posX+5, this.posY+20);
-// 			}
-// 		}
-// 		else{
-// 			context.fillStyle = 'purple';
-// 			context.fillRect(this.posX, this.posY, 40, 40);
-// 			if(this.text){
-// 				context.fillStyle = 'white';
-//     			context.font = "8pt Arial";
-//     			context.fillText(this.text, this.posX+5, this.posY+20);
-// 			}
-// 		}
-// 	}
-// 	context.restore();
-// }
-
-// Button.prototype.onClick = function(){
-// 	if(this.clickCallback){
-// 		this.clickCallback();
-// 	}
-// }
-
-// Button.prototype.togglePressed = function(){
-// 	if(this.pressed == true)
-// 		this.pressed = false;
-// 	else
-// 		this.pressed = true;
-// }
-
-// Button.prototype.setOnClick = function(callback){
-// 	this.clickCallback = callback;
-// }
-
-// Button.prototype.setText = function(text){
-// 	this.text = text;
-// }
-
 class Button{
-	constructor(text, posX, posY){
+	constructor(text, posX, posY, source){
 		var self = this;
 
 		this.posX = posX || 0;
 		this.posY = posY || 0;
 		this.pressed = false;
-		this.showButton = true;
+		this.showButton = false;
+		this.description = "";
+		this.stats = "";
+
+		this.switchdraw = 0;
 
 		this.text = text || "";
+
+		this.icone = new Image();
+
+		this.source = source;
+		this.icone.src = source;
+		if (this.source != null){
+			this.switchdraw = 1;
+		}
+		else{
+			this.switchdraw = 0;
+			this.icone.src = "./sprite/hud/construction/blank.png";
+		}
 	}
 
 	press(){
@@ -95,23 +42,38 @@ class Button{
 
 	draw(context){
 		context.save()
-		if(this.showButton){
+		if(this.showButton){		
 			if(!this.pressed){
-				context.strokeStyle = 'purple';
-				context.strokeRect(this.posX, this.posY, 40, 40);
-				if(this.text){
-					context.fillStyle = 'purple';
-   	 				context.font = "8pt Arial";
-   	 				context.fillText(this.text, this.posX+5, this.posY+20);
+				if (this.switchdraw == 1){
+					context.drawImage(this.icone,0,0,38,38,this.posX,this.posY,38,38);
+				}
+				else{
+					context.strokeStyle = 'purple';
+					
+					context.strokeRect(this.posX, this.posY, 40, 40);
+					if(this.text){
+						context.fillStyle = 'purple';
+	   	 				context.font = "8pt Arial";
+	   	 				context.fillText(this.text, this.posX+5, this.posY+20);
+					}
 				}
 			}
 			else{
-				context.fillStyle = 'purple';
-				context.fillRect(this.posX, this.posY, 40, 40);
-				if(this.text){
-					context.fillStyle = 'white';
-   		 			context.font = "8pt Arial";
-    				context.fillText(this.text, this.posX+5, this.posY+20);
+				if (this.switchdraw == 1){
+					context.strokeStyle = 'yellow';
+					context.strokeRect(this.posX, this.posY, 40, 40);
+					context.drawImage(this.icone,0,0,38,38,this.posX,this.posY,38,38);
+				}
+				else{
+					context.fillStyle = 'purple';
+					context.fillRect(this.posX, this.posY, 40, 40);
+					context.strokeStyle = 'yellow';
+					context.strokeRect(this.posX, this.posY, 40, 40);
+					if(this.text){
+						context.fillStyle = 'white';
+						context.font = "8pt Arial";
+						context.fillText(this.text, this.posX+5, this.posY+20);
+					}
 				}
 			}
 		}
@@ -137,6 +99,22 @@ class Button{
 
 	setText(text){
 		this.text = text;
+	}
+
+	setDescription(description){
+		this.description = description;
+	}
+
+	setStats(stats){
+		this.stats = stats;
+	}
+
+	addDescription(description){
+		this.description += description;
+	}
+
+	addStats(stats){
+		this.stats += stats;
 	}
 
 	getBoundingBox(){

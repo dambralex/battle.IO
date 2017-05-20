@@ -4,15 +4,29 @@ var fs = require('fs');
 var path = require('path');
 var mime = require('mime');
 
+//server/js/maps/premiere.js
+
+
 
 var server = http.createServer(function(req, res)
 {
+    // idCount = 0;
+    // units = [];
+    // players = [];
+    // connected = 0;
+
     var uri = url.parse(req.url).pathname;
+    var index = uri.lastIndexOf('/');
+    var str = uri.substr(index);
+
     if(uri === "/")
-        uri = "index.html";
+      uri = "index.html";
 
     var filename = path.join("/client",uri);
-    //console.log(filename);
+    if(str === "/tartiflette.js")
+      filename = path.join("/server", uri);
+
+    // console.log(filename);
     //console.log(mime.lookup(filename));
 
     if(mime.lookup(filename) === "image/png")
@@ -43,34 +57,110 @@ var server = http.createServer(function(req, res)
 
 var io = require('socket.io').listen(server);
 
+var maps =
+    [{
+        playerPosition : [100, 200],
+        opponentPosition : [100, 1000],
+        mapID : "map1"
+    }
+];
+
+var idCount = 0;
+var units = [];
 var players = [];
+var connected = 0;
+var choosenMap;
 
 io.sockets.on('connection', function (socket,pseudo) {
 
     // Gere les connexions des joueurs, et enregistre le pseudo dans la socket associée
     socket.on('pseudo', function(pseudo)
     {
+        socket.isPlayer = 1;
+        connected++;
+        if(connected > 2){
+          socket.emit('bonjour', "nb joueurs atteint, vous etes spectateurs");
+          socket.emit('spectator');
+          socket.isPlayer = 0;
+        }
+
         var player = { nickname : pseudo};
+        player.socket = socket;
         players.push(player);
         socket.pseudo = pseudo;
 
         socket.emit('bonjour', "bonjour " + pseudo );
-        console.log("connexion de : " + pseudo);
+        console.log("connexion de : " + pseudo + "   " + connected);
+
+        if(connected == 2){
+            io.emit('bonjour',"NB joueurs OK");
+            initGame();
+            startGame();
+        }
+        else if(connected < 2){
+          socket.emit('bonjour',"Attente d'un autre joueur...");
+        }
     });
 
-    // Gere la déconnexion d'un joueur. Informe les autres joueurs de son départ
+    socket.on('gameInformation', function(entities){
+        socket.entities = entities;
+        socket.broadcast.emit("gameInformation",entities);
+
+        // console.log(maps[0].playerPosition);
+        // upload += sizeof(hihi);
+    });
+
+    socket.on('stats', function(ping){
+        socket.emit('pong',Date.now() - ping );
+        upload = 0;
+    });
+
+    socket.on('newId', function(){
+        //console.log(idCount);
+        socket.emit('newId', idCount++ );
+    });
+
+    socket.on('lost', function(){
+        //console.log(idCount);
+        socket.broadcast.emit('win');
+    });
+
+
+    socket.on('kick', function(pseudo){
+      socket.disconnect();
+      console.log(idCount);
+    });
+
+    // Gere la déconnexion d'un joueur. Informe et déconnecte le joueur restant
     socket.on("disconnect", function(){
-        io.emit('disconnect', socket.pseudo + " s'est déconnecté");
-        console.log("deconnexion de " + socket.pseudo);
+        if(socket.isPlayer){
+          players.splice(0, players.length); // Nettoyage du tableau
+          io.emit('disconnect', socket.pseudo + " s'est déconnecté");
+          //console.log("deconnexion de " + socket.pseudo);
+          console.log("Arret du jeu");
+          connected=0;
+        }
+        socket.disconnect(); // destruction socket
     });
-
-    socket.on('move', function (destination){
-        io.emit('move', "le joueur déplace son unité en " + destination);
-        console.log(socket.pseudo + " se déplace en " + destination);
-    });
-
-
 });
 
+function initGame(){
+    choosenMap = chooseMap();
+}
 
+function chooseMap(){
+    return 0;
+}
+
+function startGame(){
+    // players[0].socket.emit('opponentStart', {name :players[1].socket.pseudo, starting : maps[choosenMap].opponentPosition});
+    // players[1].socket.emit('opponentStart', {name :players[0].socket.pseudo, starting : maps[choosenMap].playerPosition});
+
+    players[0].socket.emit('start', {name :players[0].socket.pseudo, starting : maps[choosenMap].playerPosition});
+    players[1].socket.emit('start', {name :players[1].socket.pseudo, starting : maps[choosenMap].opponentPosition});
+
+    console.log("Le jeu commence");
+}
+
+// server.listen(8080, '82.240.7.83');
 server.listen(8080);

@@ -1,14 +1,15 @@
 var Unites = {
-      "archers" : {
+      "archer" : {
         "nombre" : 6,
-        "vitesse_deplacement" : 5,
+        "vitesse_deplacement" : 50,
         "vitesse_attaque" : 1,
-        "points_vie" : 30,
+        "points_vie" : 300,
         "est_unite_distance" : true,
-        "portée_attaque" : 30,
-        "champs_de_vision" : 80,
+        "portée_attaque" : 1,
+        "champs_de_vision" : 5,
         "moral" : 50,
         "armure" : 5,
+        "force" : 20,
         "resistance_magie" : 5,
         "points_magie" : 0,
         "degats_magie" : 0,
@@ -17,15 +18,39 @@ var Unites = {
         "cout_recrutement" : 20,
 
         //modif by Alex
-        "anim_path" : "unites/human/archer"
+        "image_walk" : {
+          "anim_path" : "./sprites/jeu/unites/human/archer/walk",
+          img_size_x : 464,
+          img_size_y : 584,
+          sprite_size_x : 58,
+          sprite_size_y : 73,
+          nb_anim :8,
+          },
+        "image_death" : {
+          "anim_path" : "./sprites/jeu/unites/human/archer/death",
+          img_size_x : 173,
+          img_size_y : 584,
+          sprite_size_x : 58,
+          sprite_size_y : 73,
+          nb_anim :3,
+          },
+        "image_hit" : {
+          "anim_path" : "./sprites/jeu/unites/human/archer/hit",
+          img_size_x : 116,
+          img_size_y : 584,
+          sprite_size_x : 58,
+          sprite_size_y : 73,
+          nb_anim :2,
+          },
+        //done
       },
-      "lanciers" : {
+      "lancers" : {
         "nombre" : 6,
         "vitesse_deplacement" : 2,
         "vitesse_attaque" : 1,
         "points_vie" : 50,
         "est_unite_distance" : false,
-        "portée_attaque" : 5,
+        "portée_attaque" : 2,
         "champs_de_vision" : 50,
         "moral" : 70,
         "armure" : 20,
@@ -36,14 +61,14 @@ var Unites = {
 
         "cout_recrutement" : 50
       },
-      "epees" : {
+      "sword" : {
         "nombre" : 6,
         "vitesse_deplacement" : 2,
         "vitesse_attaque" : 2,
         "points_vie" : 50,
         "est_unite_distance" : false,
         "portée_attaque" : 5,
-        "champs_de_vision" : 50,
+        "champs_de_vision" : 3,
         "moral" : 70,
         "armure" : 40,
         "resistance_magie" : 30,
@@ -56,15 +81,16 @@ var Unites = {
         //modif by Alex
         "anim_path" : "unites/human/swordman"
       },
-      "cavaliers" : {
+      "knight" : {
         "nombre" : 3,
-        "vitesse_deplacement" : 10,
+        "vitesse_deplacement" : 100,
         "vitesse_attaque" : 5,
-        "points_vie" : 90,
+        "points_vie" : 450,
         "est_unite_distance" : false,
-        "portée_attaque" : 5,
-        "champs_de_vision" : 50,
+        "portée_attaque" : 2,
+        "champs_de_vision" : 7,
         "moral" : 100,
+        "force" : 20,
         "armure" : 50,
         "resistance_magie" : 50,
         "points_magie" : 0,
@@ -73,14 +99,39 @@ var Unites = {
 
         "cout_recrutement" : 100,
 
-        //modif by Alex
-        "anim_path" : "unites/human/knight"
+        //modif by Alex //C'EST A TERMINER!
+        "image_walk" : {
+          "anim_path" : "./sprites/jeu/unites/human/knight/walk",
+          img_size_x : 370,
+          img_size_y : 592,
+          sprite_size_x : 74,
+          sprite_size_y : 74,
+          nb_anim :5,
+          },
+        "image_death" : {
+          "anim_path" : "./sprites/jeu/unites/human/knight/death",
+          img_size_x : 370,
+          img_size_y : 592,
+          sprite_size_x : 74,
+          sprite_size_y : 74,
+          nb_anim :5,
+          },
+        "image_hit" : {
+          "anim_path" : "./sprites/jeu/unites/human/knight/hit",
+          img_size_x : 296,
+          img_size_y : 592,
+          sprite_size_x : 74,
+          sprite_size_y : 74,
+          nb_anim :4,
+          },
+        //done
       }
 }
 var Towns = {
       "niveau" : [
         {
           "grade" : 1,
+          "description" : "",
           "production" : 2000,
           "cout" : 0,
           "apports" : {
@@ -94,16 +145,12 @@ var Towns = {
           "temps_upgrade" : 0,
 
           //modif by Alex
-          "anim_path" : "batiments/human/bat_1",
-          "img_size_x" : 142,
-          "img_size_y" : 132,
-          "sprite_size_x" : 142,
-          "sprite_size_y" : 132,
-          "nb_anim" :1,
+          "bat_img" : 1,
           //done
         },
         {
           "grade" : 2,
+          "description" : "Améliore votre village en ville",
           "production" : 2000,
           "cout" : 200,
           "apports" : {
@@ -117,16 +164,12 @@ var Towns = {
           "temps_upgrade" : 2,
 
           //modif by Alex
-          "anim_path" : "batiments/human/bat_1",
-          "img_size_x" : 142,
-          "img_size_y" : 132,
-          "sprite_size_x" : 142,
-          "sprite_size_y" : 132,
-          "nb_anim" :1,
+          "bat_img" : 1,
           //done
         },
         {
           "grade" : 3,
+          "description" : "Améliore votre ville en cité",
           "production" : 3000,
           "cout" : 400,
           "apports" : {
@@ -140,16 +183,12 @@ var Towns = {
           "temps_upgrade" : 5,
 
           //modif by Alex
-          "anim_path" : "batiments/human/bat_2",
-          "img_size_x" : 142,
-          "img_size_y" : 132,
-          "sprite_size_x" : 142,
-          "sprite_size_y" : 132,
-          "nb_anim" :1,
+          "bat_img" : 2,
           //done
         },
         {
           "grade" : 4,
+          "description" : "Améliore votre cité en citadelle",
           "production" : 4000,
           "cout" : 600,
           "apports" : {
@@ -163,16 +202,12 @@ var Towns = {
           "temps_upgrade" : 8,
 
           //modif by Alex
-          "anim_path" : "batiments/human/bat_2",
-          "img_size_x" : 142,
-          "img_size_y" : 132,
-          "sprite_size_x" : 142,
-          "sprite_size_y" : 132,
-          "nb_anim" :1,
+          "bat_img" : 2,
           //done
         },
         {
           "grade" : 5,
+          "description" : "Améliore votre citadelle en forteresse",
           "production" : 5000,
           "cout" : 800,
           "apports" : {
@@ -186,18 +221,14 @@ var Towns = {
           "temps_upgrade" : 10,
 
           //modif by Alex
-          "anim_path" : "batiments/human/bat_3",
-          "img_size_x" : 142,
-          "img_size_y" : 132,
-          "sprite_size_x" : 142,
-          "sprite_size_y" : 132,
-          "nb_anim" :1,
+          "bat_img" : 3,
           //done
         }
       ],
 
       "batiments" : {
         "carriere" : {
+          "description" : "Apporte des cargaison de pierre à votre royaume",
           "production" : 2000,
           "cout" : 225,
           "apports" : {
@@ -218,6 +249,7 @@ var Towns = {
 
           "evolution" : {
             "nom": "carriere_amelioree",
+            "description" : "",
             "production" : 3000,
             "cout" : 400,
             "apports" : {
@@ -229,6 +261,7 @@ var Towns = {
         }
       },
         "scierie" : {
+          "description" : "Travail le bois brut pour donner du bois de qualité utilisable",
           "production" : 2500,
           "cout" : 100,
           "apports" : {
@@ -249,6 +282,7 @@ var Towns = {
 
           "evolution" : {
             "nom": "scierie_amelioree",
+            "description" : "",
             "production" : 3000,
             "cout" : 400,
             "apports" : {
@@ -260,6 +294,7 @@ var Towns = {
           }
         },
         "mine" : {
+          "description" : "Apporte a votre royaume du fer",
           "production" : 1000,
           "cout" : 300,
           "apports" : {
@@ -280,6 +315,7 @@ var Towns = {
           
           "evolution" : {
             "nom": "mine_amelioree",
+            "description" : "",
             "production" : 3000,
             "cout" : 400,
             "apports" : {
@@ -290,7 +326,28 @@ var Towns = {
             }
           }
         },
+        "bank" : {
+          "description" : "Revend le surplus de ressource pour enrichir votre royaume",
+          "production" : 1000,
+          "cout" : 300,
+          "apports" : {
+            pierre : -100,
+            bois : -100,
+            fer : -100,
+            or : 600 
+          },
+
+          //modif by Alex
+          "anim_path" : "construction/bank",
+          "img_size_x" : 38,
+          "img_size_y" : 38,
+          "sprite_size_x" : 38,
+          "sprite_size_y" : 38,
+          "nb_anim" :1,
+          //done
+        },
         "caserne" : {
+          "description" : "",
           "production" : 1500,
           "cout" : 400,
           "apports" : {
@@ -331,6 +388,7 @@ var Towns = {
           }
         },
         "ecurie" : {
+          "description" : "Permet de d'établir un élevage de chevaux organisé dans votre royaume",
           "production" : 1200,
           "cout" : 600,
           "apports" : {
