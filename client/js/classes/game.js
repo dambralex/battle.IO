@@ -31,7 +31,8 @@ class Game{
 		unit : []
 	}
 
-	// Setting up the player
+	// Setting the multithread
+	this.worker = new Worker("./js/worker.js");
 
 	// Setting up the client communication
 	this.client = new Client();
@@ -238,7 +239,7 @@ class Game{
 			entityBox.w = unit.width;
 			entityBox.h = unit.height;
 
-			if(collisionBox(selectionBox, entityBox)){
+			if(!unit.dead && collisionBox(selectionBox, entityBox)){
 					unit.select();
 					that.selectedEntities.unit.push(unit);
 			}
@@ -253,11 +254,11 @@ class Game{
 			if(this.selectedEntities.unit[s].isMovable() && this.selectedEntities.unit[s].isAllied()){
 				var clickMouse = this.convertClickPosition(x, y);
 				this.selectedEntities.unit[s].disengage();
-				this.selectedEntities.unit[s].setDestination(clickMouse.x, clickMouse.y);
+				this.selectedEntities.unit[s].setDestination(clickMouse.x - s*10%100, clickMouse.y - s);
 				for(var u in this.entities.unit){
 					if(this.entities.unit[u] != this.selectedEntities.unit[s]){
 						if(!this.entities.unit[u].isAlliedWith(this.selectedEntities.unit[s])){
-							if(collisionBox({x : clickMouse.x, y : clickMouse.y, w : 0, h : 0}, this.entities.unit[u].getSize())){
+							if(collisionBox({x : x, y : y, w : 0, h : 0}, this.entities.unit[u].getSizeOnScreen())){
 								this.selectedEntities.unit[s].setFollow(this.entities.unit[u]);
 							}
 						}
@@ -265,7 +266,7 @@ class Game{
 				}
 				for(var t in this.entities.town){
 					if(!this.selectedEntities.unit[s].isAlliedWith(this.entities.town[t])){
-						if(collisionBox({x : clickMouse.x, y : clickMouse.y, w : 0, h : 0}, this.entities.town[t].getSize())){
+						if(collisionBox({x : x, y : y, w : 0, h : 0}, this.entities.town[t].getSizeOnScreen())){
 							this.selectedEntities.unit[s].setFollow(this.entities.town[t]);
 						}
 					}

@@ -4,6 +4,7 @@ class Player{
     	this.type = type;
     	that.getNewId(this);
     	this.townCount = 0;
+    	this.population = 0;
 	
     	new Town(null, this, startingX, startingY);
 	

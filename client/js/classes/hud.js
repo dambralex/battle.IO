@@ -148,6 +148,7 @@ class Hud{
             this.drawPlayerResources(context);
         }
 
+        this.drawPopCount(context);
         this.drawError(context);
     
         context.restore();
@@ -376,6 +377,16 @@ class Hud{
             context.fillRect(450, 150, 100*pourcent, 10);
             context.restore();
         }
+    }
+
+    drawPopCount(context){
+        context.save();
+        context.fillStyle = 'black';
+        context.font = "10pt Arial";
+        context.fillText("Population : "+that.player.population, 900, 20);
+        context.fillText("Ville : "+that.player.townCount, 1050, 20);
+        context.restore();
+
     }
 
     forEachButton(callback){

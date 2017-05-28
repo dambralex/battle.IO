@@ -181,7 +181,11 @@ class Unit{
 		    this.HPVariation = [];
 		
 			this.actionStack = [];
-		
+
+			this.worker = new Worker("./js/worker.js");
+
+			this.player.population++;
+
 			this.fill();// tout en bas, la fonction récupere les informations de l'objet pour changer ses caractéristiques
 		}
 	}
@@ -476,17 +480,17 @@ class Unit{
 		this.posX += Math.round(directionVector.vx * this.speed * delta);
 		this.posY += Math.round(directionVector.vy * this.speed * delta);
 	
-	}
-	
+	}	
+
 	setDestination(x, y){
 		var thus = this;
 		var center = this.getCenter();
-		if(window.Worker) {
-			var worker = new Worker("http://localhost:8080/js/worker.js");
-			worker.postMessage([center.x, center.y, x, y, that.map.walls, that.map.getWidth(), that.map.getHeight(), 32]);
+		if(window.Worker && !this.dead) {
+			this.worker.postMessage([center.x, center.y, x, y, that.map.walls, that.map.getWidth(), that.map.getHeight(), 32]);
 			
-			worker.onmessage = function(path) {
+			this.worker.onmessage = function(path) {
 				thus.path = path.data.slice(0);
+				thus.path[thus.path.length-1] = {x : x, y : y};
 				
 				var nextInPath = thus.path.shift();
 				if(nextInPath){
@@ -547,6 +551,9 @@ class Unit{
 	
 	die(){
 		this.dead = true;
+		this.following = false;
+		this.path = [];
+		this.player.population--;
 	
 		if(this.deathCallback) {
 			this.deathCallback();
