@@ -36,9 +36,7 @@ var run = function(){
 	this.now = Date.now();
 
 	this.delta = this.now - this.timeZero;
-	// console.log(1000/this.delta);
 
-	// this.timeZero = clock;
 	if(this.delta > this.interval){
 		this.timeZero = this.now - (this.delta % this.interval);
 		draw();
@@ -49,10 +47,6 @@ var run = function(){
 
 var draw = function(){
 	this.mapContext.clearRect(0, 0, this.mapCanvas.width, this.mapCanvas.height);
-	this.mapContext.save();
-	this.mapContext.fillStyle = 'black';
-	this.mapContext.fillRect(0, 0, this.mapCanvas.width, this.mapCanvas.height);
-	this.mapContext.restore();
 
 	// this.spriteContext.clearRect(0, 0, this.spriteCanvas.width, this.spriteCanvas.height);
 	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
